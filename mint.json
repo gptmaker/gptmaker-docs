@@ -53,7 +53,6 @@
       "group": "Get Started",
       "pages": [
         "introduction",
-        "quickstart",
         "billing"
       ]
     },
@@ -65,7 +64,8 @@
         "agents/agent-profile",
         "agents/agent-train",
         "agents/agent-intentions",
-        "agents/agent-integrations"
+        "agents/agent-integrations",
+        "agents/agent-channels"
       ]
     },
     {
