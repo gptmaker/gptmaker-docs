@@ -1,0 +1,40 @@
+---
+title: Intenções
+description: "Permita que seu agente se conecte com outras APIs"
+icon: crosshairs
+---
+
+As intenções permitem que o agente se conecte com outras APIs para realizar ações específicas solicitadas por você ou pelos clientes. Isso inclui uma ampla variedade de funções, como emitir segunda via de boletos, consultar débitos, cadastrar tarefas no Jira, entre outras. Em resumo, qualquer API pode ser integrada, permitindo que o agente capture informações, faça uma requisição à API, interprete o resultado e forneça uma resposta adequada ao cliente.
+
+### Como funciona
+
+Um exemplo prático de uso das intenções seria configurar o agente para consultar a cotação do dólar ou do euro. Para isso, você poderia definir uma intenção que permita ao agente capturar a sigla da moeda fornecida pelo cliente, fazer uma requisição à API de cotação de moedas e retornar o valor atual ao cliente.
+
+<Steps>
+  <Step title="Primeiro passo">
+    Descreva a intenção do usuário, por exemplo "Consultar cotação de uma moeda"
+  </Step>
+  <Step title="Segundo passo">
+    Configure o agente para capturar as informações necessárias do cliente, como
+    por exemplo, a sigla da moeda a ser consultada.
+  </Step>
+  <Step title="Terceiro passo">
+    Configure a URL da API, utilize @ para ter acesso as variáveis do sistema ou
+    que foram capturados pelo agente.
+  </Step>
+</Steps>
+
+Com esses 3 passos seu agente já terá capacidade de consultar a cotação em tempo real de uma moeda, o próprio GPT Maker interpretará a resposta da API e gerará uma resposta clara e útil para o cliente.
+
+<img
+  className="block dark:hidden rounded-xl border border-gray-300"
+  src="/images/agents-form/intentions-light.png"
+  alt="Intenções do agente"
+/>
+<img
+  className="hidden dark:block rounded-xl"
+  src="/images/agents-form/intentions-dark.png"
+  alt="Intenções do agente"
+/>
+
+Configurar intenções é uma forma poderosa de expandir as capacidades do seu agente, tornando-o capaz de realizar ações complexas e fornecer respostas precisas baseadas em dados em tempo real. Ao aproveitar a conectividade com APIs externas, você pode transformar o agente em um assistente eficiente e valioso para os seus clientes, elevando a qualidade do atendimento e a satisfação geral.

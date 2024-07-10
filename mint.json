@@ -5,7 +5,7 @@
     "dark": "/logo/horizontal-white.png",
     "light": "/logo/horizontal-roxo.png"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.png",
   "colors": {
     "primary": "#a368fb",
     "light": "#8b54dd",
@@ -63,7 +63,9 @@
         "agents/create-agent",
         "agents/change-model",
         "agents/agent-profile",
-        "agents/agent-train"
+        "agents/agent-train",
+        "agents/agent-intentions",
+        "agents/agent-integrations"
       ]
     },
     {
