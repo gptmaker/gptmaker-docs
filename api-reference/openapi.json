@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "title": "OpenAPI GPT Maker",
+    "description": "Documentação completa da API do GPT Maker",
     "license": {
       "name": "MIT"
     },
@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://api.gptmaker.ai"
     }
   ],
   "security": [
@@ -19,72 +19,25 @@
     }
   ],
   "paths": {
-    "/plants": {
+    "/v2/workspaces": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
+        "description": "Lista os workspaces da conta",
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Lista de workspaces",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Plant"
+                    "$ref": "#/components/schemas/Workspace"
                   }
                 }
               }
             }
           },
           "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
+            "description": "Erro inesperado",
             "content": {
               "application/json": {
                 "schema": {
@@ -96,28 +49,450 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/v2/workspace/{workspaceId}/credits": {
+      "get": {
+        "description": "Lista a quantidade de crédito disponível na conta.",
         "parameters": [
           {
-            "name": "id",
+            "name": "workspaceId",
             "in": "path",
-            "description": "ID of plant to delete",
+            "description": "ID do workspace",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": "Quantidade de crédito disponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Credits"
+                }
+              }
+            }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/agents": {
+      "get": {
+        "description": "Lista os agentes disponíveis nesse workspace",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Filtro pelo nome do agente",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de agentes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Assistant"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Cria um novo agente no workspace",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do agente a ser criado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewAssistant"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Agente criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Assistant"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}": {
+      "put": {
+        "description": "Atualiza os detalhes de um agente existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do agente a serem atualizados",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewAssistant"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Agente atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Assistant"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/inactive": {
+      "put": {
+        "description": "Inativa um agente existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agente inativado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/active": {
+      "put": {
+        "description": "Ativa um agente existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agente ativado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/settings": {
+      "get": {
+        "description": "Obtém as configurações de um agente existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Configurações do agente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prefferModel": {
+                      "type": "string",
+                      "description": "Modelo de LLM preferido",
+                      "enum": [
+                        "GPT_3_5_TURBO",
+                        "GPT_4_O",
+                        "GPT_4",
+                        "CLAUDE_HAIKU",
+                        "CLAUDE_SONNET",
+                        "CLAUDE_OPUS",
+                        "CLAUDE_3_5_SONNET"
+                      ]
+                    },
+                    "timezone": {
+                      "type": "string",
+                      "description": "Timezone do agente"
+                    },
+                    "enabledHumanTransfer": {
+                      "type": "boolean",
+                      "description": "Define se o agente pode transferir para humano"
+                    },
+                    "enabledReminder": {
+                      "type": "boolean",
+                      "description": "Define se pode agendar lembretes"
+                    },
+                    "splitMessages": {
+                      "type": "boolean",
+                      "description": "Define se a mensagem será dividida em várias, caso seja muito grande"
+                    },
+                    "enabledEmoji": {
+                      "type": "boolean",
+                      "description": "Define se pode usar emojis nas respostas"
+                    },
+                    "limitSubjects": {
+                      "type": "boolean",
+                      "description": "Define se pode falar de outros assuntos ou apenas relacionado à empresa ou produto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Atualiza as configurações de um agente existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Configurações do agente a serem atualizadas",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "prefferModel": {
+                    "type": "string",
+                    "description": "Modelo de LLM preferido",
+                    "enum": [
+                      "GPT_3_5_TURBO",
+                      "GPT_4_O",
+                      "GPT_4",
+                      "CLAUDE_HAIKU",
+                      "CLAUDE_SONNET",
+                      "CLAUDE_OPUS",
+                      "CLAUDE_3_5_SONNET"
+                    ]
+                  },
+                  "timezone": {
+                    "type": "string",
+                    "description": "Timezone do agente"
+                  },
+                  "enabledHumanTransfer": {
+                    "type": "boolean",
+                    "description": "Define se o agente pode transferir para humano"
+                  },
+                  "enabledReminder": {
+                    "type": "boolean",
+                    "description": "Define se pode agendar lembretes"
+                  },
+                  "splitMessages": {
+                    "type": "boolean",
+                    "description": "Define se a mensagem será dividida em várias, caso seja muito grande"
+                  },
+                  "enabledEmoji": {
+                    "type": "boolean",
+                    "description": "Define se pode usar emojis nas respostas"
+                  },
+                  "limitSubjects": {
+                    "type": "boolean",
+                    "description": "Define se pode falar de outros assuntos ou apenas relacionado à empresa ou produto"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Configurações atualizadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
             "content": {
               "application/json": {
                 "schema": {
@@ -132,41 +507,135 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "Workspace": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "id": {
+            "type": "string",
+            "description": "ID do workspace"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "name": {
+            "type": "string",
+            "description": "Nome do workspace"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "Credits": {
+        "type": "object",
+        "properties": {
+          "credits": {
+            "type": "integer",
+            "description": "Quantidade de crédito disponível no workspace"
           },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
+          "status": {
+            "type": "string",
+            "description": "Status da assinatura",
+            "enum": [
+              "TRIAL",
+              "ACTIVE",
+              "PAST_DUE",
+              "CANCELED"
+            ]
           }
-        ]
+        }
+      },
+      "Assistant": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do agente"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do agente"
+          },
+          "behavior": {
+            "type": "string",
+            "description": "Comportamento do agente"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "URL de um avatar para o agente"
+          },
+          "communicationType": {
+            "type": "string",
+            "description": "Tipo de comunicação",
+            "enum": [
+              "FORMAL",
+              "NORMAL",
+              "RELAXED"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "description": "Objetivo do agente",
+            "enum": [
+              "SUPPORT",
+              "SALE",
+              "PERSONAL"
+            ]
+          },
+          "jobName": {
+            "type": "string",
+            "description": "Nome da empresa ou produto que o agente vai trabalhar"
+          },
+          "jobSite": {
+            "type": "string",
+            "description": "Site da empresa"
+          },
+          "jobDescription": {
+            "type": "string",
+            "description": "Descrição sobre a empresa"
+          }
+        }
+      },
+      "NewAssistant": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do agente"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "URL de um avatar para o agente"
+          },
+          "behavior": {
+            "type": "string",
+            "description": "Comportamento do agente"
+          },
+          "communicationType": {
+            "type": "string",
+            "description": "Tipo de comunicação",
+            "enum": [
+              "FORMAL",
+              "NORMAL",
+              "RELAXED"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "description": "Objetivo do agente",
+            "enum": [
+              "SUPPORT",
+              "SALE",
+              "PERSONAL"
+            ]
+          },
+          "jobName": {
+            "type": "string",
+            "description": "Nome da empresa ou produto que o agente vai trabalhar"
+          },
+          "jobSite": {
+            "type": "string",
+            "description": "Site da empresa"
+          },
+          "jobDescription": {
+            "type": "string",
+            "description": "Descrição sobre a empresa"
+          }
+        }
       },
       "Error": {
         "required": [
