@@ -88,19 +88,37 @@
       "group": "Workspace",
       "pages": [
         "api-reference/workspace/list",
-        "api-reference/workspace/credits",
-        "api-reference/workspace/list-agent",
-        "api-reference/workspace/create-agent"
+        "api-reference/workspace/credits"
       ]
     },
     {
       "group": "Agentes",
       "pages": [
+        "api-reference/workspace/list-agent",
+        "api-reference/workspace/create-agent",
         "api-reference/agents/update",
         "api-reference/agents/inactive",
         "api-reference/agents/active",
         "api-reference/agents/get-settings",
         "api-reference/agents/settings"
+      ]
+    },
+    {
+      "group": "Treinamentos",
+      "pages": [
+        "api-reference/agents/list-trainings",
+        "api-reference/agents/create-training",
+        "api-reference/trainings/update-training",
+        "api-reference/trainings/delete-training"
+      ]
+    },
+    {
+      "group": "Intenções",
+      "pages": [
+        "api-reference/intentions/list-intentions",
+        "api-reference/intentions/create-intention",
+        "api-reference/intentions/update-intention",
+        "api-reference/intentions/delete-intention"
       ]
     }
   ],

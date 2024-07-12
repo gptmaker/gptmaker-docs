@@ -45,6 +45,16 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
           }
         }
       }
@@ -80,6 +90,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
                 }
               }
             }
@@ -150,6 +170,16 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
           }
         }
       },
@@ -194,6 +224,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
                 }
               }
             }
@@ -246,6 +286,16 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
           }
         }
       }
@@ -289,6 +339,16 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
           }
         }
       }
@@ -329,6 +389,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
                 }
               }
             }
@@ -406,6 +476,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
                 }
               }
             }
@@ -500,6 +580,833 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/trainings": {
+      "get": {
+        "description": "Lista os treinamentos do agente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Tipo do treinamento a ser filtrado",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "TEXT",
+                "WEBSITE",
+                "VIDEO",
+                "DOCUMENT"
+              ]
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Filtro para os treinamentos",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de treinamentos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TextTraining"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/WebsiteTraining"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VideoTraining"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DocumentTraining"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Adiciona um novo treinamento ao agente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do treinamento a ser adicionado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Tipo do treinamento deve ser TEXT",
+                        "enum": [
+                          "TEXT"
+                        ]
+                      },
+                      "text": {
+                        "type": "string",
+                        "description": "Texto do treinamento"
+                      },
+                      "image": {
+                        "type": "string",
+                        "description": "URL de uma imagem para o treinamento"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Tipo do treinamento deve ser WEBSITE",
+                        "enum": [
+                          "WEBSITE"
+                        ]
+                      },
+                      "website": {
+                        "type": "string",
+                        "description": "Website do treinamento"
+                      },
+                      "trainingSubPages": {
+                        "type": "string",
+                        "description": "Treinamento em subpáginas",
+                        "enum": [
+                          "DISABLED",
+                          "ACTIVE"
+                        ]
+                      },
+                      "trainingInterval": {
+                        "type": "string",
+                        "description": "Intervalo de treinamento",
+                        "enum": [
+                          "THIRTY_SECONDS",
+                          "NEVER",
+                          "ONE_HOUR",
+                          "FOUR_HOUR",
+                          "EIGHT_HOUR",
+                          "TWELVE_HOUR",
+                          "ONE_DAY",
+                          "ONE_WEEK",
+                          "ONE_MONTH"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Tipo do treinamento deve ser VIDEO",
+                        "enum": [
+                          "VIDEO"
+                        ]
+                      },
+                      "video": {
+                        "type": "string",
+                        "description": "URL Vídeo do treinamento"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Tipo do treinamento",
+                        "enum": [
+                          "DOCUMENT"
+                        ]
+                      },
+                      "documentUrl": {
+                        "type": "string",
+                        "description": "URL do documento do treinamento"
+                      },
+                      "documentName": {
+                        "type": "string",
+                        "description": "Nome do documento do treinamento"
+                      },
+                      "documentMimetype": {
+                        "type": "string",
+                        "description": "Tipo MIME do documento do treinamento"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Treinamento adicionado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/training/{trainingId}": {
+      "put": {
+        "description": "Atualiza um treinamento ao agente. Atualmente só é possível atualizar treinamentos de texto, para os demais treinamentos, é necessário remover e adicionar novamente.",
+        "parameters": [
+          {
+            "name": "trainingId",
+            "in": "path",
+            "description": "ID do treinamento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do treinamento a ser adicionado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Tipo do treinamento deve ser TEXT",
+                        "enum": [
+                          "TEXT"
+                        ]
+                      },
+                      "text": {
+                        "type": "string",
+                        "description": "Texto atualizado do treinamento"
+                      },
+                      "image": {
+                        "type": "string",
+                        "description": "URL de uma imagem para o treinamento"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Treinamento atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deleta um treinamento existente",
+        "parameters": [
+          {
+            "name": "trainingId",
+            "in": "path",
+            "description": "ID do treinamento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Treinamento deletado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/intentions": {
+      "get": {
+        "description": "Lista as intenções do agente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Filtro pela descrição da intenção",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de intenções",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Intention"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Adiciona uma nova intenção ao agente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados da intenção a ser adicionada",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da intenção"
+                  },
+                  "preprocessingMessage": {
+                    "type": "string",
+                    "description": "Mensagem de pré-processamento",
+                    "enum": [
+                      "DISABLED",
+                      "GENERATE",
+                      "MANUAL"
+                    ]
+                  },
+                  "preprocessingText": {
+                    "type": "string",
+                    "description": "Texto de pré-processamento"
+                  },
+                  "fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Nome do campo"
+                        },
+                        "jsonName": {
+                          "type": "string",
+                          "description": "Nome JSON do campo"
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Descrição do campo"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Tipo do campo",
+                          "enum": [
+                            "TEXT",
+                            "URL",
+                            "DATE_TIME",
+                            "DATE",
+                            "NUMBER",
+                            "BOOLEAN"
+                          ]
+                        },
+                        "required": {
+                          "type": "boolean",
+                          "description": "Campo obrigatório"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "jsonName",
+                        "description",
+                        "type",
+                        "required"
+                      ]
+                    }
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Tipo de intenção",
+                    "enum": [
+                      "WEBHOOK"
+                    ]
+                  },
+                  "httpMethod": {
+                    "type": "string",
+                    "description": "Método HTTP",
+                    "enum": [
+                      "GET",
+                      "POST"
+                    ]
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "URL do webhook"
+                  },
+                  "headers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Nome do cabeçalho"
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Valor do cabeçalho"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "value"
+                      ]
+                    }
+                  },
+                  "params": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Nome do parâmetro"
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Valor do parâmetro"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "value"
+                      ]
+                    }
+                  },
+                  "requestBody": {
+                    "type": "string",
+                    "description": "String contendo um JSON que será enviado no corpo da requisição"
+                  },
+                  "autoGenerateParams": {
+                    "type": "boolean",
+                    "description": "Geração automática de parâmetros"
+                  },
+                  "autoGenerateBody": {
+                    "type": "boolean",
+                    "description": "Geração automática do corpo da requisição"
+                  }
+                },
+                "required": [
+                  "description",
+                  "preprocessingMessage",
+                  "preprocessingText",
+                  "fields",
+                  "type",
+                  "httpMethod",
+                  "url",
+                  "headers",
+                  "params",
+                  "requestBody",
+                  "autoGenerateParams",
+                  "autoGenerateBody"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Intenção adicionada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/intention/{intentionId}": {
+      "put": {
+        "description": "Atualiza os dados de uma intenção",
+        "parameters": [
+          {
+            "name": "intentionId",
+            "in": "path",
+            "description": "ID da intenção",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados da intenção a ser atualizada",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Intention"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Intenção atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deleta uma intenção existente",
+        "parameters": [
+          {
+            "name": "intentionId",
+            "in": "path",
+            "description": "ID da intenção",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Intenção deletada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
           }
         }
       }
@@ -507,6 +1414,246 @@
   },
   "components": {
     "schemas": {
+      "Intention": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID da intenção"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição da intenção"
+          },
+          "preprocessingMessage": {
+            "type": "string",
+            "description": "Mensagem de pré-processamento",
+            "enum": [
+              "DISABLED",
+              "GENERATE",
+              "MANUAL"
+            ]
+          },
+          "preprocessingText": {
+            "type": "string",
+            "description": "Texto de pré-processamento"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Nome do campo"
+                },
+                "jsonName": {
+                  "type": "string",
+                  "description": "Nome JSON do campo"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Descrição do campo"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Tipo do campo",
+                  "enum": [
+                    "TEXT",
+                    "URL",
+                    "DATE_TIME",
+                    "DATE",
+                    "NUMBER",
+                    "BOOLEAN"
+                  ]
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "Campo obrigatório"
+                }
+              }
+            }
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo de intenção",
+            "enum": [
+              "WEBHOOK"
+            ]
+          },
+          "httpMethod": {
+            "type": "string",
+            "description": "Método HTTP",
+            "enum": [
+              "GET",
+              "POST"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "description": "URL do webhook"
+          },
+          "headers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Nome do cabeçalho"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Valor do cabeçalho"
+                }
+              }
+            }
+          },
+          "params": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Nome do parâmetro"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Valor do parâmetro"
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "type": "string",
+            "description": "String contendo um JSON que será enviado no corpo da requisição"
+          },
+          "autoGenerateParams": {
+            "type": "boolean",
+            "description": "Geração automática de parâmetros"
+          },
+          "autoGenerateBody": {
+            "type": "boolean",
+            "description": "Geração automática do corpo da requisição"
+          }
+        }
+      },
+      "TextTraining": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do treinamento"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo do treinamento",
+            "enum": [
+              "TEXT"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "description": "Texto do treinamento"
+          },
+          "image": {
+            "type": "string",
+            "description": "Imagem do treinamento"
+          }
+        }
+      },
+      "WebsiteTraining": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do treinamento"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo do treinamento",
+            "enum": [
+              "WEBSITE"
+            ]
+          },
+          "website": {
+            "type": "string",
+            "description": "Website do treinamento"
+          },
+          "trainingSubPages": {
+            "type": "string",
+            "description": "Treinamento em subpáginas",
+            "enum": [
+              "DISABLED",
+              "ACTIVE"
+            ]
+          },
+          "trainingInterval": {
+            "type": "string",
+            "description": "Intervalo de treinamento",
+            "enum": [
+              "THIRTY_SECONDS",
+              "NEVER",
+              "ONE_HOUR",
+              "FOUR_HOUR",
+              "EIGHT_HOUR",
+              "TWELVE_HOUR",
+              "ONE_DAY",
+              "ONE_WEEK",
+              "ONE_MONTH"
+            ]
+          }
+        }
+      },
+      "VideoTraining": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do treinamento"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo do treinamento",
+            "enum": [
+              "VIDEO"
+            ]
+          },
+          "video": {
+            "type": "string",
+            "description": "Vídeo do treinamento"
+          }
+        }
+      },
+      "DocumentTraining": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do treinamento"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo do treinamento",
+            "enum": [
+              "DOCUMENT"
+            ]
+          },
+          "documentUrl": {
+            "type": "string",
+            "description": "URL do documento do treinamento"
+          },
+          "documentName": {
+            "type": "string",
+            "description": "Nome do documento do treinamento"
+          },
+          "documentMimetype": {
+            "type": "string",
+            "description": "Tipo MIME do documento do treinamento"
+          }
+        }
+      },
       "Workspace": {
         "type": "object",
         "properties": {
@@ -639,16 +1786,22 @@
       },
       "Error": {
         "required": [
-          "error",
-          "message"
+          "error"
         ],
         "type": "object",
         "properties": {
           "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Error403": {
+        "required": [
+          "error"
+        ],
+        "type": "object",
+        "properties": {
+          "error": {
             "type": "string"
           }
         }
