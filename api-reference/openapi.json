@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "https://api.gptmaker.ai"
+      "url": "https://mateusgptback.endpointroute.run"
     }
   ],
   "security": [
@@ -1410,10 +1410,543 @@
           }
         }
       }
+    },
+    "/v2/workspace/{workspaceId}/chats": {
+      "get": {
+        "description": "Lista os chats do workspace",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agentId",
+            "in": "query",
+            "description": "ID do agente para filtrar os chats",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Filtro para o nome do chat",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de chats",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Chat"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/chat/{chatId}/messages": {
+      "get": {
+        "description": "Lista as mensagens de um chat",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "description": "ID do chat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de mensagens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/chat/{chatId}/start-human": {
+      "put": {
+        "description": "Marcar que um humano vai assumir o atendimento, IA para de responder o chat.",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "description": "ID do chat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Humano assumiu o atendimento com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/chat/{chatId}/stop-human": {
+      "put": {
+        "description": "Encerrar atendimento humano, isso fará que a proxima interação do cliente, o agente volte a responder.",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "description": "ID do chat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atendimento encerrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/chat/{chatId}/send-message": {
+      "post": {
+        "description": "Envia uma nova mensagem para o chat",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "description": "ID do chat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do treinamento a ser adicionado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de texto a ser enviada"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de descrição a ser enviada com a imagem"
+                      },
+                      "image": {
+                        "type": "string",
+                        "description": "URL da imagem"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "audio": {
+                        "type": "string",
+                        "description": "URL do audio"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Mensagem enviada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "Message": {
+        "type": "object",
+        "properties": {
+          "userPicture": {
+            "type": "string",
+            "description": "Imagem do usuário",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "description": "Nome do arquivo",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "description": "Função no chat"
+          },
+          "documentUrl": {
+            "type": "string",
+            "description": "URL do documento",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo de mensagem"
+          },
+          "userName": {
+            "type": "string",
+            "description": "Nome do usuário",
+            "nullable": true
+          },
+          "midiaContent": {
+            "type": "string",
+            "description": "Conteúdo de mídia",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "description": "ID do usuário",
+            "nullable": true
+          },
+          "audioUrl": {
+            "type": "string",
+            "description": "URL do áudio",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "URL da imagem",
+            "nullable": true
+          },
+          "width": {
+            "type": "integer",
+            "description": "Largura da imagem",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "description": "ID da mensagem"
+          },
+          "text": {
+            "type": "string",
+            "description": "Texto da mensagem"
+          },
+          "time": {
+            "type": "integer",
+            "description": "Hora da mensagem"
+          },
+          "height": {
+            "type": "integer",
+            "description": "Altura da imagem",
+            "nullable": true
+          }
+        }
+      },
+      "Chat": {
+        "type": "object",
+        "properties": {
+          "humanTalk": {
+            "type": "boolean",
+            "description": "Indica se o chat está no controle de um humano ou do agente."
+          },
+          "userPicture": {
+            "type": "string",
+            "description": "Imagem do usuário que assumiu o atendimento",
+            "nullable": true
+          },
+          "messageUserName": {
+            "type": "string",
+            "description": "Nome do usuário que enviou a mensagem",
+            "nullable": true
+          },
+          "read": {
+            "type": "boolean",
+            "description": "Indica se o chat está lido"
+          },
+          "role": {
+            "type": "string",
+            "description": "Função no chat"
+          },
+          "agentName": {
+            "type": "string",
+            "description": "Nome do agente"
+          },
+          "agentId": {
+            "type": "string",
+            "description": "ID do agente"
+          },
+          "whatsappPhone": {
+            "type": "string",
+            "description": "Número do WhatsApp"
+          },
+          "finished": {
+            "type": "boolean",
+            "description": "Indica se o chat está finalizado"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Avatar do assistente"
+          },
+          "title": {
+            "type": "string",
+            "description": "Título do chat",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo de chat"
+          },
+          "userName": {
+            "type": "string",
+            "description": "Nome do usuário",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "description": "ID do usuário",
+            "nullable": true
+          },
+          "picture": {
+            "type": "string",
+            "description": "Imagem associada ao chat"
+          },
+          "conversationType": {
+            "type": "string",
+            "description": "Tipo de conversa"
+          },
+          "createdAt": {
+            "type": "integer",
+            "description": "Data de criação"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do chat"
+          },
+          "recipient": {
+            "type": "string",
+            "description": "Destinatário do chat"
+          },
+          "id": {
+            "type": "string",
+            "description": "ID do chat"
+          },
+          "time": {
+            "type": "integer",
+            "description": "Hora do chat"
+          },
+          "unReadCount": {
+            "type": "integer",
+            "description": "Contagem de não lidos"
+          },
+          "conversation": {
+            "type": "string",
+            "description": "Conversa"
+          }
+        }
+      },
       "Intention": {
         "type": "object",
         "properties": {

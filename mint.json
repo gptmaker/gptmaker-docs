@@ -120,6 +120,16 @@
         "api-reference/intentions/update-intention",
         "api-reference/intentions/delete-intention"
       ]
+    },
+    {
+      "group": "Chats",
+      "pages": [
+        "api-reference/chats/list-chats",
+        "api-reference/chats/list-messages",
+        "api-reference/chats/start-human",
+        "api-reference/chats/stop-human",
+        "api-reference/chats/send-message"
+      ]
     }
   ],
   "footerSocials": {
