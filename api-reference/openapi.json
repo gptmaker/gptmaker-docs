@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "https://mateusgptback.endpointroute.run"
+      "url": "https://api.gptmaker.ai"
     }
   ],
   "security": [
