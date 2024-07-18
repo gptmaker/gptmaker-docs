@@ -1766,6 +1766,530 @@
           }
         }
       }
+    },
+    "/v2/agent/{agentId}/conversation": {
+      "post": {
+        "description": "Permite conversar com o agente via API enviando texto, imagem ou áudio",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados para conversar com o agente",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "contextId": {
+                        "type": "string",
+                        "description": "ID externo para identificar o cliente",
+                        "example": "12345"
+                      },
+                      "prompt": {
+                        "type": "string",
+                        "description": "Texto para o agente responder",
+                        "example": "oi qual seu nome?"
+                      }
+                    },
+                    "required": [
+                      "contextId",
+                      "prompt"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "contextId": {
+                        "type": "string",
+                        "description": "ID externo para identificar o cliente",
+                        "example": "12345"
+                      },
+                      "prompt": {
+                        "type": "string",
+                        "description": "Texto para o agente responder",
+                        "example": "oq vc ve nessa imagem?"
+                      },
+                      "image": {
+                        "type": "string",
+                        "description": "URL da imagem",
+                        "example": "https://example.com/image.png"
+                      }
+                    },
+                    "required": [
+                      "contextId",
+                      "prompt",
+                      "image"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "contextId": {
+                        "type": "string",
+                        "description": "ID externo para identificar o cliente",
+                        "example": "12345"
+                      },
+                      "audio": {
+                        "type": "string",
+                        "description": "URL do áudio",
+                        "example": "https://example.com/audio.mp3"
+                      }
+                    },
+                    "required": [
+                      "contextId",
+                      "audio"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Resposta do agente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resposta do agente"
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "URLs das imagens respondidas pelo agente"
+                      }
+                    },
+                    "audios": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "URLs dos áudios respondidos pelo agente"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/create-channel": {
+      "post": {
+        "description": "Cria um novo canal para o agente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do canal a ser criado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do canal"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Tipo do canal",
+                    "enum": [
+                      "WHATSAPP",
+                      "INSTAGRAM",
+                      "CLOUD_API",
+                      "TELEGRAM",
+                      "WIDGET",
+                      "MESSENGER",
+                      "MERCADO_LIVRE"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "type"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Canal criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID do canal"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do canal"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Tipo do canal",
+                      "enum": [
+                        "WHATSAPP",
+                        "INSTAGRAM",
+                        "CLOUD_API",
+                        "TELEGRAM",
+                        "WIDGET",
+                        "MESSENGER",
+                        "MERCADO_LIVRE"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/channel/{channelId}/widget-settings": {
+      "put": {
+        "description": "Atualiza as configurações do canal do tipo widget",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Configurações do widget a serem atualizadas",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "isPublic": {
+                    "type": "boolean",
+                    "description": "Define se o widget é público ou apenas permitido em alguns sites"
+                  },
+                  "initialMessage": {
+                    "type": "string",
+                    "description": "Mensagem inicial do widget"
+                  },
+                  "origins": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Lista de domínios autorizados"
+                    }
+                  },
+                  "suggestMessages": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Lista de sugestões de perguntas"
+                    }
+                  },
+                  "headerBackground": {
+                    "type": "string",
+                    "description": "Cor do fundo do topo do widget"
+                  },
+                  "headerColor": {
+                    "type": "string",
+                    "description": "Cor da fonte do topo"
+                  },
+                  "messageUserBackground": {
+                    "type": "string",
+                    "description": "Cor de fundo da mensagem do usuário"
+                  },
+                  "buttonBackground": {
+                    "type": "string",
+                    "description": "Cor de fundo do botão flutuante"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Configurações do widget atualizadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/channel/{channelId}/widget-links": {
+      "get": {
+        "description": "Pega os links dos scripts do widget para injetar no site",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Links dos scripts do widget",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "float": {
+                      "type": "string",
+                      "description": "Link do botão flutuante"
+                    },
+                    "iframe": {
+                      "type": "string",
+                      "description": "Link do iframe para usar dentro de um iframe"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/search": {
+      "get": {
+        "description": "Lista os canais de um agente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Filtro pelo nome do canal",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de canais",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Nome do canal"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Tipo do canal",
+                            "enum": [
+                              "WHATSAPP",
+                              "INSTAGRAM",
+                              "CLOUD_API",
+                              "TELEGRAM",
+                              "WIDGET",
+                              "MESSENGER",
+                              "MERCADO_LIVRE"
+                            ]
+                          },
+                          "id": {
+                            "type": "string",
+                            "description": "ID do canal"
+                          },
+                          "connected": {
+                            "type": "boolean",
+                            "description": "Indica se o canal está conectado"
+                          }
+                        }
+                      }
+                    },
+                    "count": {
+                      "type": "integer",
+                      "description": "Número total de canais"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

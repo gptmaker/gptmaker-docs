@@ -100,7 +100,8 @@
         "api-reference/agents/inactive",
         "api-reference/agents/active",
         "api-reference/agents/get-settings",
-        "api-reference/agents/settings"
+        "api-reference/agents/settings",
+        "api-reference/agents/conversation"
       ]
     },
     {
@@ -129,6 +130,20 @@
         "api-reference/chats/start-human",
         "api-reference/chats/stop-human",
         "api-reference/chats/send-message"
+      ]
+    },
+    {
+      "group": "Canais",
+      "pages": [
+        "api-reference/channels/list-channels",
+        "api-reference/channels/create-channel",
+        {
+          "group": "Widget",
+          "pages": [
+            "api-reference/channels/widget/update-settings",
+            "api-reference/channels/widget/get-links"
+          ]
+        }
       ]
     }
   ],
