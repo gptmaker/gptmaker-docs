@@ -2290,6 +2290,116 @@
           }
         }
       }
+    },
+    "/v2/agent/{agentId}/credits-spent": {
+      "get": {
+        "description": "Retorna o consumo de créditos por agente dentro de um período",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Ano para filtrar",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Mês para filtrar",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "day",
+            "in": "query",
+            "description": "Dia para filtrar",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consumo de créditos por agente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": {
+                      "type": "integer",
+                      "format": "int32",
+                      "description": "Total de créditos gastos"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "credits": {
+                            "type": "integer",
+                            "description": "Quantidade de créditos gastos"
+                          },
+                          "year": {
+                            "type": "integer",
+                            "description": "Ano"
+                          },
+                          "month": {
+                            "type": "integer",
+                            "description": "Mês"
+                          },
+                          "day": {
+                            "type": "integer",
+                            "description": "Dia"
+                          },
+                          "model": {
+                            "type": "string",
+                            "description": "Modelo de IA que consumiu os créditos"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
