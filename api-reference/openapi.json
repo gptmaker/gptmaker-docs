@@ -2400,6 +2400,92 @@
           }
         }
       }
+    },
+    "/v2/channel/{channelId}/start-conversation": {
+      "post": {
+        "description": "Iniciar conversa",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados da mensagem a ser disparada, atualmente iniciar a conversa só está disponível para canais do tipo Whatsapp não oficial.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "phone": {
+                        "type": "string",
+                        "description": "Número de telefone do destinatário"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de texto a ser enviada"
+                      },
+                      "image": {
+                        "type": "string",
+                        "description": "URL da imagem"
+                      },
+                      "audio": {
+                        "type": "string",
+                        "description": "URL do audio"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Mensagem enviada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

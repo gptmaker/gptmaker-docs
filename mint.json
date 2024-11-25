@@ -144,6 +144,12 @@
             "api-reference/channels/widget/update-settings",
             "api-reference/channels/widget/get-links"
           ]
+        },
+        {
+          "group": "Whatsapp",
+          "pages": [
+            "api-reference/channels/start-conversation"
+          ]
         }
       ]
     }
