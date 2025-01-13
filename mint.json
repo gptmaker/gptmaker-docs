@@ -103,7 +103,7 @@
         "api-reference/agents/get-settings",
         "api-reference/agents/settings",
         "api-reference/agents/conversation",
-        "api-reference/agents/add-message"
+        "api-reference/agents/add-context"
       ]
     },
     {
