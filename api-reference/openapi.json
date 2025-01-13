@@ -1910,6 +1910,149 @@
         }
       }
     },
+    "/v2/agent/{agentId}/add-message": {
+      "post": {
+        "description": "Permite adicionar uma mensagem ao contexto da conversa, muito usado para quando fizer um disparo ativo por outras ferramentas e precisa adicionar essa mensagem ao contexto da conversa.",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados para mensagem a ser adicionada",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "contextId": {
+                        "type": "string",
+                        "description": "ID externo para identificar o cliente",
+                        "example": "12345"
+                      },
+                      "prompt": {
+                        "type": "string",
+                        "description": "Texto a ser salvo no contexto",
+                        "example": "oi você tem interesse no produto x?"
+                      }
+                    },
+                    "required": [
+                      "contextId",
+                      "prompt"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "contextId": {
+                        "type": "string",
+                        "description": "ID externo para identificar o cliente",
+                        "example": "12345"
+                      },
+                      "prompt": {
+                        "type": "string",
+                        "description": "Texto a ser salvo no contexto",
+                        "example": "olha a foto desse produto x."
+                      },
+                      "image": {
+                        "type": "string",
+                        "description": "URL da imagem",
+                        "example": "https://example.com/image.png"
+                      }
+                    },
+                    "required": [
+                      "contextId",
+                      "prompt",
+                      "image"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "contextId": {
+                        "type": "string",
+                        "description": "ID externo para identificar o cliente",
+                        "example": "12345"
+                      },
+                      "audio": {
+                        "type": "string",
+                        "description": "URL do áudio",
+                        "example": "https://example.com/audio.mp3"
+                      }
+                    },
+                    "required": [
+                      "contextId",
+                      "audio"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Resposta do agente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resposta do agente"
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "URLs das imagens respondidas pelo agente"
+                      }
+                    },
+                    "audios": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "URLs dos áudios respondidos pelo agente"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/agent/{agentId}/create-channel": {
       "post": {
         "description": "Cria um novo canal para o agente",
