@@ -102,8 +102,7 @@
         "api-reference/agents/active",
         "api-reference/agents/get-settings",
         "api-reference/agents/settings",
-        "api-reference/agents/conversation",
-        "api-reference/agents/add-context"
+        "api-reference/agents/conversation"
       ]
     },
     {
