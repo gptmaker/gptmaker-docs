@@ -1799,6 +1799,26 @@
                         "type": "string",
                         "description": "Texto para o agente responder",
                         "example": "oi qual seu nome?"
+                      },
+                      "callbackUrl": {
+                        "type": "string",
+                        "description": "Caso seja informado, a chamada será assíncrona, quando o agente responder, ele vai chamar esse webhook com a resposta.",
+                        "example": "https://webhook.site"
+                      },
+                      "chatName": {
+                        "type": "string",
+                        "description": "Você pode informar o nome do cliente caso já possua.",
+                        "example": "Fulano"
+                      },
+                      "chatPicture": {
+                        "type": "string",
+                        "description": "Uma foto do cliente que será mostrada no chat de atendimento.",
+                        "example": "https://foto.jpeg"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "description": "Número de whatsapp do cliente.",
+                        "example": "55xxxxxxxx"
                       }
                     },
                     "required": [
@@ -1823,6 +1843,26 @@
                         "type": "string",
                         "description": "URL da imagem",
                         "example": "https://example.com/image.png"
+                      },
+                      "callbackUrl": {
+                        "type": "string",
+                        "description": "Caso seja informado, a chamada será assíncrona, quando o agente responder, ele vai chamar esse webhook com a resposta.",
+                        "example": "https://webhook.site"
+                      },
+                      "chatName": {
+                        "type": "string",
+                        "description": "Você pode informar o nome do cliente caso já possua.",
+                        "example": "Fulano"
+                      },
+                      "chatPicture": {
+                        "type": "string",
+                        "description": "Uma foto do cliente que será mostrada no chat de atendimento.",
+                        "example": "https://foto.jpeg"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "description": "Número de whatsapp do cliente.",
+                        "example": "55xxxxxxxx"
                       }
                     },
                     "required": [
@@ -1843,6 +1883,26 @@
                         "type": "string",
                         "description": "URL do áudio",
                         "example": "https://example.com/audio.mp3"
+                      },
+                      "callbackUrl": {
+                        "type": "string",
+                        "description": "Caso seja informado, a chamada será assíncrona, quando o agente responder, ele vai chamar esse webhook com a resposta.",
+                        "example": "https://webhook.site"
+                      },
+                      "chatName": {
+                        "type": "string",
+                        "description": "Você pode informar o nome do cliente caso já possua.",
+                        "example": "Fulano"
+                      },
+                      "chatPicture": {
+                        "type": "string",
+                        "description": "Uma foto do cliente que será mostrada no chat de atendimento.",
+                        "example": "https://foto.jpeg"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "description": "Número de whatsapp do cliente.",
+                        "example": "55xxxxxxxx"
                       }
                     },
                     "required": [
