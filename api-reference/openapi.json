@@ -298,6 +298,52 @@
             }
           }
         }
+      },
+      "get": {
+        "description": "Busca dados do agente por ID",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do agente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Assistant"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v2/agent/{agentId}/inactive": {
@@ -548,6 +594,152 @@
                   "limitSubjects": {
                     "type": "boolean",
                     "description": "Define se pode falar de outros assuntos ou apenas relacionado à empresa ou produto"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Configurações atualizadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/webhooks": {
+      "get": {
+        "description": "Obtém os webhooks configurados em um agente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Webhooks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "onNewMessage": {
+                      "type": "string",
+                      "description": "Webhooks de quando uma nova mensagem chega em um chat"
+                    },
+                    "onLackKnowLedge": {
+                      "type": "string",
+                      "description": "Webhook para quando o agente não sabe responder uma pergunta"
+                    },
+                    "onTransfer": {
+                      "type": "string",
+                      "description": "Webhook para quando o agente transfêre o atendimento para um humano"
+                    },
+                    "onFinishAttendance": {
+                      "type": "string",
+                      "description": "Webhook de quando um atendimento é finalizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Atualiza os webhooks de um agente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Configurações do agente a serem atualizadas",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "onNewMessage": {
+                    "type": "string",
+                    "description": "Webhooks de quando uma nova mensagem chega em um chat"
+                  },
+                  "onLackKnowLedge": {
+                    "type": "string",
+                    "description": "Webhook para quando o agente não sabe responder uma pergunta"
+                  },
+                  "onTransfer": {
+                    "type": "string",
+                    "description": "Webhook para quando o agente transfêre o atendimento para um humano"
+                  },
+                  "onFinishAttendance": {
+                    "type": "string",
+                    "description": "Webhook de quando um atendimento é finalizado"
                   }
                 }
               }

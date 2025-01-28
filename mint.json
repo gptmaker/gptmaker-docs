@@ -96,12 +96,15 @@
       "pages": [
         "api-reference/workspace/list-agent",
         "api-reference/workspace/create-agent",
+        "api-reference/agents/get-by-id",
         "api-reference/agents/credits-spent",
         "api-reference/agents/update",
         "api-reference/agents/inactive",
         "api-reference/agents/active",
         "api-reference/agents/get-settings",
         "api-reference/agents/settings",
+        "api-reference/agents/get-webhooks",
+        "api-reference/agents/webhooks",
         "api-reference/agents/conversation",
         "api-reference/agents/add-context"
       ]
