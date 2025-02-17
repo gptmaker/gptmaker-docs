@@ -510,6 +510,17 @@
                     "limitSubjects": {
                       "type": "boolean",
                       "description": "Define se pode falar de outros assuntos ou apenas relacionado à empresa ou produto"
+                    },
+                    "messageGroupingTime": {
+                      "type": "string",
+                      "description": "Modelo de LLM preferido",
+                      "enum": [
+                        "NO_GROUP",
+                        "FIVE_SEC",
+                        "TEN_SEC",
+                        "THIRD_SEC",
+                        "ONE_MINUTE"
+                      ]
                     }
                   }
                 }
@@ -594,6 +605,17 @@
                   "limitSubjects": {
                     "type": "boolean",
                     "description": "Define se pode falar de outros assuntos ou apenas relacionado à empresa ou produto"
+                  },
+                  "messageGroupingTime": {
+                    "type": "string",
+                    "description": "Modelo de LLM preferido",
+                    "enum": [
+                      "NO_GROUP",
+                      "FIVE_SEC",
+                      "TEN_SEC",
+                      "THIRD_SEC",
+                      "ONE_MINUTE"
+                    ]
                   }
                 }
               }
