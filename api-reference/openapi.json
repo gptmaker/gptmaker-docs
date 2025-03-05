@@ -478,13 +478,15 @@
                       "type": "string",
                       "description": "Modelo de LLM preferido",
                       "enum": [
-                        "GPT_3_5_TURBO",
+                        "GPT_4_O_MINI",
                         "GPT_4_O",
+                        "OPEN_AI_O3_MINI",
                         "GPT_4",
-                        "CLAUDE_HAIKU",
-                        "CLAUDE_SONNET",
-                        "CLAUDE_OPUS",
-                        "CLAUDE_3_5_SONNET"
+                        "CLAUDE_3_5_SONNET",
+                        "CLAUDE_3_7_SONNET",
+                        "CLAUDE_3_5_HAIKU",
+                        "DEEPINFRA_LLAMA3_3",
+                        "QWEN_2_5_MAX"
                       ]
                     },
                     "timezone": {
@@ -573,13 +575,15 @@
                     "type": "string",
                     "description": "Modelo de LLM preferido",
                     "enum": [
-                      "GPT_3_5_TURBO",
+                      "GPT_4_O_MINI",
                       "GPT_4_O",
+                      "OPEN_AI_O3_MINI",
                       "GPT_4",
-                      "CLAUDE_HAIKU",
-                      "CLAUDE_SONNET",
-                      "CLAUDE_OPUS",
-                      "CLAUDE_3_5_SONNET"
+                      "CLAUDE_3_5_SONNET",
+                      "CLAUDE_3_7_SONNET",
+                      "CLAUDE_3_5_HAIKU",
+                      "DEEPINFRA_LLAMA3_3",
+                      "QWEN_2_5_MAX"
                     ]
                   },
                   "timezone": {
@@ -1710,6 +1714,59 @@
         }
       }
     },
+    "/v2/chat/{chatId}": {
+      "delete": {
+        "description": "Deletar um chat",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "description": "ID do chat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/chat/{chatId}/messages": {
       "get": {
         "description": "Lista as mensagens de um chat",
@@ -1751,6 +1808,57 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/Message"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Limpar mensagens",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "description": "ID do chat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mensagens removidas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
                   }
                 }
               }
@@ -2216,6 +2324,10 @@
                         "type": "string",
                         "description": "Texto a ser salvo no contexto",
                         "example": "oi você tem interesse no produto x?"
+                      },
+                      "role": {
+                        "type": "string",
+                        "description": "define se é uma mensagem do usuário ou do agente, 'user' ou 'assistant' default: 'assistant'"
                       }
                     },
                     "required": [
@@ -2240,6 +2352,10 @@
                         "type": "string",
                         "description": "URL da imagem",
                         "example": "https://example.com/image.png"
+                      },
+                      "role": {
+                        "type": "string",
+                        "description": "define se é uma mensagem do usuário ou do agente, 'user' ou 'assistant' default: 'assistant'"
                       }
                     },
                     "required": [
@@ -2260,6 +2376,10 @@
                         "type": "string",
                         "description": "URL do áudio",
                         "example": "https://example.com/audio.mp3"
+                      },
+                      "role": {
+                        "type": "string",
+                        "description": "define se é uma mensagem do usuário ou do agente, 'user' ou 'assistant' default: 'assistant'"
                       }
                     },
                     "required": [

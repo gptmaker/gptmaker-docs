@@ -131,7 +131,9 @@
       "group": "Chats",
       "pages": [
         "api-reference/chats/list-chats",
+        "api-reference/chats/delete-chat",
         "api-reference/chats/list-messages",
+        "api-reference/chats/delete-messages",
         "api-reference/chats/start-human",
         "api-reference/chats/stop-human",
         "api-reference/chats/send-message"
