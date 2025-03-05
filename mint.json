@@ -96,6 +96,7 @@
       "pages": [
         "api-reference/workspace/list-agent",
         "api-reference/workspace/create-agent",
+        "api-reference/agents/delete-agent",
         "api-reference/agents/get-by-id",
         "api-reference/agents/credits-spent",
         "api-reference/agents/update",
