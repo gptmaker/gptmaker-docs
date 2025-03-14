@@ -3074,6 +3074,134 @@
           }
         }
       }
+    },
+    "/v2/workspace/{workspaceId}/interactions": {
+      "get": {
+        "description": "Lista os atendimentos de um workspace, uma mesma conversa com seu cliente pode gerar vários atendimentos, pois o cliente pode retornar várias vezes, essa api lista todos os atendimentos, quando iniciou, quando finalizou, status etc..",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agentId",
+            "in": "query",
+            "description": "ID do agente para filtrar os atendimentos",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de atendimentos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Interaction"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/interaction/{interactionId}/messages": {
+      "get": {
+        "description": "Lista as mensagens de um atendimento especifico, muitos clientes usam dessa API para gerar resumos ou fazer análises sobre o atendimento.",
+        "parameters": [
+          {
+            "name": "interactionId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de mensagens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3252,6 +3380,63 @@
           "conversation": {
             "type": "string",
             "description": "Conversa"
+          }
+        }
+      },
+      "Interaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id do atendimento."
+          },
+          "agentId": {
+            "type": "string",
+            "description": "Id do agente."
+          },
+          "agentName": {
+            "type": "string",
+            "description": "Nome do agente."
+          },
+          "agentAvatar": {
+            "type": "string",
+            "description": "Avatar do agente."
+          },
+          "chatId": {
+            "type": "string",
+            "description": "Id do chat/contextId."
+          },
+          "chatName": {
+            "type": "string",
+            "description": "Nome do chat."
+          },
+          "status": {
+            "type": "string",
+            "description": "Status do atendimento.",
+            "enum": [
+              "RUNNING",
+              "WAITING",
+              "RESOLVED"
+            ]
+          },
+          "startAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data/hora de início do atendimento."
+          },
+          "transferAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data/hora da transferência foi feita para humano."
+          },
+          "resolvedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data/hora do encerramento do atendimento."
+          },
+          "userId": {
+            "type": "string",
+            "description": "Id do membro que participou do atendimento."
           }
         }
       },

@@ -141,6 +141,13 @@
       ]
     },
     {
+      "group": "Atendimentos",
+      "pages": [
+        "api-reference/interactions/list-interactions",
+        "api-reference/interactions/list-messages"
+      ]
+    },
+    {
       "group": "Canais",
       "pages": [
         "api-reference/channels/list-channels",
