@@ -41,9 +41,14 @@
       "url": "https://www.youtube.com/@GPTMaker"
     },
     {
-      "name": "Comunidade",
-      "icon": "globe",
-      "url": "https://chat.whatsapp.com/Ke1cIpsuRPxE8qivQfkTSQ"
+      "name": "Whatsapp",
+      "icon": "whatsapp",
+      "url": "https://chat.whatsapp.com/CcOhvMNtwW9K5vjAtYFjHr"
+    },
+    {
+      "name": "Discord",
+      "icon": "discord",
+      "url": "https://discord.gg/R8mZHFg6xM"
     },
     {
       "name": "Blog",
