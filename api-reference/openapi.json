@@ -534,12 +534,15 @@
                         "GPT_4_O_MINI",
                         "GPT_4_O",
                         "OPEN_AI_O3_MINI",
+                        "OPEN_AI_O1",
                         "GPT_4",
                         "CLAUDE_3_5_SONNET",
                         "CLAUDE_3_7_SONNET",
                         "CLAUDE_3_5_HAIKU",
                         "DEEPINFRA_LLAMA3_3",
-                        "QWEN_2_5_MAX"
+                        "QWEN_2_5_MAX",
+                        "DEEPSEEK_CHAT",
+                        "SABIA_3"
                       ]
                     },
                     "timezone": {
@@ -633,12 +636,15 @@
                       "GPT_4_O_MINI",
                       "GPT_4_O",
                       "OPEN_AI_O3_MINI",
+                      "OPEN_AI_O1",
                       "GPT_4",
                       "CLAUDE_3_5_SONNET",
                       "CLAUDE_3_7_SONNET",
                       "CLAUDE_3_5_HAIKU",
                       "DEEPINFRA_LLAMA3_3",
-                      "QWEN_2_5_MAX"
+                      "QWEN_2_5_MAX",
+                      "DEEPSEEK_CHAT",
+                      "SABIA_3"
                     ]
                   },
                   "timezone": {
