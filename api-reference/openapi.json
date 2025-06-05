@@ -755,19 +755,35 @@
                   "properties": {
                     "onNewMessage": {
                       "type": "string",
-                      "description": "Webhooks de quando uma nova mensagem chega em um chat"
+                      "description": "Webhook disparado automaticamente sempre que uma nova mensagem chega em um chat."
                     },
                     "onLackKnowLedge": {
                       "type": "string",
-                      "description": "Webhook para quando o agente não sabe responder uma pergunta"
+                      "description": "Webhook disparado quando o agente não sabe responder a uma pergunta."
                     },
                     "onTransfer": {
                       "type": "string",
-                      "description": "Webhook para quando o agente transfêre o atendimento para um humano"
+                      "description": "Webhook disparado quando o agente transfere o atendimento para um humano."
                     },
-                    "onFinishAttendance": {
+                    "onFirstInteraction": {
                       "type": "string",
-                      "description": "Webhook de quando um atendimento é finalizado"
+                      "description": "Webhook disparado automaticamente assim que o primeiro atendimento com o cliente é iniciado."
+                    },
+                    "onStartInteraction": {
+                      "type": "string",
+                      "description": "Webhook disparado automaticamente sempre que um atendimento com o cliente é iniciado."
+                    },
+                    "onFinishInteraction": {
+                      "type": "string",
+                      "description": "Webhook disparado automaticamente sempre que um atendimento é finalizado."
+                    },
+                    "onCreateEvent": {
+                      "type": "string",
+                      "description": "Webhook disparado automaticamente sempre que um agendamento é realizado."
+                    },
+                    "onCancelEvent": {
+                      "type": "string",
+                      "description": "Webhook disparado automaticamente sempre que um agendamento é cancelado."
                     }
                   }
                 }
@@ -818,19 +834,35 @@
                 "properties": {
                   "onNewMessage": {
                     "type": "string",
-                    "description": "Webhooks de quando uma nova mensagem chega em um chat"
+                    "description": "Webhook disparado automaticamente sempre que uma nova mensagem chega em um chat."
                   },
                   "onLackKnowLedge": {
                     "type": "string",
-                    "description": "Webhook para quando o agente não sabe responder uma pergunta"
+                    "description": "Webhook disparado quando o agente não sabe responder a uma pergunta."
                   },
                   "onTransfer": {
                     "type": "string",
-                    "description": "Webhook para quando o agente transfêre o atendimento para um humano"
+                    "description": "Webhook disparado quando o agente transfere o atendimento para um humano."
                   },
-                  "onFinishAttendance": {
+                  "onFirstInteraction": {
                     "type": "string",
-                    "description": "Webhook de quando um atendimento é finalizado"
+                    "description": "Webhook disparado automaticamente assim que o primeiro atendimento com o cliente é iniciado."
+                  },
+                  "onStartInteraction": {
+                    "type": "string",
+                    "description": "Webhook disparado automaticamente sempre que um atendimento com o cliente é iniciado."
+                  },
+                  "onFinishInteraction": {
+                    "type": "string",
+                    "description": "Webhook disparado automaticamente sempre que um atendimento é finalizado."
+                  },
+                  "onCreateEvent": {
+                    "type": "string",
+                    "description": "Webhook disparado automaticamente sempre que um agendamento é realizado."
+                  },
+                  "onCancelEvent": {
+                    "type": "string",
+                    "description": "Webhook disparado automaticamente sempre que um agendamento é cancelado."
                   }
                 }
               }
