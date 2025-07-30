@@ -1042,6 +1042,7 @@
               "schema": {
                 "oneOf": [
                   {
+                    "title": "Texto",
                     "type": "object",
                     "properties": {
                       "type": {
@@ -1058,10 +1059,15 @@
                       "image": {
                         "type": "string",
                         "description": "URL de uma imagem para o treinamento"
+                      },
+                      "callbackUrl": {
+                        "type": "string",
+                        "description": "URL do webhook para notificação quando o treinamento finaliza com sucesso ou erro (opcional)"
                       }
                     }
                   },
                   {
+                    "title": "Website",
                     "type": "object",
                     "properties": {
                       "type": {
@@ -1097,10 +1103,15 @@
                           "ONE_WEEK",
                           "ONE_MONTH"
                         ]
+                      },
+                      "callbackUrl": {
+                        "type": "string",
+                        "description": "URL do webhook para notificação quando o treinamento finaliza com sucesso ou erro (opcional)"
                       }
                     }
                   },
                   {
+                    "title": "Vídeo",
                     "type": "object",
                     "properties": {
                       "type": {
@@ -1113,10 +1124,15 @@
                       "video": {
                         "type": "string",
                         "description": "URL Vídeo do treinamento"
+                      },
+                      "callbackUrl": {
+                        "type": "string",
+                        "description": "URL do webhook para notificação quando o treinamento finaliza com sucesso ou erro (opcional)"
                       }
                     }
                   },
                   {
+                    "title": "Documento",
                     "type": "object",
                     "properties": {
                       "type": {
@@ -1137,6 +1153,10 @@
                       "documentMimetype": {
                         "type": "string",
                         "description": "Tipo MIME do documento do treinamento"
+                      },
+                      "callbackUrl": {
+                        "type": "string",
+                        "description": "URL do webhook para notificação quando o treinamento finaliza com sucesso ou erro (opcional)"
                       }
                     }
                   }
@@ -3056,6 +3076,7 @@
               "schema": {
                 "oneOf": [
                   {
+                    "title": "Mensagem de Texto",
                     "type": "object",
                     "properties": {
                       "phone": {
@@ -3065,16 +3086,76 @@
                       "message": {
                         "type": "string",
                         "description": "Mensagem de texto a ser enviada"
+                      }
+                    },
+                    "required": [
+                      "phone",
+                      "message"
+                    ]
+                  },
+                  {
+                    "title": "Imagem",
+                    "type": "object",
+                    "properties": {
+                      "phone": {
+                        "type": "string",
+                        "description": "Número de telefone do destinatário"
                       },
                       "image": {
                         "type": "string",
-                        "description": "URL da imagem"
+                        "description": "URL da imagem a ser enviada"
+                      }
+                    },
+                    "required": [
+                      "phone",
+                      "image"
+                    ]
+                  },
+                  {
+                    "title": "Áudio",
+                    "type": "object",
+                    "properties": {
+                      "phone": {
+                        "type": "string",
+                        "description": "Número de telefone do destinatário"
                       },
                       "audio": {
                         "type": "string",
-                        "description": "URL do audio"
+                        "description": "URL do áudio a ser enviado"
                       }
-                    }
+                    },
+                    "required": [
+                      "phone",
+                      "audio"
+                    ]
+                  },
+                  {
+                    "title": "Documento",
+                    "type": "object",
+                    "properties": {
+                      "phone": {
+                        "type": "string",
+                        "description": "Número de telefone do destinatário"
+                      },
+                      "document": {
+                        "type": "string",
+                        "description": "URL do documento a ser enviado"
+                      },
+                      "documentName": {
+                        "type": "string",
+                        "description": "Nome do documento"
+                      },
+                      "documentMimetype": {
+                        "type": "string",
+                        "description": "Tipo MIME do documento"
+                      }
+                    },
+                    "required": [
+                      "phone",
+                      "document",
+                      "documentName",
+                      "documentMimetype"
+                    ]
                   }
                 ]
               }
