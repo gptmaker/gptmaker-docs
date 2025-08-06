@@ -1341,6 +1341,405 @@
         }
       }
     },
+    "/v2/custom-field/workspace/{workspaceId}": {
+      "get": {
+        "description": "Lista os campos customizados",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Filtro para os campos customizados",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id do campo"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "nome do campo"
+                    },
+                    "jsonName": {
+                      "type": "string",
+                      "description": "nome do arquivo JSON"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "descrição do campo"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "description": "data de criação do campo"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "description": "data de atualização do campo"
+                    },
+                    "type": {
+                      "enum": [
+                        "STRING",
+                        "DATE",
+                        "DATE_TIME",
+                        "NUMBER",
+                        "BOOLEAN",
+                        "MONEY"
+                      ]
+                    },
+                    "archived": {
+                      "type": "boolean",
+                      "description": "mostra se está arquivado ou não"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Cria um novo campo personalizado",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados dos campos a ser adicionado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "id do campo"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "nome do campo"
+                  },
+                  "jsonName": {
+                    "type": "string",
+                    "description": "nome do arquivo JSON"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "descrição do campo"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "description": "data de criação do campo"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "description": "data de atualização do campo"
+                  },
+                  "type": {
+                    "enum": [
+                      "STRING",
+                      "DATE",
+                      "DATE_TIME",
+                      "NUMBER",
+                      "BOOLEAN",
+                      "MONEY"
+                    ]
+                  },
+                  "archived": {
+                    "type": "boolean",
+                    "description": "mostra se está arquivado ou não"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Campo adicionado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "jsonName": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "enum": [
+                        "STRING",
+                        "DATE",
+                        "DATE_TIME",
+                        "NUMBER",
+                        "BOOLEAN",
+                        "MONEY"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/custom-field/{customfieldId}": {
+      "put": {
+        "description": " Atualiza um campo customizado existente. O campo é identificado pelo seu ID.",
+        "parameters": [
+          {
+            "name": "customfieldId",
+            "in": "path",
+            "description": "ID do campo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do campo customizado a ser atualizado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Id do campo a ser atualizado"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Nome do campo"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "descrição do campo"
+                      },
+                      "type": {
+                        "enum": [
+                          "STRING",
+                          "DATE",
+                          "DATE_TIME",
+                          "NUMBER",
+                          "BOOLEAN",
+                          "MONEY"
+                        ]
+                      },
+                      "jsonName": {
+                        "type": "string",
+                        "description": "nome do arquivo JSON"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Campo atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/custom-field/toggle-archive/{customfieldId}": {
+      "put": {
+        "description": " Atualiza o status de arquivamento de um campo customizado existente. O campo é identificado pelo seu ID e o novo status é passado como parâmetro de query.",
+        "parameters": [
+          {
+            "name": "customfieldId",
+            "in": "path",
+            "description": "ID do campo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "description": "Define se o campo deve ser arquivado (`true`) ou desarquivado (`false`)",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Campo atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/agent/{agentId}/intentions": {
       "get": {
         "description": "Lista as intenções do agente",

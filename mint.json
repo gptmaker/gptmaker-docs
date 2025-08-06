@@ -125,6 +125,15 @@
       ]
     },
     {
+      "group": "Campos customizados",
+      "pages": [
+        "api-reference/custom-field/list-custom-field",
+        "api-reference/custom-field/create-custom-field",
+        "api-reference/custom-field/update-custom-field",
+        "api-reference/custom-field/archive-custom-field"
+      ]
+    },
+    {
       "group": "Intenções",
       "pages": [
         "api-reference/intentions/list-intentions",
