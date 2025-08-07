@@ -529,6 +529,8 @@
                       "type": "string",
                       "description": "Modelo de LLM preferido",
                       "enum": [
+                        "GPT_5",
+                        "GPT_5_MINI",
                         "GPT_4_1",
                         "GPT_4_1_MINI",
                         "GPT_4_O_MINI",
@@ -633,6 +635,8 @@
                     "type": "string",
                     "description": "Modelo de LLM preferido",
                     "enum": [
+                      "GPT_5",
+                      "GPT_5_MINI",
                       "GPT_4_1",
                       "GPT_4_1_MINI",
                       "GPT_4_O_MINI",
