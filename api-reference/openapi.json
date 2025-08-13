@@ -581,6 +581,24 @@
                         "THIRD_SEC",
                         "ONE_MINUTE"
                       ]
+                    },
+                    "maxDailyMessages": {
+                      "type": "integer",
+                      "nullable": true,
+                      "description": "Define o que acontece ao atingir o limite de interações por atendimento, se for nulo não usa maxDailyMessagesLimitAction"
+                    },
+                    "maxDailyMessagesLimitAction": {
+                      "type": "string",
+                      "enum": [
+                        "TEMP_BLOCK_30S",
+                        "TEMP_BLOCK_5M",
+                        "TEMP_BLOCK_10M",
+                        "TEMP_BLOCK_30M",
+                        "TEMP_BLOCK_1H",
+                        "BLOCK",
+                        "TRANSFER"
+                      ],
+                      "description": "Define o que acontece ao atingir o limite de interações por atendimento, vai ser usado apenas quando o maxDailyMessages não for nulo."
                     }
                   }
                 }
