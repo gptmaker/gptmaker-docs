@@ -134,6 +134,15 @@
       ]
     },
     {
+      "group": "Regras de transferência",
+      "pages": [
+        "api-reference/transfer-rules/list-transfer-rules",
+        "api-reference/transfer-rules/create-transfer-rules",
+        "api-reference/transfer-rules/update-transfer-rules",
+        "api-reference/transfer-rules/delete-transfer-rules"
+      ]
+    },
+    {
       "group": "Intenções",
       "pages": [
         "api-reference/intentions/list-intentions",

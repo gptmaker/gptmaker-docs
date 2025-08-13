@@ -1740,6 +1740,398 @@
         }
       }
     },
+    "/v2/agent/{id}/transfer-rules": {
+      "get": {
+        "description": "Lista as regras de transferência",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista as regras de transferência",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id da regra"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "description": "data de atualização do campo"
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "description": "Instruções visíveis na transferência"
+                    },
+                    "returnOnFinish": {
+                      "type": "boolean",
+                      "description": "Define se deve retornar ao assistente após o atendimento"
+                    },
+                    "type": {
+                      "enum": [
+                        "HUMAN",
+                        "AGENT"
+                      ]
+                    },
+                    "agentId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do agente de destino (se aplicável)"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do usuário de destino (se aplicável)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/transfer-rules": {
+      "post": {
+        "description": "Cria uma nova regra de transferência para o agente especificado",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados da regra de transferência a ser adicionado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "instructions": {
+                    "type": "string",
+                    "description": "Instruções visíveis na transferência"
+                  },
+                  "returnOnFinish": {
+                    "type": "boolean",
+                    "description": "Define se deve retornar ao assistente após o atendimento"
+                  },
+                  "type": {
+                    "enum": [
+                      "HUMAN",
+                      "AGENT"
+                    ]
+                  },
+                  "userId": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Id do usuário de destino (caso o tipo seja HUMAN)"
+                  },
+                  "agentId": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Id do agente de destino (caso o tipo seja AGENT)"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Regra de transferência criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id da regra"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "description": "data de atualização do campo"
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "description": "Instruções visíveis na transferência"
+                    },
+                    "returnOnFinish": {
+                      "type": "boolean",
+                      "description": "Define se deve retornar ao assistente após o atendimento"
+                    },
+                    "type": {
+                      "enum": [
+                        "HUMAN",
+                        "AGENT"
+                      ]
+                    },
+                    "agentId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do agente de destino (se aplicável)"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do usuário de destino (se aplicável)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/transfer-rules/{transfer-rule-id}": {
+      "put": {
+        "description": " Atualiza uma regra de transferência existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transfer-rule-id",
+            "in": "path",
+            "description": "ID da regra de transferência",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados da regra de transferência a ser atualizada",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "instructions": {
+                        "type": "string",
+                        "description": "Instruções visíveis na transferência"
+                      },
+                      "returnOnFinish": {
+                        "type": "boolean",
+                        "description": "Define se deve retornar ao assistente após o atendimento"
+                      },
+                      "type": {
+                        "enum": [
+                          "HUMAN",
+                          "AGENT"
+                        ]
+                      },
+                      "agentId": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Id do agente de destino (se aplicável)"
+                      },
+                      "userId": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Id do usuário de destino (se aplicável)"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Regra de transferência atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id da regra"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "description": "Data de criação da regra de transferência"
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "description": "Instruções visíveis na transferência"
+                    },
+                    "returnOnFinish": {
+                      "type": "boolean",
+                      "description": "Define se deve retornar ao assistente após o atendimento"
+                    },
+                    "type": {
+                      "enum": [
+                        "HUMAN",
+                        "AGENT"
+                      ]
+                    },
+                    "agentId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do agente de destino (se aplicável)"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do usuário de destino (se aplicável)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": " Deleta uma regra de transferência existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transfer-rule-id",
+            "in": "path",
+            "description": "ID da regra de transferência",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Regra de transferência atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string",
+                      "description": "Sucesso ao deletar a regra"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/agent/{agentId}/intentions": {
       "get": {
         "description": "Lista as intenções do agente",
@@ -3976,6 +4368,14 @@
           "description": {
             "type": "string",
             "description": "Descrição da intenção"
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Quando usar a intenção"
+          },
+          "details": {
+            "type": "string",
+            "description": "Instruções dos dados de saída"
           },
           "preprocessingMessage": {
             "type": "string",
