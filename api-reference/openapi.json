@@ -546,7 +546,8 @@
                         "DEEPINFRA_LLAMA3_3",
                         "QWEN_2_5_MAX",
                         "DEEPSEEK_CHAT",
-                        "SABIA_3"
+                        "SABIA_3",
+                        "SABIA_3_1"
                       ]
                     },
                     "timezone": {
@@ -652,7 +653,8 @@
                       "DEEPINFRA_LLAMA3_3",
                       "QWEN_2_5_MAX",
                       "DEEPSEEK_CHAT",
-                      "SABIA_3"
+                      "SABIA_3",
+                      "SABIA_3_1"
                     ]
                   },
                   "timezone": {
