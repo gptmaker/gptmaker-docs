@@ -134,6 +134,15 @@
       ]
     },
     {
+      "group": "Ações de inatividade",
+      "pages": [
+        "api-reference/idle-actions/list-idle-actions",
+        "api-reference/idle-actions/create-idle-actions",
+        "api-reference/idle-actions/update-idle-actions",
+        "api-reference/idle-actions/delete-idle-actions"
+      ]
+    },
+    {
       "group": "Regras de transferência",
       "pages": [
         "api-reference/transfer-rules/list-transfer-rules",

@@ -1758,6 +1758,869 @@
         }
       }
     },
+    "/v2/agent/{agentId}/idle-actions": {
+      "get": {
+        "description": "Listar as ações de inatividade",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista as configurações de ações de inatividade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "actions": {
+                      "type": "array",
+                      "description": "Lista de ações configuradas para inatividade",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Identificador da ação"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "SEND_MESSAGE",
+                              "FINISH_INTERACTION"
+                            ],
+                            "description": "Tipo da ação de inatividade"
+                          },
+                          "instructions": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Mensagem ou instruções da ação"
+                          },
+                          "workingHours": {
+                            "type": "object",
+                            "nullable": true,
+                            "description": "Horários de funcionamento permitidos para execução da ação",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "tenant": {
+                                "type": "string"
+                              },
+                              "tenantOwner": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "integer",
+                                "description": "Timestamp de criação"
+                              },
+                              "updatedAt": {
+                                "type": "integer",
+                                "nullable": true,
+                                "description": "Timestamp de atualização"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              },
+                              "days": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "tenant": {
+                                      "type": "string"
+                                    },
+                                    "tenantOwner": {
+                                      "type": "string"
+                                    },
+                                    "createdAt": {
+                                      "type": "integer"
+                                    },
+                                    "updatedAt": {
+                                      "type": "integer",
+                                      "nullable": true
+                                    },
+                                    "active": {
+                                      "type": "boolean"
+                                    },
+                                    "dayWeek": {
+                                      "type": "integer",
+                                      "description": "Dia da semana (0=Domingo, 1=Segunda, ...)"
+                                    },
+                                    "hours": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "tenant": {
+                                            "type": "string"
+                                          },
+                                          "tenantOwner": {
+                                            "type": "string"
+                                          },
+                                          "createdAt": {
+                                            "type": "integer"
+                                          },
+                                          "updatedAt": {
+                                            "type": "integer",
+                                            "nullable": true
+                                          },
+                                          "start": {
+                                            "type": "string",
+                                            "example": "08:00"
+                                          },
+                                          "end": {
+                                            "type": "string",
+                                            "example": "12:00"
+                                          },
+                                          "sequence": {
+                                            "type": "integer",
+                                            "description": "Ordem do intervalo"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "allowAllHours": {
+                            "type": "boolean",
+                            "description": "Indica se a ação pode ser executada em qualquer horário"
+                          },
+                          "seconds": {
+                            "type": "integer",
+                            "description": "Tempo de inatividade (em segundos) para disparar a ação"
+                          }
+                        }
+                      }
+                    },
+                    "finishOn": {
+                      "type": "object",
+                      "description": "Configuração de tempo para finalizar interação",
+                      "properties": {
+                        "seconds": {
+                          "type": "integer",
+                          "description": "Tempo total em segundos para finalizar"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Cria uma nova ação de inatividade",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Configuração de ações de inatividade a ser criada/atualizada",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "SEND_MESSAGE",
+                            "TEMP_BLOCK",
+                            "FINISH_INTERACTION"
+                          ]
+                        },
+                        "instructions": {
+                          "type": "string",
+                          "description": "Mensagem ou instruções da ação"
+                        },
+                        "seconds": {
+                          "type": "integer",
+                          "description": "Tempo em segundos de inatividade para disparar a ação"
+                        },
+                        "allowAllHours": {
+                          "type": "boolean",
+                          "default": true,
+                          "description": "Define se deve ser executada em qualquer horário ou não, se for true não colocamos workingHours"
+                        },
+                        "workingHours": {
+                          "type": "array",
+                          "nullable": true,
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "dayWeek": {
+                                "type": "integer",
+                                "description": "0=Domingo, 1=Segunda, ..., 6=Sábado"
+                              },
+                              "active": {
+                                "type": "boolean",
+                                "description": "Define se o dia está ativo"
+                              },
+                              "hours": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "start": {
+                                      "type": "string",
+                                      "example": "08:00"
+                                    },
+                                    "end": {
+                                      "type": "string",
+                                      "example": "12:00"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "finishOn": {
+                    "type": "object",
+                    "properties": {
+                      "seconds": {
+                        "type": "integer",
+                        "description": "Tempo total (em segundos) para finalizar a interação"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Configuração de ações de inatividade criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "actions": {
+                      "type": "array",
+                      "description": "Lista de ações configuradas para inatividade",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Identificador da ação criada"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "SEND_MESSAGE",
+                              "TEMP_BLOCK",
+                              "FINISH_INTERACTION"
+                            ],
+                            "description": "Tipo da ação de inatividade"
+                          },
+                          "instructions": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Mensagem/instruções da ação"
+                          },
+                          "workingHours": {
+                            "type": "object",
+                            "nullable": true,
+                            "description": "Horários de funcionamento aplicáveis à ação",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "tenant": {
+                                "type": "string"
+                              },
+                              "tenantOwner": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "integer"
+                              },
+                              "updatedAt": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "active": {
+                                "type": "boolean"
+                              },
+                              "days": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "tenant": {
+                                      "type": "string"
+                                    },
+                                    "tenantOwner": {
+                                      "type": "string"
+                                    },
+                                    "createdAt": {
+                                      "type": "integer"
+                                    },
+                                    "updatedAt": {
+                                      "type": "integer",
+                                      "nullable": true
+                                    },
+                                    "active": {
+                                      "type": "boolean"
+                                    },
+                                    "dayWeek": {
+                                      "type": "integer",
+                                      "description": "0=Domingo ... 6=Sábado"
+                                    },
+                                    "hours": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "tenant": {
+                                            "type": "string"
+                                          },
+                                          "tenantOwner": {
+                                            "type": "string"
+                                          },
+                                          "createdAt": {
+                                            "type": "integer"
+                                          },
+                                          "updatedAt": {
+                                            "type": "integer",
+                                            "nullable": true
+                                          },
+                                          "start": {
+                                            "type": "string",
+                                            "example": "08:00"
+                                          },
+                                          "end": {
+                                            "type": "string",
+                                            "example": "12:00"
+                                          },
+                                          "sequence": {
+                                            "type": "integer"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "allowAllHours": {
+                            "type": "boolean",
+                            "description": "Indica se a ação pode ocorrer em qualquer horário"
+                          },
+                          "seconds": {
+                            "type": "integer",
+                            "description": "Tempo de inatividade (s) para disparo da ação"
+                          }
+                        }
+                      }
+                    },
+                    "finishOn": {
+                      "type": "object",
+                      "description": "Configuração para finalização automática",
+                      "properties": {
+                        "seconds": {
+                          "type": "integer",
+                          "description": "Tempo total (s) para finalizar a interação"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Atualizar uma nova ação de inatividade",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Atualização das ações de inatividade do assistente",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "actions": {
+                    "type": "array",
+                    "description": "Lista de ações configuradas",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "SEND_MESSAGE",
+                            "TEMP_BLOCK",
+                            "FINISH_INTERACTION"
+                          ],
+                          "description": "Tipo da ação"
+                        },
+                        "instructions": {
+                          "type": "string",
+                          "description": "Mensagem ou instruções da ação"
+                        },
+                        "seconds": {
+                          "type": "integer",
+                          "description": "Tempo de inatividade em segundos"
+                        },
+                        "allowAllHours": {
+                          "type": "boolean",
+                          "description": "Se true, ignora restrição de horário"
+                        },
+                        "workingHours": {
+                          "type": "array",
+                          "nullable": true,
+                          "description": "Lista de dias e horários em que a ação pode ser executada",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "dayWeek": {
+                                "type": "integer",
+                                "description": "Dia da semana (0=Domingo, 1=Segunda, ... 6=Sábado)"
+                              },
+                              "active": {
+                                "type": "boolean",
+                                "description": "Define se o dia está ativo"
+                              },
+                              "hours": {
+                                "type": "array",
+                                "description": "Faixas de horário do dia",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "start": {
+                                      "type": "string",
+                                      "example": "08:00"
+                                    },
+                                    "end": {
+                                      "type": "string",
+                                      "example": "12:00"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "finishOn": {
+                    "type": "object",
+                    "description": "Tempo para finalizar interação automaticamente",
+                    "properties": {
+                      "seconds": {
+                        "type": "integer",
+                        "description": "Tempo total em segundos"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Configuração de ações de inatividade atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "actions": {
+                      "type": "array",
+                      "description": "Lista de ações configuradas para inatividade",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Identificador único da ação"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "SEND_MESSAGE",
+                              "FINISH_INTERACTION"
+                            ],
+                            "description": "Tipo da ação"
+                          },
+                          "instructions": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Mensagem/instruções configuradas para a ação"
+                          },
+                          "workingHours": {
+                            "type": "object",
+                            "nullable": true,
+                            "description": "Horários de funcionamento da ação (quando allowAllHours=false)",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "tenant": {
+                                "type": "string"
+                              },
+                              "tenantOwner": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "integer"
+                              },
+                              "updatedAt": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "active": {
+                                "type": "boolean"
+                              },
+                              "days": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "tenant": {
+                                      "type": "string"
+                                    },
+                                    "tenantOwner": {
+                                      "type": "string"
+                                    },
+                                    "createdAt": {
+                                      "type": "integer"
+                                    },
+                                    "updatedAt": {
+                                      "type": "integer",
+                                      "nullable": true
+                                    },
+                                    "active": {
+                                      "type": "boolean"
+                                    },
+                                    "dayWeek": {
+                                      "type": "integer",
+                                      "description": "0=Domingo ... 6=Sábado"
+                                    },
+                                    "hours": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "tenant": {
+                                            "type": "string"
+                                          },
+                                          "tenantOwner": {
+                                            "type": "string"
+                                          },
+                                          "createdAt": {
+                                            "type": "integer"
+                                          },
+                                          "updatedAt": {
+                                            "type": "integer",
+                                            "nullable": true
+                                          },
+                                          "start": {
+                                            "type": "string",
+                                            "example": "08:00"
+                                          },
+                                          "end": {
+                                            "type": "string",
+                                            "example": "12:00"
+                                          },
+                                          "sequence": {
+                                            "type": "integer",
+                                            "description": "Ordem do intervalo dentro do dia"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "allowAllHours": {
+                            "type": "boolean",
+                            "description": "Se a ação deve ignorar restrições de horário"
+                          },
+                          "seconds": {
+                            "type": "integer",
+                            "description": "Tempo em segundos para disparar a ação"
+                          }
+                        }
+                      }
+                    },
+                    "finishOn": {
+                      "type": "object",
+                      "description": "Configuração de tempo total para finalizar automaticamente",
+                      "properties": {
+                        "seconds": {
+                          "type": "integer",
+                          "description": "Tempo em segundos para finalizar"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "actions": [
+                    {
+                      "id": "3E5EA46144FFA08784C07E0B08728529",
+                      "type": "SEND_MESSAGE",
+                      "instructions": "oi tudo bem?",
+                      "workingHours": null,
+                      "allowAllHours": true,
+                      "seconds": 300
+                    },
+                    {
+                      "id": "3E5EA46144FFA1899F837E0B08728529",
+                      "type": "SEND_MESSAGE",
+                      "instructions": "oi tudo certo??",
+                      "workingHours": {
+                        "id": "3E5EA46144FFA2C7F0417E0B08728529",
+                        "tenant": "3C2DA3195269F012EB6956CE2010C3A1",
+                        "tenantOwner": "GPT_MAKER",
+                        "createdAt": 1755550865562,
+                        "updatedAt": null,
+                        "active": true,
+                        "days": [
+                          {
+                            "id": "3E5EA46144FFA3E046E87E0B08728529",
+                            "tenant": "3C2DA3195269F012EB6956CE2010C3A1",
+                            "tenantOwner": "GPT_MAKER",
+                            "createdAt": 1755550865562,
+                            "updatedAt": null,
+                            "active": true,
+                            "dayWeek": 1,
+                            "hours": [
+                              {
+                                "id": "3E5EA46144FFA4BC6E437E0B08728529",
+                                "tenant": "3C2DA3195269F012EB6956CE2010C3A1",
+                                "tenantOwner": "GPT_MAKER",
+                                "createdAt": 1755550865562,
+                                "updatedAt": null,
+                                "start": "08:00",
+                                "end": "12:00",
+                                "sequence": 0
+                              },
+                              {
+                                "id": "3E5EA46144FFA536F8A67E0B08728529",
+                                "tenant": "3C2DA3195269F012EB6956CE2010C3A1",
+                                "tenantOwner": "GPT_MAKER",
+                                "createdAt": 1755550865562,
+                                "updatedAt": null,
+                                "start": "14:00",
+                                "end": "18:00",
+                                "sequence": 1
+                              }
+                            ]
+                          },
+                          {
+                            "id": "3E5EA46144FFA69E39407E0B08728529",
+                            "tenant": "3C2DA3195269F012EB6956CE2010C3A1",
+                            "tenantOwner": "GPT_MAKER",
+                            "createdAt": 1755550865562,
+                            "updatedAt": null,
+                            "active": false,
+                            "dayWeek": 2,
+                            "hours": []
+                          }
+                        ]
+                      },
+                      "allowAllHours": false,
+                      "seconds": 300
+                    },
+                    {
+                      "id": "3E5EA46144FFA74E06157E0B08728529",
+                      "type": "FINISH_INTERACTION",
+                      "instructions": null,
+                      "workingHours": null,
+                      "allowAllHours": true,
+                      "seconds": 600
+                    }
+                  ],
+                  "finishOn": {
+                    "seconds": 600
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deleta uma ação existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ação de inatividade deletada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/agent/{id}/transfer-rules": {
       "get": {
         "description": "Lista as regras de transferência",
