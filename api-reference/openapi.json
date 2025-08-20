@@ -599,6 +599,14 @@
                         "TRANSFER"
                       ],
                       "description": "Define o que acontece ao atingir o limite de interações por atendimento, vai ser usado apenas quando o maxDailyMessages não for nulo."
+                    },
+                    "knowledgeByFunction": {
+                      "type": "boolean",
+                      "description": "É reponsável por ativar a busca inteligênte do treinamento aonde o agente consulta a base de treinamentos no momento certo, para trazer respostas mais precisas"
+                    },
+                    "onLackKnowLedge": {
+                      "type": "string",
+                      "description": "Na falta de conhecimento o agente lança um weebhook"
                     }
                   }
                 }
@@ -703,6 +711,34 @@
                       "THIRD_SEC",
                       "ONE_MINUTE"
                     ]
+                  },
+                  "signMessages": {
+                    "type": "boolean",
+                    "description": "Define se a mensagem do agente vai ser assinada ou não"
+                  },
+                  "maxDailyMessages": {
+                    "type": "integer",
+                    "description": "É o limite de interações por atendimento aonde temos as opções (null) que representa sem limite, (20,50,100,200,500,1000) interações qualquer valor além desses não será aceito"
+                  },
+                  "maxDailyMessagesLimitAction": {
+                    "enum": [
+                      "TEMP_BLOCK_30S",
+                      "TEMP_BLOCK_5M",
+                      "TEMP_BLOCK_10M",
+                      "TEMP_BLOCK_30M",
+                      "TEMP_BLOCK_1H",
+                      "BLOCK",
+                      "TRANSFER"
+                    ],
+                    "description": "Vai ser usado apenas quando maxDailyMessages for diferente de null"
+                  },
+                  "knowledgeByFunction": {
+                    "type": "boolean",
+                    "description": "É reponsável por ativar a busca inteligênte do treinamento aonde o agente consulta a base de treinamentos no momento certo, para trazer respostas mais precisas"
+                  },
+                  "onLackKnowLedge": {
+                    "type": "string",
+                    "description": "Na falta de conhecimento o agente lança um weebhook"
                   }
                 }
               }
