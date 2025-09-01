@@ -2008,14 +2008,6 @@
                     "items": {
                       "type": "object",
                       "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "SEND_MESSAGE",
-                            "TEMP_BLOCK",
-                            "FINISH_INTERACTION"
-                          ]
-                        },
                         "instructions": {
                           "type": "string",
                           "description": "Mensagem ou instruções da ação"
@@ -2278,15 +2270,6 @@
                     "items": {
                       "type": "object",
                       "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "SEND_MESSAGE",
-                            "TEMP_BLOCK",
-                            "FINISH_INTERACTION"
-                          ],
-                          "description": "Tipo da ação"
-                        },
                         "instructions": {
                           "type": "string",
                           "description": "Mensagem ou instruções da ação"
