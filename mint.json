@@ -125,15 +125,30 @@
       ]
     },
     {
-      "group": "MCP",
+      "group": "Campos customizados",
       "pages": [
-        "api-reference/mcp/add",
-        "api-reference/mcp/connect",
-        "api-reference/mcp/list-tools",
-        "api-reference/mcp/active-tool",
-        "api-reference/mcp/inactiv-tool",
-        "api-reference/mcp/sync-tools",
-        "api-reference/mcp/delete-mcp"
+        "api-reference/custom-field/list-custom-field",
+        "api-reference/custom-field/create-custom-field",
+        "api-reference/custom-field/update-custom-field",
+        "api-reference/custom-field/archive-custom-field"
+      ]
+    },
+    {
+      "group": "Ações de inatividade",
+      "pages": [
+        "api-reference/idle-actions/list-idle-actions",
+        "api-reference/idle-actions/create-idle-actions",
+        "api-reference/idle-actions/update-idle-actions",
+        "api-reference/idle-actions/delete-idle-actions"
+      ]
+    },
+    {
+      "group": "Regras de transferência",
+      "pages": [
+        "api-reference/transfer-rules/list-transfer-rules",
+        "api-reference/transfer-rules/create-transfer-rules",
+        "api-reference/transfer-rules/update-transfer-rules",
+        "api-reference/transfer-rules/delete-transfer-rules"
       ]
     },
     {
@@ -143,6 +158,18 @@
         "api-reference/intentions/create-intention",
         "api-reference/intentions/update-intention",
         "api-reference/intentions/delete-intention"
+      ]
+    },
+    {
+      "group": "MCP",
+      "pages": [
+        "api-reference/mcp/add",
+        "api-reference/mcp/connect",
+        "api-reference/mcp/list-tools",
+        "api-reference/mcp/active-tool",
+        "api-reference/mcp/inactive-tool",
+        "api-reference/mcp/sync-tools",
+        "api-reference/mcp/delete-mcp"
       ]
     },
     {

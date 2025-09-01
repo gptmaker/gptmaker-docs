@@ -584,6 +584,32 @@
                         "THIRD_SEC",
                         "ONE_MINUTE"
                       ]
+                    },
+                    "maxDailyMessages": {
+                      "type": "integer",
+                      "nullable": true,
+                      "description": "Define o que acontece ao atingir o limite de interações por atendimento, se for nulo não usa maxDailyMessagesLimitAction"
+                    },
+                    "maxDailyMessagesLimitAction": {
+                      "type": "string",
+                      "enum": [
+                        "TEMP_BLOCK_30S",
+                        "TEMP_BLOCK_5M",
+                        "TEMP_BLOCK_10M",
+                        "TEMP_BLOCK_30M",
+                        "TEMP_BLOCK_1H",
+                        "BLOCK",
+                        "TRANSFER"
+                      ],
+                      "description": "Define o que acontece ao atingir o limite de interações por atendimento, vai ser usado apenas quando o maxDailyMessages não for nulo."
+                    },
+                    "knowledgeByFunction": {
+                      "type": "boolean",
+                      "description": "É reponsável por ativar a busca inteligênte do treinamento aonde o agente consulta a base de treinamentos no momento certo, para trazer respostas mais precisas"
+                    },
+                    "onLackKnowLedge": {
+                      "type": "string",
+                      "description": "Na falta de conhecimento o agente lança um weebhook"
                     }
                   }
                 }
@@ -691,6 +717,34 @@
                       "THIRD_SEC",
                       "ONE_MINUTE"
                     ]
+                  },
+                  "signMessages": {
+                    "type": "boolean",
+                    "description": "Define se a mensagem do agente vai ser assinada ou não"
+                  },
+                  "maxDailyMessages": {
+                    "type": "integer",
+                    "description": "É o limite de interações por atendimento aonde temos as opções (null) que representa sem limite, (20,50,100,200,500,1000) interações qualquer valor além desses não será aceito"
+                  },
+                  "maxDailyMessagesLimitAction": {
+                    "enum": [
+                      "TEMP_BLOCK_30S",
+                      "TEMP_BLOCK_5M",
+                      "TEMP_BLOCK_10M",
+                      "TEMP_BLOCK_30M",
+                      "TEMP_BLOCK_1H",
+                      "BLOCK",
+                      "TRANSFER"
+                    ],
+                    "description": "Vai ser usado apenas quando maxDailyMessages for diferente de null"
+                  },
+                  "knowledgeByFunction": {
+                    "type": "boolean",
+                    "description": "É reponsável por ativar a busca inteligênte do treinamento aonde o agente consulta a base de treinamentos no momento certo, para trazer respostas mais precisas"
+                  },
+                  "onLackKnowLedge": {
+                    "type": "string",
+                    "description": "Na falta de conhecimento o agente lança um weebhook"
                   }
                 }
               }
@@ -1318,6 +1372,1562 @@
                   "properties": {
                     "success": {
                       "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/custom-field/workspace/{workspaceId}": {
+      "get": {
+        "description": "Lista os campos customizados",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Filtro para os campos customizados",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id do campo"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "nome do campo"
+                    },
+                    "jsonName": {
+                      "type": "string",
+                      "description": "nome do arquivo JSON"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "descrição do campo"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "description": "data de criação do campo"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "description": "data de atualização do campo"
+                    },
+                    "type": {
+                      "enum": [
+                        "STRING",
+                        "DATE",
+                        "DATE_TIME",
+                        "NUMBER",
+                        "BOOLEAN",
+                        "MONEY"
+                      ]
+                    },
+                    "archived": {
+                      "type": "boolean",
+                      "description": "mostra se está arquivado ou não"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Cria um novo campo personalizado",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados dos campos a ser adicionado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "id do campo"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "nome do campo"
+                  },
+                  "jsonName": {
+                    "type": "string",
+                    "description": "nome do arquivo JSON"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "descrição do campo"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "description": "data de criação do campo"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "description": "data de atualização do campo"
+                  },
+                  "type": {
+                    "enum": [
+                      "STRING",
+                      "DATE",
+                      "DATE_TIME",
+                      "NUMBER",
+                      "BOOLEAN",
+                      "MONEY"
+                    ]
+                  },
+                  "archived": {
+                    "type": "boolean",
+                    "description": "mostra se está arquivado ou não"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Campo adicionado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "jsonName": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "enum": [
+                        "STRING",
+                        "DATE",
+                        "DATE_TIME",
+                        "NUMBER",
+                        "BOOLEAN",
+                        "MONEY"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/custom-field/{customfieldId}": {
+      "put": {
+        "description": " Atualiza um campo customizado existente. O campo é identificado pelo seu ID.",
+        "parameters": [
+          {
+            "name": "customfieldId",
+            "in": "path",
+            "description": "ID do campo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do campo customizado a ser atualizado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Id do campo a ser atualizado"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Nome do campo"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "descrição do campo"
+                      },
+                      "type": {
+                        "enum": [
+                          "STRING",
+                          "DATE",
+                          "DATE_TIME",
+                          "NUMBER",
+                          "BOOLEAN",
+                          "MONEY"
+                        ]
+                      },
+                      "jsonName": {
+                        "type": "string",
+                        "description": "nome do arquivo JSON"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Campo atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/custom-field/toggle-archive/{customfieldId}": {
+      "put": {
+        "description": " Atualiza o status de arquivamento de um campo customizado existente. O campo é identificado pelo seu ID e o novo status é passado como parâmetro de query.",
+        "parameters": [
+          {
+            "name": "customfieldId",
+            "in": "path",
+            "description": "ID do campo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "description": "Define se o campo deve ser arquivado (`true`) ou desarquivado (`false`)",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Campo atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/idle-actions": {
+      "get": {
+        "description": "Listar as ações de inatividade",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista as configurações de ações de inatividade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "actions": {
+                      "type": "array",
+                      "description": "Lista de ações configuradas para inatividade",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Identificador da ação"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "SEND_MESSAGE",
+                              "FINISH_INTERACTION"
+                            ],
+                            "description": "Tipo da ação de inatividade"
+                          },
+                          "instructions": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Mensagem ou instruções da ação"
+                          },
+                          "workingHours": {
+                            "type": "object",
+                            "nullable": true,
+                            "description": "Horários de funcionamento permitidos para execução da ação",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "tenant": {
+                                "type": "string"
+                              },
+                              "tenantOwner": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "integer",
+                                "description": "Timestamp de criação"
+                              },
+                              "updatedAt": {
+                                "type": "integer",
+                                "nullable": true,
+                                "description": "Timestamp de atualização"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              },
+                              "days": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "tenant": {
+                                      "type": "string"
+                                    },
+                                    "tenantOwner": {
+                                      "type": "string"
+                                    },
+                                    "createdAt": {
+                                      "type": "integer"
+                                    },
+                                    "updatedAt": {
+                                      "type": "integer",
+                                      "nullable": true
+                                    },
+                                    "active": {
+                                      "type": "boolean"
+                                    },
+                                    "dayWeek": {
+                                      "type": "integer",
+                                      "description": "Dia da semana (0=Domingo, 1=Segunda, ...)"
+                                    },
+                                    "hours": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "tenant": {
+                                            "type": "string"
+                                          },
+                                          "tenantOwner": {
+                                            "type": "string"
+                                          },
+                                          "createdAt": {
+                                            "type": "integer"
+                                          },
+                                          "updatedAt": {
+                                            "type": "integer",
+                                            "nullable": true
+                                          },
+                                          "start": {
+                                            "type": "string",
+                                            "example": "08:00"
+                                          },
+                                          "end": {
+                                            "type": "string",
+                                            "example": "12:00"
+                                          },
+                                          "sequence": {
+                                            "type": "integer",
+                                            "description": "Ordem do intervalo"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "allowAllHours": {
+                            "type": "boolean",
+                            "description": "Indica se a ação pode ser executada em qualquer horário"
+                          },
+                          "seconds": {
+                            "type": "integer",
+                            "description": "Tempo de inatividade (em segundos) para disparar a ação"
+                          }
+                        }
+                      }
+                    },
+                    "finishOn": {
+                      "type": "object",
+                      "description": "Configuração de tempo para finalizar interação",
+                      "properties": {
+                        "seconds": {
+                          "type": "integer",
+                          "description": "Tempo total em segundos para finalizar"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Cria uma nova ação de inatividade",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Configuração de ações de inatividade a ser criada/atualizada",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "instructions": {
+                          "type": "string",
+                          "description": "Mensagem ou instruções da ação"
+                        },
+                        "seconds": {
+                          "type": "integer",
+                          "description": "Tempo em segundos de inatividade para disparar a ação"
+                        },
+                        "allowAllHours": {
+                          "type": "boolean",
+                          "default": true,
+                          "description": "Define se deve ser executada em qualquer horário ou não, se for true não colocamos workingHours"
+                        },
+                        "workingHours": {
+                          "type": "array",
+                          "nullable": true,
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "dayWeek": {
+                                "type": "integer",
+                                "description": "0=Domingo, 1=Segunda, ..., 6=Sábado"
+                              },
+                              "active": {
+                                "type": "boolean",
+                                "description": "Define se o dia está ativo"
+                              },
+                              "hours": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "start": {
+                                      "type": "string",
+                                      "example": "08:00"
+                                    },
+                                    "end": {
+                                      "type": "string",
+                                      "example": "12:00"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "finishOn": {
+                    "type": "object",
+                    "properties": {
+                      "seconds": {
+                        "type": "integer",
+                        "description": "Tempo total (em segundos) para finalizar a interação"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Configuração de ações de inatividade criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "actions": {
+                      "type": "array",
+                      "description": "Lista de ações configuradas para inatividade",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Identificador da ação criada"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "SEND_MESSAGE",
+                              "TEMP_BLOCK",
+                              "FINISH_INTERACTION"
+                            ],
+                            "description": "Tipo da ação de inatividade"
+                          },
+                          "instructions": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Mensagem/instruções da ação"
+                          },
+                          "workingHours": {
+                            "type": "object",
+                            "nullable": true,
+                            "description": "Horários de funcionamento aplicáveis à ação",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "tenant": {
+                                "type": "string"
+                              },
+                              "tenantOwner": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "integer"
+                              },
+                              "updatedAt": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "active": {
+                                "type": "boolean"
+                              },
+                              "days": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "tenant": {
+                                      "type": "string"
+                                    },
+                                    "tenantOwner": {
+                                      "type": "string"
+                                    },
+                                    "createdAt": {
+                                      "type": "integer"
+                                    },
+                                    "updatedAt": {
+                                      "type": "integer",
+                                      "nullable": true
+                                    },
+                                    "active": {
+                                      "type": "boolean"
+                                    },
+                                    "dayWeek": {
+                                      "type": "integer",
+                                      "description": "0=Domingo ... 6=Sábado"
+                                    },
+                                    "hours": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "tenant": {
+                                            "type": "string"
+                                          },
+                                          "tenantOwner": {
+                                            "type": "string"
+                                          },
+                                          "createdAt": {
+                                            "type": "integer"
+                                          },
+                                          "updatedAt": {
+                                            "type": "integer",
+                                            "nullable": true
+                                          },
+                                          "start": {
+                                            "type": "string",
+                                            "example": "08:00"
+                                          },
+                                          "end": {
+                                            "type": "string",
+                                            "example": "12:00"
+                                          },
+                                          "sequence": {
+                                            "type": "integer"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "allowAllHours": {
+                            "type": "boolean",
+                            "description": "Indica se a ação pode ocorrer em qualquer horário"
+                          },
+                          "seconds": {
+                            "type": "integer",
+                            "description": "Tempo de inatividade (s) para disparo da ação"
+                          }
+                        }
+                      }
+                    },
+                    "finishOn": {
+                      "type": "object",
+                      "description": "Configuração para finalização automática",
+                      "properties": {
+                        "seconds": {
+                          "type": "integer",
+                          "description": "Tempo total (s) para finalizar a interação"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Atualizar uma nova ação de inatividade",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Atualização das ações de inatividade do assistente",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "actions": {
+                    "type": "array",
+                    "description": "Lista de ações configuradas",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "instructions": {
+                          "type": "string",
+                          "description": "Mensagem ou instruções da ação"
+                        },
+                        "seconds": {
+                          "type": "integer",
+                          "description": "Tempo de inatividade em segundos"
+                        },
+                        "allowAllHours": {
+                          "type": "boolean",
+                          "description": "Se true, ignora restrição de horário"
+                        },
+                        "workingHours": {
+                          "type": "array",
+                          "nullable": true,
+                          "description": "Lista de dias e horários em que a ação pode ser executada",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "dayWeek": {
+                                "type": "integer",
+                                "description": "Dia da semana (0=Domingo, 1=Segunda, ... 6=Sábado)"
+                              },
+                              "active": {
+                                "type": "boolean",
+                                "description": "Define se o dia está ativo"
+                              },
+                              "hours": {
+                                "type": "array",
+                                "description": "Faixas de horário do dia",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "start": {
+                                      "type": "string",
+                                      "example": "08:00"
+                                    },
+                                    "end": {
+                                      "type": "string",
+                                      "example": "12:00"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "finishOn": {
+                    "type": "object",
+                    "description": "Tempo para finalizar interação automaticamente",
+                    "properties": {
+                      "seconds": {
+                        "type": "integer",
+                        "description": "Tempo total em segundos"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Configuração de ações de inatividade atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "actions": {
+                      "type": "array",
+                      "description": "Lista de ações configuradas para inatividade",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Identificador único da ação"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "SEND_MESSAGE",
+                              "FINISH_INTERACTION"
+                            ],
+                            "description": "Tipo da ação"
+                          },
+                          "instructions": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Mensagem/instruções configuradas para a ação"
+                          },
+                          "workingHours": {
+                            "type": "object",
+                            "nullable": true,
+                            "description": "Horários de funcionamento da ação (quando allowAllHours=false)",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "tenant": {
+                                "type": "string"
+                              },
+                              "tenantOwner": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "integer"
+                              },
+                              "updatedAt": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "active": {
+                                "type": "boolean"
+                              },
+                              "days": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "tenant": {
+                                      "type": "string"
+                                    },
+                                    "tenantOwner": {
+                                      "type": "string"
+                                    },
+                                    "createdAt": {
+                                      "type": "integer"
+                                    },
+                                    "updatedAt": {
+                                      "type": "integer",
+                                      "nullable": true
+                                    },
+                                    "active": {
+                                      "type": "boolean"
+                                    },
+                                    "dayWeek": {
+                                      "type": "integer",
+                                      "description": "0=Domingo ... 6=Sábado"
+                                    },
+                                    "hours": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "tenant": {
+                                            "type": "string"
+                                          },
+                                          "tenantOwner": {
+                                            "type": "string"
+                                          },
+                                          "createdAt": {
+                                            "type": "integer"
+                                          },
+                                          "updatedAt": {
+                                            "type": "integer",
+                                            "nullable": true
+                                          },
+                                          "start": {
+                                            "type": "string",
+                                            "example": "08:00"
+                                          },
+                                          "end": {
+                                            "type": "string",
+                                            "example": "12:00"
+                                          },
+                                          "sequence": {
+                                            "type": "integer",
+                                            "description": "Ordem do intervalo dentro do dia"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "allowAllHours": {
+                            "type": "boolean",
+                            "description": "Se a ação deve ignorar restrições de horário"
+                          },
+                          "seconds": {
+                            "type": "integer",
+                            "description": "Tempo em segundos para disparar a ação"
+                          }
+                        }
+                      }
+                    },
+                    "finishOn": {
+                      "type": "object",
+                      "description": "Configuração de tempo total para finalizar automaticamente",
+                      "properties": {
+                        "seconds": {
+                          "type": "integer",
+                          "description": "Tempo em segundos para finalizar"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deleta uma ação existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ação de inatividade deletada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{id}/transfer-rules": {
+      "get": {
+        "description": "Lista as regras de transferência",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista as regras de transferência",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id da regra"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "description": "data de atualização do campo"
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "description": "Instruções visíveis na transferência"
+                    },
+                    "returnOnFinish": {
+                      "type": "boolean",
+                      "description": "Define se deve retornar ao assistente após o atendimento"
+                    },
+                    "type": {
+                      "enum": [
+                        "HUMAN",
+                        "AGENT"
+                      ]
+                    },
+                    "agentId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do agente de destino (se aplicável)"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do usuário de destino (se aplicável)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/transfer-rules": {
+      "post": {
+        "description": "Cria uma nova regra de transferência para o agente especificado",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados da regra de transferência a ser adicionado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "instructions": {
+                    "type": "string",
+                    "description": "Instruções visíveis na transferência"
+                  },
+                  "returnOnFinish": {
+                    "type": "boolean",
+                    "description": "Define se deve retornar ao assistente após o atendimento"
+                  },
+                  "type": {
+                    "enum": [
+                      "HUMAN",
+                      "AGENT"
+                    ]
+                  },
+                  "userId": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Id do usuário de destino (caso o tipo seja HUMAN)"
+                  },
+                  "agentId": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Id do agente de destino (caso o tipo seja AGENT)"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Regra de transferência criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id da regra"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "description": "data de atualização do campo"
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "description": "Instruções visíveis na transferência"
+                    },
+                    "returnOnFinish": {
+                      "type": "boolean",
+                      "description": "Define se deve retornar ao assistente após o atendimento"
+                    },
+                    "type": {
+                      "enum": [
+                        "HUMAN",
+                        "AGENT"
+                      ]
+                    },
+                    "agentId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do agente de destino (se aplicável)"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do usuário de destino (se aplicável)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/transfer-rules/{transfer-rule-id}": {
+      "put": {
+        "description": " Atualiza uma regra de transferência existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transfer-rule-id",
+            "in": "path",
+            "description": "ID da regra de transferência",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados da regra de transferência a ser atualizada",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "instructions": {
+                        "type": "string",
+                        "description": "Instruções visíveis na transferência"
+                      },
+                      "returnOnFinish": {
+                        "type": "boolean",
+                        "description": "Define se deve retornar ao assistente após o atendimento"
+                      },
+                      "type": {
+                        "enum": [
+                          "HUMAN",
+                          "AGENT"
+                        ]
+                      },
+                      "agentId": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Id do agente de destino (se aplicável)"
+                      },
+                      "userId": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Id do usuário de destino (se aplicável)"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Regra de transferência atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id da regra"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "description": "Data de criação da regra de transferência"
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "description": "Instruções visíveis na transferência"
+                    },
+                    "returnOnFinish": {
+                      "type": "boolean",
+                      "description": "Define se deve retornar ao assistente após o atendimento"
+                    },
+                    "type": {
+                      "enum": [
+                        "HUMAN",
+                        "AGENT"
+                      ]
+                    },
+                    "agentId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do agente de destino (se aplicável)"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Id do usuário de destino (se aplicável)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": " Deleta uma regra de transferência existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transfer-rule-id",
+            "in": "path",
+            "description": "ID da regra de transferência",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Regra de transferência atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string",
+                      "description": "Sucesso ao deletar a regra"
                     }
                   }
                 }
@@ -1984,20 +3594,15 @@
                 "properties": {
                   "description": {
                     "type": "string",
-                    "description": "Descrição da intenção"
+                    "description": "Descrição da intençãoooo"
                   },
-                  "preprocessingMessage": {
+                  "details": {
                     "type": "string",
-                    "description": "Mensagem de pré-processamento",
-                    "enum": [
-                      "DISABLED",
-                      "GENERATE",
-                      "MANUAL"
-                    ]
+                    "description": "Detalhamento e instruções de quando o agente deve usar essa intenção."
                   },
-                  "preprocessingText": {
+                  "instructions": {
                     "type": "string",
-                    "description": "Texto de pré-processamento"
+                    "description": "Instruções para o agente caso o atributo type seja INSTRUCTIONS."
                   },
                   "fields": {
                     "type": "array",
@@ -2046,7 +3651,8 @@
                     "type": "string",
                     "description": "Tipo de intenção",
                     "enum": [
-                      "WEBHOOK"
+                      "WEBHOOK",
+                      "INSTRUCTIONS"
                     ]
                   },
                   "httpMethod": {
@@ -2098,6 +3704,57 @@
                       "required": [
                         "name",
                         "value"
+                      ]
+                    }
+                  },
+                  "variables": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "valueExpression": {
+                          "type": "string",
+                          "description": "Expressão do valor a ser adicionado no campo padrão ou customizado"
+                        },
+                        "defaultFieldKey": {
+                          "type": "string",
+                          "description": "Nome do campo padrão. Aceitos são: chat_id, contact_name, contact_phone, contact_email, contact_gender, contact_birthday, contact_job_title, contact_org_name, contact_org_state, contact_org_city"
+                        },
+                        "customField": {
+                          "type": "object",
+                          "description": "Caso não seja um campo padrão informado em defaultFieldKey, informe o customField obtido em Listar campos.",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Id do campo a ser atualizado"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Nome do campo"
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "descrição do campo"
+                            },
+                            "type": {
+                              "enum": [
+                                "STRING",
+                                "DATE",
+                                "DATE_TIME",
+                                "NUMBER",
+                                "BOOLEAN",
+                                "MONEY"
+                              ]
+                            },
+                            "jsonName": {
+                              "type": "string",
+                              "description": "nome do arquivo JSON"
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "valueExpression"
                       ]
                     }
                   },
@@ -4122,6 +5779,14 @@
           "description": {
             "type": "string",
             "description": "Descrição da intenção"
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Quando usar a intenção"
+          },
+          "details": {
+            "type": "string",
+            "description": "Instruções dos dados de saída"
           },
           "preprocessingMessage": {
             "type": "string",
