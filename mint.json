@@ -161,6 +161,18 @@
       ]
     },
     {
+      "group": "MCP",
+      "pages": [
+        "api-reference/mcp/add",
+        "api-reference/mcp/connect",
+        "api-reference/mcp/list-tools",
+        "api-reference/mcp/active-tool",
+        "api-reference/mcp/inactive-tool",
+        "api-reference/mcp/sync-tools",
+        "api-reference/mcp/delete-mcp"
+      ]
+    },
+    {
       "group": "Chats",
       "pages": [
         "api-reference/chats/list-chats",

@@ -529,6 +529,8 @@
                       "type": "string",
                       "description": "Modelo de LLM preferido",
                       "enum": [
+                        "GPT_5",
+                        "GPT_5_MINI",
                         "GPT_4_1",
                         "GPT_4_1_MINI",
                         "GPT_4_O_MINI",
@@ -544,7 +546,8 @@
                         "DEEPINFRA_LLAMA3_3",
                         "QWEN_2_5_MAX",
                         "DEEPSEEK_CHAT",
-                        "SABIA_3"
+                        "SABIA_3",
+                        "SABIA_3_1"
                       ]
                     },
                     "timezone": {
@@ -659,6 +662,8 @@
                     "type": "string",
                     "description": "Modelo de LLM preferido",
                     "enum": [
+                      "GPT_5",
+                      "GPT_5_MINI",
                       "GPT_4_1",
                       "GPT_4_1_MINI",
                       "GPT_4_O_MINI",
@@ -674,7 +679,8 @@
                       "DEEPINFRA_LLAMA3_3",
                       "QWEN_2_5_MAX",
                       "DEEPSEEK_CHAT",
-                      "SABIA_3"
+                      "SABIA_3",
+                      "SABIA_3_1"
                     ]
                   },
                   "timezone": {
@@ -2951,6 +2957,545 @@
         }
       }
     },
+    "/v2/mcp/{mcpId}/tools": {
+      "get": {
+        "description": "Lista as ferramentas de um MCP específico",
+        "parameters": [
+          {
+            "name": "mcpId",
+            "in": "path",
+            "description": "ID do MCP",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Configurações listadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Id da ferramenta"
+                      },
+                      "tenant": {
+                        "type": "string",
+                        "description": "Id/instância que está consumindo a API"
+                      },
+                      "tenantOwner": {
+                        "type": "string",
+                        "description": "Responsável pelo tenant"
+                      },
+                      "createdAt": {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "Data de criação"
+                      },
+                      "updatedAt": {
+                        "type": "integer",
+                        "format": "int64",
+                        "nullable": true,
+                        "description": "Data de atualização"
+                      },
+                      "integrationId": {
+                        "type": "string",
+                        "description": "Id de integração"
+                      },
+                      "agentId": {
+                        "type": "string",
+                        "description": "Id do agente"
+                      },
+                      "active": {
+                        "type": "boolean",
+                        "description": "Status"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Nome da ferramenta"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Descrição da ferramenta"
+                      },
+                      "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "$schema": {
+                            "type": "string"
+                          },
+                          "properties": {
+                            "type": "object"
+                          },
+                          "additionalProperties": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/mcp/{mcpId}/tool/{toolId}/active": {
+      "get": {
+        "description": "Ativa determinada ferramenta do MCP",
+        "parameters": [
+          {
+            "name": "mcpId",
+            "in": "path",
+            "description": "ID do MCP",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toolId",
+            "in": "path",
+            "description": "ID da ferramenta",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ferramenta ativada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/mcp/{mcpId}/tool/{toolId}/inactive": {
+      "get": {
+        "description": "Inativa determinada ferramenta do MCP",
+        "parameters": [
+          {
+            "name": "mcpId",
+            "in": "path",
+            "description": "ID do MCP",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toolId",
+            "in": "path",
+            "description": "ID da ferramenta",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ferramenta inativada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/mcp/{mcpId}/sync-tools": {
+      "get": {
+        "description": "Sincroniza ferramentas do MCP",
+        "parameters": [
+          {
+            "name": "mcpId",
+            "in": "path",
+            "description": "ID do MCP",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ferramenta sincronizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/mcp/add": {
+      "post": {
+        "description": "Permite criar uma conexão MCP",
+        "parameters": [
+          {
+            "name": "mcpId",
+            "in": "path",
+            "description": "ID do MCP",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados para criação de uma integração MCP",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome da integração MCP",
+                    "example": "Local MCP"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da integração",
+                    "example": "Integração MCP sem OAuth"
+                  },
+                  "mcpUrl": {
+                    "type": "string",
+                    "description": "URL de conexão MCP",
+                    "example": "https://observability.mcp.cloudflare.com/sse"
+                  },
+                  "urlType": {
+                    "enum": [
+                      "SSE",
+                      "STREAMABLEHTTP"
+                    ]
+                  },
+                  "authType": {
+                    "enum": [
+                      "NO_OAUTH",
+                      "OAUTH",
+                      "HEADERS"
+                    ],
+                    "description": "Tipo de autenticação utilizada"
+                  },
+                  "headers": {
+                    "type": "object",
+                    "description": "Cabeçalhos adicionais para autenticação ou configuração"
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "mcpUrl",
+                  "urlType",
+                  "authType"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Integração criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "connected": {
+                      "type": "boolean",
+                      "description": "Indica se a integração já está conectada"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indica se a operação foi realizada com sucesso"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "Identificador único da integração criada"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "URL de autorização para completar o fluxo OAuth"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/mcp/connect": {
+      "post": {
+        "description": "Permite conectar a uma conexão MCP caso for OAUTH",
+        "requestBody": {
+          "description": "Dados de retorno do fluxo OAuth para criação da integração MCP",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Código de autorização retornado pelo provedor OAuth",
+                    "example": "3cf778033a85c96b236f88733342d614:hXK8aaN7dARJn0rn:ahvDhFFDCLnwPxbrnDUm24XSGY5tBvTi"
+                  },
+                  "state": {
+                    "type": "string",
+                    "description": "Valor único para validação do fluxo OAuth",
+                    "example": "17b64ff8-f7be-49d6-a7f6-00da9592b216"
+                  }
+                },
+                "required": [
+                  "code",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Integração vinculada ao agente com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "agentId": {
+                      "type": "string",
+                      "description": "Identificador único do agente vinculado"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indica se a operação foi realizada com sucesso"
+                    },
+                    "mcpId": {
+                      "type": "string",
+                      "description": "Identificador único da integração MCP criada"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/mcp/{mcpId}": {
+      "delete": {
+        "description": "Deleta um MCP existente",
+        "parameters": [
+          {
+            "name": "mcpId",
+            "in": "path",
+            "description": "ID do MCP",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MCP deletado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/agent/{agentId}/intentions": {
       "get": {
         "description": "Lista as intenções do agente",
@@ -3049,20 +3594,15 @@
                 "properties": {
                   "description": {
                     "type": "string",
-                    "description": "Descrição da intenção"
+                    "description": "Descrição da intençãoooo"
                   },
-                  "preprocessingMessage": {
+                  "details": {
                     "type": "string",
-                    "description": "Mensagem de pré-processamento",
-                    "enum": [
-                      "DISABLED",
-                      "GENERATE",
-                      "MANUAL"
-                    ]
+                    "description": "Detalhamento e instruções de quando o agente deve usar essa intenção."
                   },
-                  "preprocessingText": {
+                  "instructions": {
                     "type": "string",
-                    "description": "Texto de pré-processamento"
+                    "description": "Instruções para o agente caso o atributo type seja INSTRUCTIONS."
                   },
                   "fields": {
                     "type": "array",
@@ -3111,7 +3651,8 @@
                     "type": "string",
                     "description": "Tipo de intenção",
                     "enum": [
-                      "WEBHOOK"
+                      "WEBHOOK",
+                      "INSTRUCTIONS"
                     ]
                   },
                   "httpMethod": {
@@ -3163,6 +3704,57 @@
                       "required": [
                         "name",
                         "value"
+                      ]
+                    }
+                  },
+                  "variables": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "valueExpression": {
+                          "type": "string",
+                          "description": "Expressão do valor a ser adicionado no campo padrão ou customizado"
+                        },
+                        "defaultFieldKey": {
+                          "type": "string",
+                          "description": "Nome do campo padrão. Aceitos são: chat_id, contact_name, contact_phone, contact_email, contact_gender, contact_birthday, contact_job_title, contact_org_name, contact_org_state, contact_org_city"
+                        },
+                        "customField": {
+                          "type": "object",
+                          "description": "Caso não seja um campo padrão informado em defaultFieldKey, informe o customField obtido em Listar campos.",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Id do campo a ser atualizado"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Nome do campo"
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "descrição do campo"
+                            },
+                            "type": {
+                              "enum": [
+                                "STRING",
+                                "DATE",
+                                "DATE_TIME",
+                                "NUMBER",
+                                "BOOLEAN",
+                                "MONEY"
+                              ]
+                            },
+                            "jsonName": {
+                              "type": "string",
+                              "description": "nome do arquivo JSON"
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "valueExpression"
                       ]
                     }
                   },
