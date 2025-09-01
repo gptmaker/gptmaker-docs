@@ -127,12 +127,12 @@
     {
       "group": "MCP",
       "pages": [
+        "api-reference/mcp/add",
+        "api-reference/mcp/connect",
         "api-reference/mcp/list-tools",
         "api-reference/mcp/active-tool",
         "api-reference/mcp/inactiv-tool",
         "api-reference/mcp/sync-tools",
-        "api-reference/mcp/add",
-        "api-reference/mcp/connect",
         "api-reference/mcp/delete-mcp"
       ]
     },

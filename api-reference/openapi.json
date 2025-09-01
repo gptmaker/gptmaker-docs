@@ -1681,16 +1681,11 @@
                   },
                   "authType": {
                     "enum": [
+                      "NO_OAUTH",
                       "OAUTH",
-                      "HEADERS",
-                      "NO_OAUTH"
+                      "HEADERS"
                     ],
                     "description": "Tipo de autenticação utilizada"
-                  },
-                  "redirectUri": {
-                    "type": "string",
-                    "description": "URI de redirecionamento para autenticação",
-                    "example": "http://localhost:3000/teste"
                   },
                   "headers": {
                     "type": "object",
