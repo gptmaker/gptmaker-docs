@@ -5788,19 +5788,6 @@
             "type": "string",
             "description": "Instruções dos dados de saída"
           },
-          "preprocessingMessage": {
-            "type": "string",
-            "description": "Mensagem de pré-processamento",
-            "enum": [
-              "DISABLED",
-              "GENERATE",
-              "MANUAL"
-            ]
-          },
-          "preprocessingText": {
-            "type": "string",
-            "description": "Texto de pré-processamento"
-          },
           "fields": {
             "type": "array",
             "items": {
@@ -5886,6 +5873,57 @@
                   "description": "Valor do parâmetro"
                 }
               }
+            }
+          },
+          "variables": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "valueExpression": {
+                  "type": "string",
+                  "description": "Expressão do valor a ser adicionado no campo padrão ou customizado"
+                },
+                "defaultFieldKey": {
+                  "type": "string",
+                  "description": "Nome do campo padrão. Aceitos são: chat_id, contact_name, contact_phone, contact_email, contact_gender, contact_birthday, contact_job_title, contact_org_name, contact_org_state, contact_org_city"
+                },
+                "customField": {
+                  "type": "object",
+                  "description": "Caso não seja um campo padrão informado em defaultFieldKey, informe o customField obtido em Listar campos.",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id do campo a ser atualizado"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do campo"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "descrição do campo"
+                    },
+                    "type": {
+                      "enum": [
+                        "STRING",
+                        "DATE",
+                        "DATE_TIME",
+                        "NUMBER",
+                        "BOOLEAN",
+                        "MONEY"
+                      ]
+                    },
+                    "jsonName": {
+                      "type": "string",
+                      "description": "nome do arquivo JSON"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "valueExpression"
+              ]
             }
           },
           "requestBody": {
