@@ -3594,7 +3594,7 @@
                 "properties": {
                   "description": {
                     "type": "string",
-                    "description": "Descrição da intençãoooo"
+                    "description": "Descrição da intenção"
                   },
                   "details": {
                     "type": "string",
@@ -3773,15 +3773,9 @@
                 },
                 "required": [
                   "description",
-                  "preprocessingMessage",
-                  "preprocessingText",
-                  "fields",
                   "type",
                   "httpMethod",
                   "url",
-                  "headers",
-                  "params",
-                  "requestBody",
                   "autoGenerateParams",
                   "autoGenerateBody"
                 ]
