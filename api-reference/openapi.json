@@ -5803,7 +5803,7 @@
                   "type": "string",
                   "description": "Tipo do campo",
                   "enum": [
-                    "TEXT",
+                    "STRING",
                     "URL",
                     "DATE_TIME",
                     "DATE",
