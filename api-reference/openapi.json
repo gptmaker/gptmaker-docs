@@ -4440,6 +4440,11 @@
                         "description": "Caso seja informado, a chamada será assíncrona, quando o agente responder, ele vai chamar esse webhook com a resposta.",
                         "example": "https://webhook.site"
                       },
+                      "onFinishCallback": {
+                        "type": "string",
+                        "description": "Caso seja informado, será disparado um webhook sempre que o atendimento for finalizado.",
+                        "example": "https://webhook.site"
+                      },
                       "chatName": {
                         "type": "string",
                         "description": "Você pode informar o nome do cliente caso já possua.",
@@ -4527,6 +4532,11 @@
                       "callbackUrl": {
                         "type": "string",
                         "description": "Caso seja informado, a chamada será assíncrona, quando o agente responder, ele vai chamar esse webhook com a resposta.",
+                        "example": "https://webhook.site"
+                      },
+                      "onFinishCallback": {
+                        "type": "string",
+                        "description": "Caso seja informado, será disparado um webhook sempre que o atendimento for finalizado.",
                         "example": "https://webhook.site"
                       },
                       "chatName": {
