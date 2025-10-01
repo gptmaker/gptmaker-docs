@@ -4402,6 +4402,439 @@
         }
       }
     },
+    "/v2/workspace/{workspaceId}/search": {
+      "get": {
+        "description": "Busca todos os contatos",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorno da requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "birthday": {
+                      "type": "integer",
+                      "format": "int64",
+                      "nullable": true,
+                      "description": "Data de nascimento"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "description": "Gênero do contato",
+                      "nullable": true
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Telefone",
+                      "nullable": true
+                    },
+                    "jobTitle": {
+                      "type": "string",
+                      "description": "Cargo"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do contato",
+                      "nullable": true
+                    },
+                    "recipient": {
+                      "type": "string",
+                      "description": "Identificador único do chat dentro do canal"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "Id do contato"
+                    },
+                    "picture": {
+                      "type": "string",
+                      "description": "Link da imagem de perfil do contato",
+                      "nullable": true
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "Email do contato",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/contact/{contactId}": {
+      "get": {
+        "description": "Buscar um contato em específico",
+        "responses": {
+          "200": {
+            "description": "Retorno da requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id do contato"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do contato",
+                      "nullable": true
+                    },
+                    "birthday": {
+                      "type": "integer",
+                      "format": "int64",
+                      "nullable": true,
+                      "description": "Data de nascimento em milissegundos"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Gênero do contato"
+                    },
+                    "picture": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true,
+                      "description": "Link da imagem de perfil do contato"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Número de telefone do contato",
+                      "nullable": true
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "nullable": true,
+                      "description": "Email do contato"
+                    },
+                    "jobTitle": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Cargo"
+                    },
+                    "recipient": {
+                      "type": "string",
+                      "description": "Identificador único do chat dentro do canal"
+                    },
+                    "customFieldValues": {
+                      "type": "array",
+                      "description": "Lista de campos customizados do contato",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "customFieldId"
+                        ],
+                        "properties": {
+                          "customFieldId": {
+                            "type": "string",
+                            "description": "Id do campo customizado"
+                          },
+                          "value": {
+                            "description": "Valor do campo customizado",
+                            "nullable": true,
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/contact/{contactId}/update": {
+      "put": {
+        "description": "Atualiza os dados de um contato em específico",
+        "requestBody": {
+          "description": "Dados do contato no qual pode ser atualizado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Id do contato"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do contato"
+                  },
+                  "birthday": {
+                    "type": "integer",
+                    "format": "int64",
+                    "nullable": true,
+                    "description": "Data de nascimento em milissegundos"
+                  },
+                  "gender": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Gênero do contato"
+                  },
+                  "picture": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": true,
+                    "description": "Link da imagem de perfil do contato"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Número de telefone do contato"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "nullable": true,
+                    "description": "Email do contato"
+                  },
+                  "jobTitle": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Cargo"
+                  },
+                  "recipient": {
+                    "type": "string",
+                    "description": "Identificador único do chat dentro do canal"
+                  },
+                  "customFieldValues": {
+                    "type": "array",
+                    "description": "Lista de campos customizados do contato",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customFieldId"
+                      ],
+                      "properties": {
+                        "customFieldId": {
+                          "type": "string",
+                          "description": "Id do campo customizado"
+                        },
+                        "value": {
+                          "description": "Valor do campo customizado",
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer",
+                              "format": "int64"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Retorno da requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id do contato"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do contato"
+                    },
+                    "birthday": {
+                      "type": "integer",
+                      "format": "int64",
+                      "nullable": true,
+                      "description": "Data de nascimento em milissegundos"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Gênero do contato"
+                    },
+                    "picture": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true,
+                      "description": "Link da imagem de perfil do contato"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Número de telefone do contato"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "nullable": true,
+                      "description": "Email do contato"
+                    },
+                    "jobTitle": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Cargo"
+                    },
+                    "recipient": {
+                      "type": "string",
+                      "description": "Identificador único do chat dentro do canal"
+                    },
+                    "customFieldValues": {
+                      "type": "array",
+                      "description": "Lista de campos customizados do contato",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "customFieldId"
+                        ],
+                        "properties": {
+                          "customFieldId": {
+                            "type": "string",
+                            "description": "Id do campo customizado"
+                          },
+                          "value": {
+                            "description": "Valor do campo customizado",
+                            "nullable": true,
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/agent/{agentId}/conversation": {
       "post": {
         "description": "Permite conversar com o agente via API enviando texto, imagem ou áudio",

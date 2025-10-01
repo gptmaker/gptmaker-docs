@@ -185,6 +185,14 @@
       ]
     },
     {
+      "group": "Contatos",
+      "pages": [
+        "api-reference/contacts/search-contacts",
+        "api-reference/contacts/get-contact-by-id",
+        "api-reference/contacts/update-contact"
+      ]
+    },
+    {
       "group": "Atendimentos",
       "pages": [
         "api-reference/interactions/list-interactions",
