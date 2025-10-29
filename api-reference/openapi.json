@@ -5323,6 +5323,24 @@
                     ]
                   },
                   {
+                    "title": "Vídeo",
+                    "type": "object",
+                    "properties": {
+                      "phone": {
+                        "type": "string",
+                        "description": "Número de telefone do destinatário"
+                      },
+                      "video": {
+                        "type": "string",
+                        "description": "URL do video a ser enviado"
+                      }
+                    },
+                    "required": [
+                      "phone",
+                      "video"
+                    ]
+                  },
+                  {
                     "title": "Áudio",
                     "type": "object",
                     "properties": {
