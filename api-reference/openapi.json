@@ -4775,6 +4775,110 @@
         }
       }
     },
+    "/v2/agent/{id}/list-behavior-history": {
+      "get": {
+        "description": "Este endpoint retorna a lista de registros do histórico de comportamentos do agente, permitindo consultar as alterações realizadas ao longo do tempo.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página (iniciando em 0)",
+            "required": true,
+            "schema": { "type": "integer", "example": 0, "minimum": 0 }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Quantidade de registros por página",
+            "required": true,
+            "schema": { "type": "integer", "example": 10, "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro de comportamento retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userLogin": {
+                      "type": "string",
+                      "description": "Login (e-mail) do usuário"
+                    },
+                    "createdAt": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "Data/hora de criação em timestamp (ms)"
+                    },
+                    "userPicture": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "URL da foto do usuário (quando disponível)"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID do registro de comportamento"
+                    },
+                    "userName": {
+                      "type": "string",
+                      "description": "Nome do usuário"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "description": "ID do usuário"
+                    },
+                    "behaviorText": {
+                      "type": "string",
+                      "description": "Texto do comportamento"
+                    }
+                  },
+                  "required": [
+                    "userLogin",
+                    "createdAt",
+                    "userPicture",
+                    "id",
+                    "userName",
+                    "userId",
+                    "behaviorText"
+                  ],
+                  "additionalProperties": false
+                  }
+                }
+              }
+            },
+          "500": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/agent/{agentId}/create-channel": {
       "post": {
         "description": "Cria um novo canal para o agente",

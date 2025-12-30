@@ -112,7 +112,8 @@
         "api-reference/agents/get-webhooks",
         "api-reference/agents/webhooks",
         "api-reference/agents/conversation",
-        "api-reference/agents/add-context"
+        "api-reference/agents/add-context",
+        "api-reference/agents/list-behavior-history"
       ]
     },
     {
