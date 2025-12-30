@@ -5558,6 +5558,178 @@
           }
         }
       }
+    },
+    "/v2/interaction/{id}/workspace/{workspaceId}": {
+      "delete": {
+        "description": "Deleta um atendimento da listagem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do atendimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atendimento deletado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "Indica se o atendimento foi deletado com sucesso",
+                      "example": true
+                    }
+                  },
+                  "required": ["deleted"],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "deleted": true
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/export": {
+       "post": {
+        "description": "Exporta os atendimentos da listagem, permitindo exportação completa ou filtrada por propriedades específicas em arquivo .csv",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Para exportação em .csv, é possível gerar o arquivo com todos os atendimentos da listagem ou exportar de forma filtrada, selecionando um agente específico, tipos de canais e definindo paginação (número de páginas e quantidade de atendimentos por página).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "title": "Exportar todos",
+                    "type": "object",
+                    "description": "Para exportar todos os atendimentos, envie um JSON vazio no body.",
+                    "properties": {},
+                    "additionalProperties": false,
+                    "example": {}
+                  },
+                  {
+                    "title": "Exportar por página",
+                    "type": "object",
+                    "properties": {
+                      "page": {
+                        "type": "integer",
+                        "description": "Número de páginas"
+                      },
+                      "pagesize": {
+                        "type": "integer",
+                        "description": "Número de atendimentos por página"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Exportação de todos atendimentos gerados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "contactName": { "type": "string", "description": "Nome do contato" },
+                    "channelType": { "type": "string", "description": "Tipo do canal" },
+                    "status": { "type": "string", "description": "Status do atendimento" },
+                    "agentName": { "type": "string", "description": "Nome do agente" },
+                    "startAt": { "type": "string", "description": "Data/hora de início do atendimento" },
+                    "resolvedAt": { "type": "string", "description": "Data/hora de resolução do atendimento" },
+                    "duration": { "type": "string", "description": "Duração do atendimento" },
+                    "protocol": { "type": "string", "description": "Protocolo do atendimento" }
+                  },
+                  "required": [
+                    "contactName",
+                    "channelType",
+                    "status",
+                    "agentName",
+                    "startAt",
+                    "resolvedAt",
+                    "duration",
+                    "protocol"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
