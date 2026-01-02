@@ -4402,6 +4402,343 @@
         }
       }
     },
+    "/v2/chat/{chatId}/message/{messageId}": {
+      "delete": {
+        "description": "Remove uma mensagem de um canal específico. Esta funcionalidade está disponível apenas para os canais Z-API, Telegram e Widget.",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "description": "ID do chat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "messageId",
+            "in": "path",
+            "description": "ID da mensagem",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mensagem deletada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indica se a operação foi realizada com sucesso",
+                      "example": true
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Mensagem informativa sobre a operação",
+                      "example": "This channel allows to delete messages"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "success": true,
+                  "status": "This channel allows to delete messages"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao deletar mensagem",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "Canal não permite deletar mensagens",
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean",
+                          "description": "Indica se a operação foi realizada com sucesso",
+                          "example": false
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "Mensagem informativa sobre a restrição do canal",
+                          "example": "The channel does not allow deleting messages"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Erro inesperado",
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "description": "Mensagem do erro retornada pela API",
+                          "example": "Unexpected error"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/editMessage": {
+      "post": {
+        "description": "Edita uma mensagem em um canal específico. Esta funcionalidade está disponível apenas para os canais Z-API, Telegram e Widget, pois nem todos os tipos de canal permitem edição de mensagens.",
+        "requestBody": {
+          "description": "Dados para edição de mensagem",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "chatContextId": {
+                    "type": "string",
+                    "description": "ID do chat onde a mensagem será editada",
+                    "example": "3EC6EAFBBB17505A7EB9E6300696488C"
+                  },
+                  "messageId": {
+                    "type": "string",
+                    "description": "ID da mensagem que será editada",
+                    "example": "3EC7E989CB4C50C1B8C542CD510C3BFC"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Novo conteúdo da mensagem",
+                    "example": "Mensagem editada com sucesso!"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "example": {
+                "chatContextId": "3EC6EAFBBB17505A7EB9E6300696488C",
+                "messageId": "3EC7E989CB4C50C1B8C542CD510C3BFC",
+                "message": "Mensagem editada com sucesso!"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mensagem editada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indica se a operação foi realizada com sucesso",
+                      "example": true
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Mensagem informativa sobre a operação",
+                      "example": "This channel allows to edit messages"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "success": true,
+                  "status": "This channel allows to edit messages"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao editar mensagem",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "Canal não permite editar mensagens",
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean",
+                          "description": "Indica se a operação foi realizada com sucesso",
+                          "example": false
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "Mensagem informativa sobre a restrição do canal",
+                          "example": "The channel does not allow edit messages"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Erro inesperado",
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "description": "Mensagem do erro retornada pela API",
+                          "example": "Unexpected error"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/conversation/{chatContextId}/reply": {
+      "post": {
+        "description": "Responde uma mensagem em um canal específico. Esta funcionalidade está disponível para os canais Z-API, Widget, Telegram, WhatsApp e Messenger.",
+        "parameters": [
+          {
+            "name": "chatContextId",
+            "in": "path",
+            "description": "ID do chat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados para responder uma mensagem",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Mensagem de resposta",
+                    "example": "oi tudo bem?"
+                  },
+                  "messageId": {
+                    "type": "string",
+                    "description": "ID da mensagem que será respondida",
+                    "example": "3EC7BC95F214F05591D21E1238EBCAC5"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "example": {
+                "message": "eae tio teste",
+                "messageId": "3EC7BC95F214F05591D21E1238EBCAC5"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mensagem respondida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indica se a operação foi realizada com sucesso",
+                      "example": true
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Mensagem informativa sobre a operação",
+                      "example": "This conversation allows to reply messages"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "success": true,
+                  "status": "This conversation allows to reply messages"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao responder mensagem",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Mensagem do erro retornada pela API"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indica se a operação foi realizada com sucesso",
+                      "example": false
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Mensagem informativa sobre a restrição/erro da conversa",
+                      "example": "The conversation does not allow reply messages"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "error": "Unexpected error",
+                  "success": false,
+                  "status": "The conversation does not allow reply messages"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/agent/{agentId}/conversation": {
       "post": {
         "description": "Permite conversar com o agente via API enviando texto, imagem ou áudio",
