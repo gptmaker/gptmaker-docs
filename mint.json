@@ -189,8 +189,7 @@
       "pages": [
         "api-reference/interactions/list-interactions",
         "api-reference/interactions/list-messages",
-        "api-reference/interactions/delete-interactions",
-        "api-reference/interactions/export-interactions"
+        "api-reference/interactions/delete-interactions"
       ]
     },
     {
