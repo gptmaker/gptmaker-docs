@@ -5992,7 +5992,7 @@
         }
       }
     },
-    "/v2/interaction/{id}/workspace/{workspaceId}": {
+    "/v2/interaction/{id}": {
       "delete": {
         "description": "Deleta um atendimento da listagem",
         "parameters": [
@@ -6000,15 +6000,6 @@
             "name": "id",
             "in": "path",
             "description": "ID do atendimento",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "workspaceId",
-            "in": "path",
-            "description": "ID do workspace",
             "required": true,
             "schema": {
               "type": "string"
@@ -6029,7 +6020,9 @@
                       "example": true
                     }
                   },
-                  "required": ["deleted"],
+                  "required": [
+                    "deleted"
+                  ],
                   "additionalProperties": false
                 },
                 "example": {
@@ -6062,7 +6055,7 @@
       }
     },
     "/v2/workspace/{workspaceId}/export": {
-       "post": {
+      "post": {
         "description": "Exporta os atendimentos da listagem, permitindo exportação completa ou filtrada por propriedades específicas em arquivo .csv",
         "parameters": [
           {
@@ -6117,14 +6110,38 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "contactName": { "type": "string", "description": "Nome do contato" },
-                    "channelType": { "type": "string", "description": "Tipo do canal" },
-                    "status": { "type": "string", "description": "Status do atendimento" },
-                    "agentName": { "type": "string", "description": "Nome do agente" },
-                    "startAt": { "type": "string", "description": "Data/hora de início do atendimento" },
-                    "resolvedAt": { "type": "string", "description": "Data/hora de resolução do atendimento" },
-                    "duration": { "type": "string", "description": "Duração do atendimento" },
-                    "protocol": { "type": "string", "description": "Protocolo do atendimento" }
+                    "contactName": {
+                      "type": "string",
+                      "description": "Nome do contato"
+                    },
+                    "channelType": {
+                      "type": "string",
+                      "description": "Tipo do canal"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Status do atendimento"
+                    },
+                    "agentName": {
+                      "type": "string",
+                      "description": "Nome do agente"
+                    },
+                    "startAt": {
+                      "type": "string",
+                      "description": "Data/hora de início do atendimento"
+                    },
+                    "resolvedAt": {
+                      "type": "string",
+                      "description": "Data/hora de resolução do atendimento"
+                    },
+                    "duration": {
+                      "type": "string",
+                      "description": "Duração do atendimento"
+                    },
+                    "protocol": {
+                      "type": "string",
+                      "description": "Protocolo do atendimento"
+                    }
                   },
                   "required": [
                     "contactName",
