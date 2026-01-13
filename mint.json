@@ -205,7 +205,13 @@
       "group": "Canais",
       "pages": [
         "api-reference/channels/list-channels",
+        "api-reference/channels/list-channels2",
         "api-reference/channels/create-channel",
+        "api-reference/channels/create-channel-workspace",
+        "api-reference/channels/remove-channel",
+        "api-reference/channels/edit-channel",
+        "api-reference/channels/list-channel-config",
+        "api-reference/channels/edit-channel-config",
         {
           "group": "Widget",
           "pages": [
@@ -216,7 +222,8 @@
         {
           "group": "Whatsapp",
           "pages": [
-            "api-reference/channels/start-conversation"
+            "api-reference/channels/start-conversation",
+            "api-reference/channels/qr-code"
           ]
         }
       ]
