@@ -196,7 +196,8 @@
       "group": "Atendimentos",
       "pages": [
         "api-reference/interactions/list-interactions",
-        "api-reference/interactions/list-messages"
+        "api-reference/interactions/list-messages",
+        "api-reference/interactions/delete-interactions"
       ]
     },
     {
