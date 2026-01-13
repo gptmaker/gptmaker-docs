@@ -5258,65 +5258,6 @@
         }
       }
     },
-    "/v2/channel/{channelId}/remove": {
-      "delete": {
-        "description": "Remover canal",
-        "parameters": [
-          {
-            "name": "channelId",
-            "in": "path",
-            "description": "ID do canal",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Agente removido com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "description": "Indica se o agente foi removido com sucesso",
-                      "example": true
-                    }
-                  },
-                  "additionalProperties": false
-                },
-                "example": {
-                  "success": true
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Erro de token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error403"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v2/channel/{channelId}": {
       "put": {
         "description": "Atualiza as informações do canal, permitindo alterar o nome e vincular (ou trocar) o agente associado ao canal.",
@@ -5411,6 +5352,63 @@
                     "id": "3EB7F3C2BDB85017727802E54CF1568E",
                     "name": "Askia Inoove"
                   }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Remover canal",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agente removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indica se o agente foi removido com sucesso",
+                      "example": true
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "success": true
                 }
               }
             }
