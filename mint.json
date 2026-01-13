@@ -112,7 +112,8 @@
         "api-reference/agents/get-webhooks",
         "api-reference/agents/webhooks",
         "api-reference/agents/conversation",
-        "api-reference/agents/add-context"
+        "api-reference/agents/add-context",
+        "api-reference/agents/list-behavior-history"
       ]
     },
     {
@@ -183,22 +184,36 @@
         "api-reference/chats/stop-human",
         "api-reference/chats/send-message",
         "api-reference/chats/delete-message",
-        "api-reference/chats/edit-message",
-        "api-reference/chats/reply-message"
+        "api-reference/chats/edit-message"
+      ]
+    },
+    {
+      "group": "Contatos",
+      "pages": [
+        "api-reference/contacts/search-contacts",
+        "api-reference/contacts/get-contact-by-id",
+        "api-reference/contacts/update-contact"
       ]
     },
     {
       "group": "Atendimentos",
       "pages": [
         "api-reference/interactions/list-interactions",
-        "api-reference/interactions/list-messages"
+        "api-reference/interactions/list-messages",
+        "api-reference/interactions/delete-interactions"
       ]
     },
     {
       "group": "Canais",
       "pages": [
         "api-reference/channels/list-channels",
+        "api-reference/channels/list-channels2",
         "api-reference/channels/create-channel",
+        "api-reference/channels/create-channel-workspace",
+        "api-reference/channels/remove-channel",
+        "api-reference/channels/edit-channel",
+        "api-reference/channels/list-channel-config",
+        "api-reference/channels/edit-channel-config",
         {
           "group": "Widget",
           "pages": [
@@ -209,7 +224,8 @@
         {
           "group": "Whatsapp",
           "pages": [
-            "api-reference/channels/start-conversation"
+            "api-reference/channels/start-conversation",
+            "api-reference/channels/qr-code"
           ]
         }
       ]

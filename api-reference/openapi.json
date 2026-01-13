@@ -552,7 +552,7 @@
                         "CLAUDE_3_5_HAIKU",
                         "DEEPINFRA_LLAMA3_3",
                         "QWEN_2_5_MAX",
-                        "DEEPSEEK_V3",
+                        "DEEPSEEK_CHAT",
                         "SABIA_3",
                         "SABIA_3_1"
                       ]
@@ -670,31 +670,31 @@
                     "description": "Modelo de LLM preferido",
                     "enum": [
                       "GPT_5",
-                        "GPT_5_MINI",
-                        "GPT_5_1",
-                        "GPT_5_2",
-                        "GPT_5_MINI_V2",
-                        "GPT_4_TURBO",
-                        "OPEN_AI_04",
-                        "OPEN_AI_03_MINI_BETA",
-                        "GPT_4_1",
-                        "GPT_4_1_MINI",
-                        "GPT_4_O_MINI",
-                        "GPT_4_O",
-                        "OPEN_AI_O3_MINI",
-                        "OPEN_AI_O4_MINI",
-                        "OPEN_AI_O3",
-                        "OPEN_AI_O1",
-                        "GPT_4",
-                        "CLAUDE_4_5_SONNET",
-                        "CLAUDE_3_5_SONNET",
-                        "CLAUDE_3_7_SONNET",
-                        "CLAUDE_3_5_HAIKU",
-                        "DEEPINFRA_LLAMA3_3",
-                        "QWEN_2_5_MAX",
-                        "DEEPSEEK_V3",
-                        "SABIA_3",
-                        "SABIA_3_1"
+                      "GPT_5_MINI",
+                      "GPT_5_1",
+                      "GPT_5_2",
+                      "GPT_5_MINI_V2",
+                      "GPT_4_TURBO",
+                      "OPEN_AI_04",
+                      "OPEN_AI_03_MINI_BETA",
+                      "GPT_4_1",
+                      "GPT_4_1_MINI",
+                      "GPT_4_O_MINI",
+                      "GPT_4_O",
+                      "OPEN_AI_O3_MINI",
+                      "OPEN_AI_O4_MINI",
+                      "OPEN_AI_O3",
+                      "OPEN_AI_O1",
+                      "GPT_4",
+                      "CLAUDE_4_5_SONNET",
+                      "CLAUDE_3_5_SONNET",
+                      "CLAUDE_3_7_SONNET",
+                      "CLAUDE_3_5_HAIKU",
+                      "DEEPINFRA_LLAMA3_3",
+                      "QWEN_2_5_MAX",
+                      "DEEPSEEK_CHAT",
+                      "SABIA_3",
+                      "SABIA_3_1"
                     ]
                   },
                   "timezone": {
@@ -4335,15 +4335,23 @@
           }
         ],
         "requestBody": {
-          "description": "Dados do treinamento a ser adicionado",
+          "description": "Dados da mensagem a ser enviada, caso queira responder uma mensagem envie o 'replyMessageId'.",
           "content": {
             "application/json": {
               "schema": {
                 "oneOf": [
                   {
                     "type": "object",
+                    "title": "Texto",
+                    "required": [
+                      "message"
+                    ],
                     "properties": {
                       "message": {
+                        "type": "string",
+                        "description": "Mensagem de texto a ser enviada"
+                      },
+                      "replyMessageId": {
                         "type": "string",
                         "description": "Mensagem de texto a ser enviada"
                       }
@@ -4351,6 +4359,7 @@
                   },
                   {
                     "type": "object",
+                    "title": "Imagem",
                     "properties": {
                       "message": {
                         "type": "string",
@@ -4364,10 +4373,39 @@
                   },
                   {
                     "type": "object",
+                    "title": "Áudio",
                     "properties": {
                       "audio": {
                         "type": "string",
                         "description": "URL do audio"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "title": "Vídeo",
+                    "properties": {
+                      "video": {
+                        "type": "string",
+                        "description": "URL do vídeo"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "title": "Documento",
+                    "properties": {
+                      "document": {
+                        "type": "string",
+                        "description": "URL do documento a ser enviado"
+                      },
+                      "documentName": {
+                        "type": "string",
+                        "description": "Nome do documento"
+                      },
+                      "documentMimetype": {
+                        "type": "string",
+                        "description": "Tipo MIME do documento"
                       }
                     }
                   }
@@ -4518,11 +4556,29 @@
             }
           }
         }
-      }
-    },
-    "/v2/editMessage": {
-      "post": {
+      },
+      "put": {
         "description": "Edita uma mensagem em um canal específico. Esta funcionalidade está disponível apenas para os canais Z-API, Telegram e Widget, pois nem todos os tipos de canal permitem edição de mensagens.",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "description": "ID do chat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "messageId",
+            "in": "path",
+            "description": "ID da mensagem",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "description": "Dados para edição de mensagem",
           "required": true,
@@ -4531,16 +4587,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "chatContextId": {
-                    "type": "string",
-                    "description": "ID do chat onde a mensagem será editada",
-                    "example": "3EC6EAFBBB17505A7EB9E6300696488C"
-                  },
-                  "messageId": {
-                    "type": "string",
-                    "description": "ID da mensagem que será editada",
-                    "example": "3EC7E989CB4C50C1B8C542CD510C3BFC"
-                  },
                   "message": {
                     "type": "string",
                     "description": "Novo conteúdo da mensagem",
@@ -4550,8 +4596,6 @@
                 "additionalProperties": false
               },
               "example": {
-                "chatContextId": "3EC6EAFBBB17505A7EB9E6300696488C",
-                "messageId": "3EC7E989CB4C50C1B8C542CD510C3BFC",
                 "message": "Mensagem editada com sucesso!"
               }
             }
@@ -4638,104 +4682,422 @@
         }
       }
     },
-    "/v2/conversation/{chatContextId}/reply": {
-      "post": {
-        "description": "Responde uma mensagem em um canal específico. Esta funcionalidade está disponível para os canais Z-API, Widget, Telegram, WhatsApp e Messenger.",
+    "/v2/workspace/{workspaceId}/search": {
+      "get": {
+        "description": "Busca todos os contatos",
         "parameters": [
           {
-            "name": "chatContextId",
-            "in": "path",
-            "description": "ID do chat",
-            "required": true,
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Retorno da requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "birthday": {
+                      "type": "integer",
+                      "format": "int64",
+                      "nullable": true,
+                      "description": "Data de nascimento"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "description": "Gênero do contato",
+                      "nullable": true
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Telefone",
+                      "nullable": true
+                    },
+                    "jobTitle": {
+                      "type": "string",
+                      "description": "Cargo"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do contato",
+                      "nullable": true
+                    },
+                    "recipient": {
+                      "type": "string",
+                      "description": "Identificador único do chat dentro do canal"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "Id do contato"
+                    },
+                    "picture": {
+                      "type": "string",
+                      "description": "Link da imagem de perfil do contato",
+                      "nullable": true
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "Email do contato",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/contact/{contactId}": {
+      "get": {
+        "description": "Buscar um contato em específico",
+        "responses": {
+          "200": {
+            "description": "Retorno da requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id do contato"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do contato",
+                      "nullable": true
+                    },
+                    "birthday": {
+                      "type": "integer",
+                      "format": "int64",
+                      "nullable": true,
+                      "description": "Data de nascimento em milissegundos"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Gênero do contato"
+                    },
+                    "picture": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true,
+                      "description": "Link da imagem de perfil do contato"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Número de telefone do contato",
+                      "nullable": true
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "nullable": true,
+                      "description": "Email do contato"
+                    },
+                    "jobTitle": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Cargo"
+                    },
+                    "recipient": {
+                      "type": "string",
+                      "description": "Identificador único do chat dentro do canal"
+                    },
+                    "customFieldValues": {
+                      "type": "array",
+                      "description": "Lista de campos customizados do contato",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "customFieldId"
+                        ],
+                        "properties": {
+                          "customFieldId": {
+                            "type": "string",
+                            "description": "Id do campo customizado"
+                          },
+                          "value": {
+                            "description": "Valor do campo customizado",
+                            "nullable": true,
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/contact/{contactId}/update": {
+      "put": {
+        "description": "Atualiza os dados de um contato em específico",
         "requestBody": {
-          "description": "Dados para responder uma mensagem",
-          "required": true,
+          "description": "Dados do contato no qual pode ser atualizado",
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "message": {
+                  "id": {
                     "type": "string",
-                    "description": "Mensagem de resposta",
-                    "example": "oi tudo bem?"
+                    "description": "Id do contato"
                   },
-                  "messageId": {
+                  "name": {
                     "type": "string",
-                    "description": "ID da mensagem que será respondida",
-                    "example": "3EC7BC95F214F05591D21E1238EBCAC5"
-                  }
-                },
-                "additionalProperties": false
-              },
-              "example": {
-                "message": "eae tio teste",
-                "messageId": "3EC7BC95F214F05591D21E1238EBCAC5"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Mensagem respondida com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "description": "Indica se a operação foi realizada com sucesso",
-                      "example": true
-                    },
-                    "status": {
-                      "type": "string",
-                      "description": "Mensagem informativa sobre a operação",
-                      "example": "This conversation allows to reply messages"
+                    "description": "Nome do contato"
+                  },
+                  "birthday": {
+                    "type": "integer",
+                    "format": "int64",
+                    "nullable": true,
+                    "description": "Data de nascimento em milissegundos"
+                  },
+                  "gender": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Gênero do contato"
+                  },
+                  "picture": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": true,
+                    "description": "Link da imagem de perfil do contato"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Número de telefone do contato"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "nullable": true,
+                    "description": "Email do contato"
+                  },
+                  "jobTitle": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Cargo"
+                  },
+                  "recipient": {
+                    "type": "string",
+                    "description": "Identificador único do chat dentro do canal"
+                  },
+                  "customFieldValues": {
+                    "type": "array",
+                    "description": "Lista de campos customizados do contato",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customFieldId"
+                      ],
+                      "properties": {
+                        "customFieldId": {
+                          "type": "string",
+                          "description": "Id do campo customizado"
+                        },
+                        "value": {
+                          "description": "Valor do campo customizado",
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer",
+                              "format": "int64"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ]
+                        }
+                      }
                     }
-                  },
-                  "additionalProperties": false
-                },
-                "example": {
-                  "success": true,
-                  "status": "This conversation allows to reply messages"
+                  }
                 }
               }
             }
           },
-          "500": {
-            "description": "Erro ao responder mensagem",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Retorno da requisição",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
+                    "id": {
                       "type": "string",
-                      "description": "Mensagem do erro retornada pela API"
+                      "description": "Id do contato"
                     },
-                    "success": {
-                      "type": "boolean",
-                      "description": "Indica se a operação foi realizada com sucesso",
-                      "example": false
-                    },
-                    "status": {
+                    "name": {
                       "type": "string",
-                      "description": "Mensagem informativa sobre a restrição/erro da conversa",
-                      "example": "The conversation does not allow reply messages"
+                      "description": "Nome do contato"
+                    },
+                    "birthday": {
+                      "type": "integer",
+                      "format": "int64",
+                      "nullable": true,
+                      "description": "Data de nascimento em milissegundos"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Gênero do contato"
+                    },
+                    "picture": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true,
+                      "description": "Link da imagem de perfil do contato"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Número de telefone do contato"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "nullable": true,
+                      "description": "Email do contato"
+                    },
+                    "jobTitle": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Cargo"
+                    },
+                    "recipient": {
+                      "type": "string",
+                      "description": "Identificador único do chat dentro do canal"
+                    },
+                    "customFieldValues": {
+                      "type": "array",
+                      "description": "Lista de campos customizados do contato",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "customFieldId"
+                        ],
+                        "properties": {
+                          "customFieldId": {
+                            "type": "string",
+                            "description": "Id do campo customizado"
+                          },
+                          "value": {
+                            "description": "Valor do campo customizado",
+                            "nullable": true,
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      }
                     }
-                  },
-                  "additionalProperties": false
-                },
-                "example": {
-                  "error": "Unexpected error",
-                  "success": false,
-                  "status": "The conversation does not allow reply messages"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -5105,6 +5467,1526 @@
           },
           "400": {
             "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{id}/list-behavior-history": {
+      "get": {
+        "description": "Este endpoint retorna a lista de registros do histórico de comportamentos do agente, permitindo consultar as alterações realizadas ao longo do tempo.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página (iniciando em 0)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 0,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Quantidade de registros por página",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 10,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro de comportamento retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userLogin": {
+                      "type": "string",
+                      "description": "Login (e-mail) do usuário"
+                    },
+                    "createdAt": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "Data/hora de criação em timestamp (ms)"
+                    },
+                    "userPicture": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "URL da foto do usuário (quando disponível)"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID do registro de comportamento"
+                    },
+                    "userName": {
+                      "type": "string",
+                      "description": "Nome do usuário"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "description": "ID do usuário"
+                    },
+                    "behaviorText": {
+                      "type": "string",
+                      "description": "Texto do comportamento"
+                    }
+                  },
+                  "required": [
+                    "userLogin",
+                    "createdAt",
+                    "userPicture",
+                    "id",
+                    "userName",
+                    "userId",
+                    "behaviorText"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/channels": {
+      "get": {
+        "description": "Este é o endpoint mais atualizado para listagem de canais, onde os canais são gerenciados separadamente dos agentes (desmembrados), refletindo a nova estrutura do sistema.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página (padrão: 1)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "example": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Quantidade de itens por página (padrão: 25)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 25,
+              "minimum": 1,
+              "example": 25
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Texto para busca/filtragem (padrão: vazio)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "example": ""
+            }
+          },
+          {
+            "name": "agentId",
+            "in": "query",
+            "description": "Filtra pelos canais vinculados a um agente específico (padrão: vazio)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "example": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de canais retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "description": "Lista de canais",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Nome do canal"
+                          },
+                          "id": {
+                            "type": "string",
+                            "description": "ID do canal"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Tipo do canal",
+                            "enum": [
+                              "Z_API",
+                              "WHATSAPP",
+                              "INSTAGRAM",
+                              "CLOUD_API",
+                              "TELEGRAM",
+                              "WIDGET",
+                              "MESSENGER",
+                              "MERCADO_LIVRE",
+                              "TWILIO_SMS"
+                            ]
+                          },
+                          "agentId": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "ID do agente vinculado (quando houver)"
+                          },
+                          "agentPicture": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "URL da foto do agente vinculado (quando houver)"
+                          },
+                          "agentName": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Nome do agente vinculado (quando houver)"
+                          },
+                          "facebookPageId": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "ID da página do Facebook (quando aplicável)"
+                          },
+                          "connected": {
+                            "type": "boolean",
+                            "description": "Indica se o canal está conectado"
+                          },
+                          "username": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Identificador do canal (ex.: telefone/usuário), quando aplicável"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "count": {
+                      "type": "integer",
+                      "description": "Quantidade total de canais retornados",
+                      "example": 10
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/create-channel": {
+      "post": {
+        "description": "Endpoint mais atualizado para criação de canais. Permite criar um canal de forma independente, sem necessidade de vinculá-lo a um agente.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados para criação do canal",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do canal",
+                    "example": "Meu Canal"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Tipo do canal",
+                    "enum": [
+                      "Z_API",
+                      "WHATSAPP",
+                      "INSTAGRAM",
+                      "CLOUD_API",
+                      "TELEGRAM",
+                      "WIDGET",
+                      "MESSENGER",
+                      "MERCADO_LIVRE",
+                      "TWILIO_SMS"
+                    ]
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Canal criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "assistantId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "ID do agente vinculado (quando houver)"
+                    },
+                    "workspace": {
+                      "type": "object",
+                      "description": "Workspace do canal",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Nome do workspace"
+                        },
+                        "id": {
+                          "type": "string",
+                          "description": "ID do workspace"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "id"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do canal"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID do canal"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Tipo do canal",
+                      "enum": [
+                        "Z_API",
+                        "WHATSAPP",
+                        "INSTAGRAM",
+                        "CLOUD_API",
+                        "TELEGRAM",
+                        "WIDGET",
+                        "MESSENGER",
+                        "MERCADO_LIVRE",
+                        "TWILIO_SMS"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "assistantId",
+                    "workspace",
+                    "name",
+                    "id",
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "assistantId": null,
+                  "workspace": {
+                    "name": "Askia Inoove",
+                    "id": "3EB7F3C2BDB85017727802E54CF1568E"
+                  },
+                  "name": "canal de teste slc doido",
+                  "id": "3EC7E989CB4C50C1B8C542CD510C3BFC",
+                  "type": "WIDGET"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/assistant/{assistantId}/create-channel/{type}": {
+      "post": {
+        "description": "Endpoint mais atualizado para criação de canais. Permite criar um canal com um agente veinculado.",
+        "parameters": [
+          {
+            "name": "assistantId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Tipo do canal",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Z_API",
+                "WHATSAPP",
+                "INSTAGRAM",
+                "CLOUD_API",
+                "TELEGRAM",
+                "WIDGET",
+                "MESSENGER",
+                "MERCADO_LIVRE",
+                "TWILIO_SMS"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados para criação do canal",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do canal",
+                    "example": "Meu Canal"
+                  },
+                  "assistantId": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "ID do agente a ser vinculado ao canal (opcional). Se não informado, o canal é criado sem agente.",
+                    "example": "3EB804183CD300509DF902E54CF1568E"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "additionalProperties": false
+              },
+              "example": {
+                "name": "Meu Canal",
+                "assistantId": "3EB804183CD300509DF902E54CF1568E"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Canal criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "assistantId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "ID do agente vinculado (quando houver)"
+                    },
+                    "workspace": {
+                      "type": "object",
+                      "description": "Workspace do canal",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Nome do workspace"
+                        },
+                        "id": {
+                          "type": "string",
+                          "description": "ID do workspace"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "id"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do canal"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID do canal"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Tipo do canal",
+                      "enum": [
+                        "Z_API",
+                        "WHATSAPP",
+                        "INSTAGRAM",
+                        "CLOUD_API",
+                        "TELEGRAM",
+                        "WIDGET",
+                        "MESSENGER",
+                        "MERCADO_LIVRE",
+                        "TWILIO_SMS"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "assistantId",
+                    "workspace",
+                    "name",
+                    "id",
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "assistantId": null,
+                  "workspace": {
+                    "name": "Askia Inoove",
+                    "id": "3EB7F3C2BDB85017727802E54CF1568E"
+                  },
+                  "name": "canal de teste slc doido",
+                  "id": "3EC7E989CB4C50C1B8C542CD510C3BFC",
+                  "type": "WIDGET"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/channel/{channelId}": {
+      "put": {
+        "description": "Atualiza as informações do canal, permitindo alterar o nome e vincular (ou trocar) o agente associado ao canal.",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados para atualização do canal",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do canal",
+                    "example": "Novo nome do canal"
+                  },
+                  "agentId": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "ID do agente vinculado ao canal (opcional). Se null/vazio, remove o vínculo com o agente.",
+                    "example": "3EB804183CD300509DF902E54CF1568E"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "additionalProperties": false
+              },
+              "example": {
+                "name": "Novo nome do canal",
+                "agentId": "3EB804183CD300509DF902E54CF1568E"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Canal atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Nome do canal"
+                    },
+                    "assistantId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "ID do agente vinculado (quando houver)"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Tipo do canal"
+                    },
+                    "workspace": {
+                      "type": "object",
+                      "description": "Workspace do canal",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "ID do workspace"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Nome do workspace"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "name": "canal atualizado",
+                  "assistantId": "3EB804183CD300509DF902E54CF1568E",
+                  "type": "WIDGET",
+                  "workspace": {
+                    "id": "3EB7F3C2BDB85017727802E54CF1568E",
+                    "name": "Askia Inoove"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Remover canal",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agente removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indica se o agente foi removido com sucesso",
+                      "example": true
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "success": true
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/channel/{channelId}/qr-code": {
+      "get": {
+        "description": "Pega qr-code para conexão.",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Configurações do canal retornadas com sucesso (os campos variam conforme o tipo do canal)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "Quando não está conectado",
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "description": "Código QrCode para leitura."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Quando está conectado",
+                      "type": "object",
+                      "properties": {
+                        "connected": {
+                          "type": "boolean",
+                          "description": "Indica que está conectado."
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/channel/{channelId}/config": {
+      "get": {
+        "description": "Retorna as configurações de um canal específico a partir do seu ID, permitindo consultar todos os detalhes e parâmetros cadastrados para esse canal.",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Configurações do canal retornadas com sucesso (os campos variam conforme o tipo do canal)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "Configuração Z_API",
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "ID do canal"
+                        },
+                        "tenant": {
+                          "type": "string",
+                          "description": "Tenant do canal"
+                        },
+                        "audioAction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Configuração de ação de áudio"
+                        },
+                        "startTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de início"
+                        },
+                        "endTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de encerramento"
+                        },
+                        "enabledTyping": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita indicador de 'digitando'"
+                        },
+                        "enableGroupsResponse": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita respostas em grupos"
+                        },
+                        "replyGroupsType": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Tipo de resposta em grupos"
+                        },
+                        "enablePrivateChatResponse": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita resposta em chat privado"
+                        },
+                        "callRejectAuto": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Rejeita chamadas automaticamente"
+                        },
+                        "callRejectMessage": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Mensagem ao rejeitar chamada"
+                        },
+                        "takeOutsideService": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita retirar atendimento para fora do serviço"
+                        },
+                        "takeOutsideServiceMember": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Membro/usuário alvo da ação"
+                        },
+                        "takeOutsideServiceCommand": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Comando utilizado"
+                        },
+                        "takeOutsideServiceMessage": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Mensagem utilizada"
+                        },
+                        "takeOutsideServiceCommandReturn": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Define se deve retornar após executar o comando"
+                        },
+                        "takeOutsideServiceReturnMessage": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Mensagem de retorno"
+                        },
+                        "waitingMessageEnabled": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita mensagem de espera"
+                        },
+                        "waitingMessageText": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Texto da mensagem de espera"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Tipo do canal",
+                          "enum": [
+                            "Z_API"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Configuração WHATSAPP",
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "ID do canal"
+                        },
+                        "tenant": {
+                          "type": "string",
+                          "description": "Tenant do canal"
+                        },
+                        "audioAction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Configuração de ação de áudio"
+                        },
+                        "startTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de início"
+                        },
+                        "endTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de encerramento"
+                        },
+                        "enabledTyping": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita indicador de 'digitando'"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Tipo do canal",
+                          "enum": [
+                            "WHATSAPP"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Configuração INSTAGRAM",
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "ID do canal"
+                        },
+                        "tenant": {
+                          "type": "string",
+                          "description": "Tenant do canal"
+                        },
+                        "audioAction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Configuração de ação de áudio"
+                        },
+                        "startTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de início"
+                        },
+                        "endTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de encerramento"
+                        },
+                        "notReactInstagramStories": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Define se deve ignorar/não reagir a stories do Instagram"
+                        },
+                        "takeOutsideService": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita retirar atendimento para fora do serviço"
+                        },
+                        "takeOutsideServiceMember": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Membro/usuário alvo da ação"
+                        },
+                        "takeOutsideServiceCommand": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Comando utilizado"
+                        },
+                        "takeOutsideServiceMessage": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Mensagem utilizada"
+                        },
+                        "takeOutsideServiceCommandReturn": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Define se deve retornar após executar o comando"
+                        },
+                        "takeOutsideServiceReturnMessage": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Mensagem de retorno"
+                        },
+                        "commentsReplyEnabled": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita responder comentários"
+                        },
+                        "commentsReplyAllEnabled": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita responder todos os comentários"
+                        },
+                        "commentsReplyAllInstruction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Instrução para responder todos os comentários"
+                        },
+                        "commentsCallDirectInstruction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Instrução para chamar no direct a partir de comentários"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Configuração básica (TWILIO_SMS, TELEGRAM, MERCADO_LIVRE, MESSENGER)",
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "ID do canal"
+                        },
+                        "tenant": {
+                          "type": "string",
+                          "description": "Tenant do canal"
+                        },
+                        "audioAction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Configuração de ação de áudio"
+                        },
+                        "startTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de início"
+                        },
+                        "endTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de encerramento"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/channel/{id}/config": {
+      "put": {
+        "description": "Atualiza as configurações de um canal específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do canal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados para atualização do canal. Envie apenas as configurações que deseja alterar.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Campos opcionais: informe somente os atributos que serão atualizados no canal.",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "ID do canal",
+                    "example": "3EC6EAFBBB17505A7EB9E6300696488C"
+                  },
+                  "tenant": {
+                    "type": "string",
+                    "description": "Tenant do canal",
+                    "example": "3E753A12D20F50A185E54E911FDCDB1F"
+                  },
+                  "audioAction": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Ação de áudio (quando aplicável)",
+                    "example": "DISABLED"
+                  },
+                  "startTrigger": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Trigger de início (quando aplicável)",
+                    "example": "ONLY_WHEN_CALLING_BY_NAME"
+                  },
+                  "endTrigger": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Trigger de encerramento (quando aplicável)",
+                    "example": "WHEN_SAY_GOODBYE"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "example": {
+                "startTrigger": "ONLY_WHEN_CALLING_BY_NAME",
+                "id": "3EC6EAFBBB17505A7EB9E6300696488C",
+                "audioAction": "DISABLED",
+                "tenant": "3E753A12D20F50A185E54E911FDCDB1F",
+                "endTrigger": "WHEN_SAY_GOODBYE"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Canal atualizado com sucesso (o retorno varia conforme o tipo do canal)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "Configuração Z_API",
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "ID do canal"
+                        },
+                        "tenant": {
+                          "type": "string",
+                          "description": "Tenant do canal"
+                        },
+                        "audioAction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Configuração de ação de áudio"
+                        },
+                        "startTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de início"
+                        },
+                        "endTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de encerramento"
+                        },
+                        "enabledTyping": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita indicador de 'digitando'"
+                        },
+                        "enableGroupsResponse": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita respostas em grupos"
+                        },
+                        "replyGroupsType": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Tipo de resposta em grupos"
+                        },
+                        "enablePrivateChatResponse": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita resposta em chat privado"
+                        },
+                        "callRejectAuto": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Rejeita chamadas automaticamente"
+                        },
+                        "callRejectMessage": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Mensagem ao rejeitar chamada"
+                        },
+                        "takeOutsideService": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita retirar atendimento para fora do serviço"
+                        },
+                        "takeOutsideServiceMember": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Membro/usuário alvo da ação"
+                        },
+                        "takeOutsideServiceCommand": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Comando utilizado"
+                        },
+                        "takeOutsideServiceMessage": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Mensagem utilizada"
+                        },
+                        "takeOutsideServiceCommandReturn": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Define se deve retornar após executar o comando"
+                        },
+                        "takeOutsideServiceReturnMessage": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Mensagem de retorno"
+                        },
+                        "waitingMessageEnabled": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita mensagem de espera"
+                        },
+                        "waitingMessageText": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Texto da mensagem de espera"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Tipo do canal",
+                          "enum": [
+                            "Z_API"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Configuração WHATSAPP",
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "ID do canal"
+                        },
+                        "tenant": {
+                          "type": "string",
+                          "description": "Tenant do canal"
+                        },
+                        "audioAction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Configuração de ação de áudio"
+                        },
+                        "startTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de início"
+                        },
+                        "endTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de encerramento"
+                        },
+                        "enabledTyping": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita indicador de 'digitando'"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Tipo do canal",
+                          "enum": [
+                            "WHATSAPP"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Configuração INSTAGRAM",
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "ID do canal"
+                        },
+                        "tenant": {
+                          "type": "string",
+                          "description": "Tenant do canal"
+                        },
+                        "audioAction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Configuração de ação de áudio"
+                        },
+                        "startTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de início"
+                        },
+                        "endTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de encerramento"
+                        },
+                        "notReactInstagramStories": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Define se deve ignorar/não reagir a stories do Instagram"
+                        },
+                        "takeOutsideService": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita retirar atendimento para fora do serviço"
+                        },
+                        "takeOutsideServiceMember": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Membro/usuário alvo da ação"
+                        },
+                        "takeOutsideServiceCommand": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Comando utilizado"
+                        },
+                        "takeOutsideServiceMessage": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Mensagem utilizada"
+                        },
+                        "takeOutsideServiceCommandReturn": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Define se deve retornar após executar o comando"
+                        },
+                        "takeOutsideServiceReturnMessage": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Mensagem de retorno"
+                        },
+                        "commentsReplyEnabled": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita responder comentários"
+                        },
+                        "commentsReplyAllEnabled": {
+                          "type": "boolean",
+                          "nullable": true,
+                          "description": "Habilita responder todos os comentários"
+                        },
+                        "commentsReplyAllInstruction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Instrução para responder todos os comentários"
+                        },
+                        "commentsCallDirectInstruction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Instrução para chamar no direct a partir de comentários"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Configuração básica (TWILIO_SMS, TELEGRAM, MERCADO_LIVRE, MESSENGER)",
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "ID do canal"
+                        },
+                        "tenant": {
+                          "type": "string",
+                          "description": "Tenant do canal"
+                        },
+                        "audioAction": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Configuração de ação de áudio"
+                        },
+                        "startTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de início"
+                        },
+                        "endTrigger": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Trigger de encerramento"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -5883,6 +7765,195 @@
                   "items": {
                     "$ref": "#/components/schemas/Message"
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/interaction/{id}": {
+      "delete": {
+        "description": "Deleta um atendimento da listagem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do atendimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atendimento deletado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "Indica se o atendimento foi deletado com sucesso",
+                      "example": true
+                    }
+                  },
+                  "required": [
+                    "deleted"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "deleted": true
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/export": {
+      "post": {
+        "description": "Exporta os atendimentos da listagem, permitindo exportação completa ou filtrada por propriedades específicas em arquivo .csv",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Para exportação em .csv, é possível gerar o arquivo com todos os atendimentos da listagem ou exportar de forma filtrada, selecionando um agente específico, tipos de canais e definindo paginação (número de páginas e quantidade de atendimentos por página).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "title": "Exportar todos",
+                    "type": "object",
+                    "description": "Para exportar todos os atendimentos, envie um JSON vazio no body.",
+                    "properties": {},
+                    "additionalProperties": false,
+                    "example": {}
+                  },
+                  {
+                    "title": "Exportar por página",
+                    "type": "object",
+                    "properties": {
+                      "page": {
+                        "type": "integer",
+                        "description": "Número de páginas"
+                      },
+                      "pagesize": {
+                        "type": "integer",
+                        "description": "Número de atendimentos por página"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Exportação de todos atendimentos gerados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "contactName": {
+                      "type": "string",
+                      "description": "Nome do contato"
+                    },
+                    "channelType": {
+                      "type": "string",
+                      "description": "Tipo do canal"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Status do atendimento"
+                    },
+                    "agentName": {
+                      "type": "string",
+                      "description": "Nome do agente"
+                    },
+                    "startAt": {
+                      "type": "string",
+                      "description": "Data/hora de início do atendimento"
+                    },
+                    "resolvedAt": {
+                      "type": "string",
+                      "description": "Data/hora de resolução do atendimento"
+                    },
+                    "duration": {
+                      "type": "string",
+                      "description": "Duração do atendimento"
+                    },
+                    "protocol": {
+                      "type": "string",
+                      "description": "Protocolo do atendimento"
+                    }
+                  },
+                  "required": [
+                    "contactName",
+                    "channelType",
+                    "status",
+                    "agentName",
+                    "startAt",
+                    "resolvedAt",
+                    "duration",
+                    "protocol"
+                  ],
+                  "additionalProperties": false
                 }
               }
             }
