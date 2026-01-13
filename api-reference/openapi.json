@@ -4402,6 +4402,439 @@
         }
       }
     },
+    "/v2/workspace/{workspaceId}/search": {
+      "get": {
+        "description": "Busca todos os contatos",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorno da requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "birthday": {
+                      "type": "integer",
+                      "format": "int64",
+                      "nullable": true,
+                      "description": "Data de nascimento"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "description": "Gênero do contato",
+                      "nullable": true
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Telefone",
+                      "nullable": true
+                    },
+                    "jobTitle": {
+                      "type": "string",
+                      "description": "Cargo"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do contato",
+                      "nullable": true
+                    },
+                    "recipient": {
+                      "type": "string",
+                      "description": "Identificador único do chat dentro do canal"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "Id do contato"
+                    },
+                    "picture": {
+                      "type": "string",
+                      "description": "Link da imagem de perfil do contato",
+                      "nullable": true
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "Email do contato",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/contact/{contactId}": {
+      "get": {
+        "description": "Buscar um contato em específico",
+        "responses": {
+          "200": {
+            "description": "Retorno da requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id do contato"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do contato",
+                      "nullable": true
+                    },
+                    "birthday": {
+                      "type": "integer",
+                      "format": "int64",
+                      "nullable": true,
+                      "description": "Data de nascimento em milissegundos"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Gênero do contato"
+                    },
+                    "picture": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true,
+                      "description": "Link da imagem de perfil do contato"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Número de telefone do contato",
+                      "nullable": true
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "nullable": true,
+                      "description": "Email do contato"
+                    },
+                    "jobTitle": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Cargo"
+                    },
+                    "recipient": {
+                      "type": "string",
+                      "description": "Identificador único do chat dentro do canal"
+                    },
+                    "customFieldValues": {
+                      "type": "array",
+                      "description": "Lista de campos customizados do contato",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "customFieldId"
+                        ],
+                        "properties": {
+                          "customFieldId": {
+                            "type": "string",
+                            "description": "Id do campo customizado"
+                          },
+                          "value": {
+                            "description": "Valor do campo customizado",
+                            "nullable": true,
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/contact/{contactId}/update": {
+      "put": {
+        "description": "Atualiza os dados de um contato em específico",
+        "requestBody": {
+          "description": "Dados do contato no qual pode ser atualizado",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Id do contato"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do contato"
+                  },
+                  "birthday": {
+                    "type": "integer",
+                    "format": "int64",
+                    "nullable": true,
+                    "description": "Data de nascimento em milissegundos"
+                  },
+                  "gender": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Gênero do contato"
+                  },
+                  "picture": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": true,
+                    "description": "Link da imagem de perfil do contato"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Número de telefone do contato"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "nullable": true,
+                    "description": "Email do contato"
+                  },
+                  "jobTitle": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Cargo"
+                  },
+                  "recipient": {
+                    "type": "string",
+                    "description": "Identificador único do chat dentro do canal"
+                  },
+                  "customFieldValues": {
+                    "type": "array",
+                    "description": "Lista de campos customizados do contato",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customFieldId"
+                      ],
+                      "properties": {
+                        "customFieldId": {
+                          "type": "string",
+                          "description": "Id do campo customizado"
+                        },
+                        "value": {
+                          "description": "Valor do campo customizado",
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer",
+                              "format": "int64"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Retorno da requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id do contato"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do contato"
+                    },
+                    "birthday": {
+                      "type": "integer",
+                      "format": "int64",
+                      "nullable": true,
+                      "description": "Data de nascimento em milissegundos"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Gênero do contato"
+                    },
+                    "picture": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true,
+                      "description": "Link da imagem de perfil do contato"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Número de telefone do contato"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "nullable": true,
+                      "description": "Email do contato"
+                    },
+                    "jobTitle": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Cargo"
+                    },
+                    "recipient": {
+                      "type": "string",
+                      "description": "Identificador único do chat dentro do canal"
+                    },
+                    "customFieldValues": {
+                      "type": "array",
+                      "description": "Lista de campos customizados do contato",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "customFieldId"
+                        ],
+                        "properties": {
+                          "customFieldId": {
+                            "type": "string",
+                            "description": "Id do campo customizado"
+                          },
+                          "value": {
+                            "description": "Valor do campo customizado",
+                            "nullable": true,
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/agent/{agentId}/conversation": {
       "post": {
         "description": "Permite conversar com o agente via API enviando texto, imagem ou áudio",
@@ -4753,6 +5186,110 @@
             }
           },
           "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{id}/list-behavior-history": {
+      "get": {
+        "description": "Este endpoint retorna a lista de registros do histórico de comportamentos do agente, permitindo consultar as alterações realizadas ao longo do tempo.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página (iniciando em 0)",
+            "required": true,
+            "schema": { "type": "integer", "example": 0, "minimum": 0 }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Quantidade de registros por página",
+            "required": true,
+            "schema": { "type": "integer", "example": 10, "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro de comportamento retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userLogin": {
+                      "type": "string",
+                      "description": "Login (e-mail) do usuário"
+                    },
+                    "createdAt": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "Data/hora de criação em timestamp (ms)"
+                    },
+                    "userPicture": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "URL da foto do usuário (quando disponível)"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID do registro de comportamento"
+                    },
+                    "userName": {
+                      "type": "string",
+                      "description": "Nome do usuário"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "description": "ID do usuário"
+                    },
+                    "behaviorText": {
+                      "type": "string",
+                      "description": "Texto do comportamento"
+                    }
+                  },
+                  "required": [
+                    "userLogin",
+                    "createdAt",
+                    "userPicture",
+                    "id",
+                    "userName",
+                    "userId",
+                    "behaviorText"
+                  ],
+                  "additionalProperties": false
+                  }
+                }
+              }
+            },
+          "500": {
             "description": "Erro inesperado",
             "content": {
               "application/json": {
@@ -6940,6 +7477,195 @@
                   "items": {
                     "$ref": "#/components/schemas/Message"
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/interaction/{id}": {
+      "delete": {
+        "description": "Deleta um atendimento da listagem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do atendimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atendimento deletado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "Indica se o atendimento foi deletado com sucesso",
+                      "example": true
+                    }
+                  },
+                  "required": [
+                    "deleted"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "deleted": true
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/export": {
+      "post": {
+        "description": "Exporta os atendimentos da listagem, permitindo exportação completa ou filtrada por propriedades específicas em arquivo .csv",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Para exportação em .csv, é possível gerar o arquivo com todos os atendimentos da listagem ou exportar de forma filtrada, selecionando um agente específico, tipos de canais e definindo paginação (número de páginas e quantidade de atendimentos por página).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "title": "Exportar todos",
+                    "type": "object",
+                    "description": "Para exportar todos os atendimentos, envie um JSON vazio no body.",
+                    "properties": {},
+                    "additionalProperties": false,
+                    "example": {}
+                  },
+                  {
+                    "title": "Exportar por página",
+                    "type": "object",
+                    "properties": {
+                      "page": {
+                        "type": "integer",
+                        "description": "Número de páginas"
+                      },
+                      "pagesize": {
+                        "type": "integer",
+                        "description": "Número de atendimentos por página"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Exportação de todos atendimentos gerados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "contactName": {
+                      "type": "string",
+                      "description": "Nome do contato"
+                    },
+                    "channelType": {
+                      "type": "string",
+                      "description": "Tipo do canal"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Status do atendimento"
+                    },
+                    "agentName": {
+                      "type": "string",
+                      "description": "Nome do agente"
+                    },
+                    "startAt": {
+                      "type": "string",
+                      "description": "Data/hora de início do atendimento"
+                    },
+                    "resolvedAt": {
+                      "type": "string",
+                      "description": "Data/hora de resolução do atendimento"
+                    },
+                    "duration": {
+                      "type": "string",
+                      "description": "Duração do atendimento"
+                    },
+                    "protocol": {
+                      "type": "string",
+                      "description": "Protocolo do atendimento"
+                    }
+                  },
+                  "required": [
+                    "contactName",
+                    "channelType",
+                    "status",
+                    "agentName",
+                    "startAt",
+                    "resolvedAt",
+                    "duration",
+                    "protocol"
+                  ],
+                  "additionalProperties": false
                 }
               }
             }

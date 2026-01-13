@@ -112,7 +112,8 @@
         "api-reference/agents/get-webhooks",
         "api-reference/agents/webhooks",
         "api-reference/agents/conversation",
-        "api-reference/agents/add-context"
+        "api-reference/agents/add-context",
+        "api-reference/agents/list-behavior-history"
       ]
     },
     {
@@ -185,10 +186,19 @@
       ]
     },
     {
+      "group": "Contatos",
+      "pages": [
+        "api-reference/contacts/search-contacts",
+        "api-reference/contacts/get-contact-by-id",
+        "api-reference/contacts/update-contact"
+      ]
+    },
+    {
       "group": "Atendimentos",
       "pages": [
         "api-reference/interactions/list-interactions",
-        "api-reference/interactions/list-messages"
+        "api-reference/interactions/list-messages",
+        "api-reference/interactions/delete-interactions"
       ]
     },
     {
