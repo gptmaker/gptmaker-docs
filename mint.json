@@ -198,7 +198,6 @@
         "api-reference/channels/list-channels2",
         "api-reference/channels/create-channel",
         "api-reference/channels/create-channel-workspace",
-        "api-reference/channels/create-channel-agent",
         "api-reference/channels/remove-channel",
         "api-reference/channels/edit-channel",
         "api-reference/channels/list-channel-config",
@@ -213,7 +212,8 @@
         {
           "group": "Whatsapp",
           "pages": [
-            "api-reference/channels/start-conversation"
+            "api-reference/channels/start-conversation",
+            "api-reference/channels/qr-code"
           ]
         }
       ]
