@@ -7748,7 +7748,7 @@
           {
             "name": "interactionId",
             "in": "path",
-            "description": "ID do workspace",
+            "description": "ID do atendimento",
             "required": true,
             "schema": {
               "type": "string"
