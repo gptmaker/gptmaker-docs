@@ -1767,7 +1767,29 @@
         ],
         "responses": {
           "200": {
-            "description": "Base de conhecimento conectada com sucesso"
+            "description": "Base de conhecimento conectada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "assistantId": {
+                      "type": "string",
+                      "description": "ID do agente"
+                    },
+                    "knowledgeBaseId": {
+                      "type": "string",
+                      "description": "ID da base de conhecimento"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": ["CONNECTED"],
+                      "description": "Status da conexão"
+                    }
+                  }
+                }
+              }
+            }
           },
           "403": {
             "description": "Erro de token",
@@ -1831,10 +1853,20 @@
                         "nullable": true,
                         "description": "URL de imagem associada ao treinamento"
                       },
+                      "video": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "URL de vídeo associado ao treinamento"
+                      },
                       "audio": {
                         "type": "string",
                         "nullable": true,
                         "description": "URL de áudio associado ao treinamento"
+                      },
+                      "document": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "URL de documento associado ao treinamento"
                       }
                     }
                   },
@@ -2017,67 +2049,38 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "title": "Texto",
+                  "type": "object",
+                  "properties": {
+                    "data": {
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
                           "id": { "type": "string", "description": "ID do treinamento" },
-                          "affirmationType": { "type": "string", "enum": ["TEXT"] },
-                          "description": { "type": "string", "description": "Texto do treinamento" },
+                          "type": {
+                            "type": "string",
+                            "enum": ["TEXT", "WEBSITE", "VIDEO", "DOCUMENT"],
+                            "description": "Tipo do treinamento"
+                          },
+                          "text": { "type": "string", "nullable": true, "description": "Texto do treinamento (quando type = TEXT)" },
                           "image": { "type": "string", "nullable": true, "description": "URL de imagem associada" },
+                          "video": { "type": "string", "nullable": true, "description": "URL de vídeo associado" },
                           "audio": { "type": "string", "nullable": true, "description": "URL de áudio associado" },
-                          "runningTraining": { "type": "boolean", "description": "Indica se o treinamento está em andamento" }
+                          "document": { "type": "string", "nullable": true, "description": "URL de documento associado" },
+                          "website": { "type": "string", "nullable": true, "description": "URL do site (quando type = WEBSITE)" },
+                          "trainingSubPages": { "type": "string", "nullable": true, "enum": ["DISABLED", "ACTIVE"], "description": "Treinamento em subpáginas" },
+                          "trainingInterval": { "type": "string", "nullable": true, "description": "Intervalo de re-treinamento" },
+                          "documentUrl": { "type": "string", "nullable": true, "description": "URL do documento (quando type = DOCUMENT)" },
+                          "documentName": { "type": "string", "nullable": true, "description": "Nome do documento" },
+                          "documentMimetype": { "type": "string", "nullable": true, "description": "Tipo MIME do documento" }
                         }
                       }
                     },
-                    {
-                      "title": "Website",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": { "type": "string", "description": "ID do treinamento" },
-                          "affirmationType": { "type": "string", "enum": ["WEBSITE"] },
-                          "websiteUrl": { "type": "string", "description": "URL do site" },
-                          "trainingSubPages": { "type": "string", "enum": ["DISABLED", "ACTIVE"] },
-                          "trainingInterval": { "type": "string", "description": "Intervalo de re-treinamento" },
-                          "runningTraining": { "type": "boolean", "description": "Indica se o treinamento está em andamento" }
-                        }
-                      }
-                    },
-                    {
-                      "title": "Vídeo",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": { "type": "string", "description": "ID do treinamento" },
-                          "affirmationType": { "type": "string", "enum": ["VIDEO"] },
-                          "videoUrl": { "type": "string", "description": "URL do vídeo" },
-                          "videoLanguage": { "type": "string", "description": "Idioma do vídeo" },
-                          "runningTraining": { "type": "boolean", "description": "Indica se o treinamento está em andamento" }
-                        }
-                      }
-                    },
-                    {
-                      "title": "Documento",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": { "type": "string", "description": "ID do treinamento" },
-                          "affirmationType": { "type": "string", "enum": ["DOCUMENT"] },
-                          "documentUrl": { "type": "string", "description": "URL do documento" },
-                          "documentName": { "type": "string", "description": "Nome do documento" },
-                          "documentMimetype": { "type": "string", "description": "Tipo MIME do documento" },
-                          "runningTraining": { "type": "boolean", "description": "Indica se o treinamento está em andamento" }
-                        }
-                      }
+                    "count": {
+                      "type": "integer",
+                      "description": "Total de treinamentos"
                     }
-                  ]
+                  }
                 }
               }
             }
@@ -2134,33 +2137,39 @@
           "content": {
             "application/json": {
               "schema": {
-                "oneOf": [
-                  {
-                    "title": "Texto",
-                    "type": "object",
-                    "properties": {
-                      "affirmationType": {
-                        "type": "string",
-                        "description": "Tipo do treinamento deve ser TEXT",
-                        "enum": ["TEXT"]
-                      },
-                      "description": {
-                        "type": "string",
-                        "description": "Texto atualizado do treinamento"
-                      },
-                      "image": {
-                        "type": "string",
-                        "nullable": true,
-                        "description": "URL de imagem associada ao treinamento"
-                      },
-                      "audio": {
-                        "type": "string",
-                        "nullable": true,
-                        "description": "URL de áudio associado ao treinamento"
-                      }
-                    }
+                "type": "object",
+                "required": ["affirmationType"],
+                "properties": {
+                  "affirmationType": {
+                    "type": "string",
+                    "enum": ["TEXT"],
+                    "description": "Tipo do treinamento"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Texto do treinamento"
+                  },
+                  "image": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "URL de imagem associada ao treinamento"
+                  },
+                  "video": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "URL de vídeo associado ao treinamento"
+                  },
+                  "audio": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "URL de áudio associado ao treinamento"
+                  },
+                  "document": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "URL de documento associado ao treinamento"
                   }
-                ]
+                }
               }
             }
           }
@@ -2265,7 +2274,29 @@
         ],
         "responses": {
           "200": {
-            "description": "Base de conhecimento desconectada com sucesso"
+            "description": "Base de conhecimento desconectada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "assistantId": {
+                      "type": "string",
+                      "description": "ID do agente"
+                    },
+                    "knowledgeBaseId": {
+                      "type": "string",
+                      "description": "ID da base de conhecimento"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": ["DISCONNECTED"],
+                      "description": "Status da desconexão"
+                    }
+                  }
+                }
+              }
+            }
           },
           "403": {
             "description": "Erro de token",
