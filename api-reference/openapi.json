@@ -1415,6 +1415,912 @@
         }
       }
     },
+    "/v2/{workspaceId}/knowledge-base": {
+      "post": {
+        "description": "Cria uma nova base de conhecimento no workspace especificado",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados da base de conhecimento a ser criada",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome da base de conhecimento"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da base de conhecimento"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Base de conhecimento criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID da base de conhecimento"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome da base de conhecimento"
+                    },
+                    "description": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Descrição da base de conhecimento"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Lista as bases de conhecimento do workspace especificado",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 6
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de bases de conhecimento",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "ID da base de conhecimento"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Nome da base de conhecimento"
+                          },
+                          "description": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Descrição da base de conhecimento"
+                          }
+                        }
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "description": "Página atual"
+                    },
+                    "pageSize": {
+                      "type": "integer",
+                      "description": "Tamanho da página"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total de registros"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/{workspaceId}/{id}/knowledge-base": {
+      "put": {
+        "description": "Edita uma base de conhecimento existente",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da base de conhecimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados da base de conhecimento a ser atualizada",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome da base de conhecimento"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da base de conhecimento"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Base de conhecimento atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID da base de conhecimento"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome da base de conhecimento"
+                    },
+                    "description": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Descrição da base de conhecimento"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deleta uma base de conhecimento",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da base de conhecimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Base de conhecimento deletada com sucesso"
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/knowledge-base/{id}/{assistantId}/connect": {
+      "post": {
+        "description": "Conecta uma base de conhecimento a um agente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da base de conhecimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assistantId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Base de conhecimento conectada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "assistantId": {
+                      "type": "string",
+                      "description": "ID do agente"
+                    },
+                    "knowledgeBaseId": {
+                      "type": "string",
+                      "description": "ID da base de conhecimento"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": ["CONNECTED"],
+                      "description": "Status da conexão"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/knowledge-base/{id}/affirmations": {
+      "post": {
+        "description": "Cria um treinamento na base de conhecimento especificada",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da base de conhecimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do treinamento a ser adicionado",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "title": "Texto",
+                    "type": "object",
+                    "properties": {
+                      "affirmationType": {
+                        "type": "string",
+                        "description": "Tipo do treinamento deve ser TEXT",
+                        "enum": ["TEXT"]
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Texto do treinamento"
+                      },
+                      "image": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "URL de imagem associada ao treinamento"
+                      },
+                      "video": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "URL de vídeo associado ao treinamento"
+                      },
+                      "audio": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "URL de áudio associado ao treinamento"
+                      },
+                      "document": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "URL de documento associado ao treinamento"
+                      }
+                    }
+                  },
+                  {
+                    "title": "Website",
+                    "type": "object",
+                    "properties": {
+                      "affirmationType": {
+                        "type": "string",
+                        "description": "Tipo do treinamento deve ser WEBSITE",
+                        "enum": ["WEBSITE"]
+                      },
+                      "websiteUrl": {
+                        "type": "string",
+                        "description": "URL do site a ser treinado"
+                      },
+                      "trainingSubPages": {
+                        "type": "string",
+                        "description": "Treinamento em subpáginas",
+                        "enum": ["DISABLED", "ACTIVE"]
+                      },
+                      "trainingInterval": {
+                        "type": "string",
+                        "description": "Intervalo de re-treinamento",
+                        "enum": [
+                          "NEVER",
+                          "ONE_HOUR",
+                          "FOUR_HOUR",
+                          "EIGHT_HOUR",
+                          "TWELVE_HOUR",
+                          "ONE_DAY",
+                          "ONE_WEEK",
+                          "ONE_MONTH"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "title": "Vídeo",
+                    "type": "object",
+                    "properties": {
+                      "affirmationType": {
+                        "type": "string",
+                        "description": "Tipo do treinamento deve ser VIDEO",
+                        "enum": ["VIDEO"]
+                      },
+                      "videoUrl": {
+                        "type": "string",
+                        "description": "URL do vídeo do treinamento"
+                      },
+                      "videoLanguage": {
+                        "type": "string",
+                        "description": "Idioma do vídeo",
+                        "example": "pt"
+                      }
+                    }
+                  },
+                  {
+                    "title": "Documento",
+                    "type": "object",
+                    "properties": {
+                      "affirmationType": {
+                        "type": "string",
+                        "description": "Tipo do treinamento deve ser DOCUMENT",
+                        "enum": ["DOCUMENT"]
+                      },
+                      "documentUrl": {
+                        "type": "string",
+                        "description": "URL do documento do treinamento"
+                      },
+                      "documentName": {
+                        "type": "string",
+                        "description": "Nome do documento"
+                      },
+                      "documentMimetype": {
+                        "type": "string",
+                        "description": "Tipo MIME do documento"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Treinamento adicionado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID do treinamento criado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Lista os treinamentos da base de conhecimento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da base de conhecimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página (padrão: 1)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Tamanho da página (padrão: 25)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 25
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Filtro para os treinamentos",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "affirmationType",
+            "in": "query",
+            "description": "Tipo do treinamento a ser filtrado (padrão: TEXT)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["TEXT", "WEBSITE", "VIDEO", "DOCUMENT"],
+              "default": "TEXT"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de treinamentos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string", "description": "ID do treinamento" },
+                          "type": {
+                            "type": "string",
+                            "enum": ["TEXT", "WEBSITE", "VIDEO", "DOCUMENT"],
+                            "description": "Tipo do treinamento"
+                          },
+                          "text": { "type": "string", "nullable": true, "description": "Texto do treinamento (quando type = TEXT)" },
+                          "image": { "type": "string", "nullable": true, "description": "URL de imagem associada" },
+                          "video": { "type": "string", "nullable": true, "description": "URL de vídeo associado" },
+                          "audio": { "type": "string", "nullable": true, "description": "URL de áudio associado" },
+                          "document": { "type": "string", "nullable": true, "description": "URL de documento associado" },
+                          "website": { "type": "string", "nullable": true, "description": "URL do site (quando type = WEBSITE)" },
+                          "trainingSubPages": { "type": "string", "nullable": true, "enum": ["DISABLED", "ACTIVE"], "description": "Treinamento em subpáginas" },
+                          "trainingInterval": { "type": "string", "nullable": true, "description": "Intervalo de re-treinamento" },
+                          "documentUrl": { "type": "string", "nullable": true, "description": "URL do documento (quando type = DOCUMENT)" },
+                          "documentName": { "type": "string", "nullable": true, "description": "Nome do documento" },
+                          "documentMimetype": { "type": "string", "nullable": true, "description": "Tipo MIME do documento" }
+                        }
+                      }
+                    },
+                    "count": {
+                      "type": "integer",
+                      "description": "Total de treinamentos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/knowledge-base/{id}/{affirmationId}/affirmations": {
+      "put": {
+        "description": "Atualiza um treinamento da base de conhecimento. Atualmente só é possível atualizar treinamentos de texto, para os demais tipos é necessário remover e adicionar novamente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da base de conhecimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "affirmationId",
+            "in": "path",
+            "description": "ID do treinamento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do treinamento a ser atualizado",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["affirmationType"],
+                "properties": {
+                  "affirmationType": {
+                    "type": "string",
+                    "enum": ["TEXT"],
+                    "description": "Tipo do treinamento"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Texto do treinamento"
+                  },
+                  "image": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "URL de imagem associada ao treinamento"
+                  },
+                  "video": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "URL de vídeo associado ao treinamento"
+                  },
+                  "audio": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "URL de áudio associado ao treinamento"
+                  },
+                  "document": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "URL de documento associado ao treinamento"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Treinamento atualizado com sucesso"
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deleta um treinamento da base de conhecimento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da base de conhecimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "affirmationId",
+            "in": "path",
+            "description": "ID do treinamento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Treinamento deletado com sucesso"
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/knowledge-base/{id}/{assistantId}/disconnect": {
+      "post": {
+        "description": "Desconecta uma base de conhecimento de um agente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da base de conhecimento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assistantId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Base de conhecimento desconectada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "assistantId": {
+                      "type": "string",
+                      "description": "ID do agente"
+                    },
+                    "knowledgeBaseId": {
+                      "type": "string",
+                      "description": "ID da base de conhecimento"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": ["DISCONNECTED"],
+                      "description": "Status da desconexão"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/custom-field/workspace/{workspaceId}": {
       "get": {
         "description": "Lista os campos customizados",
