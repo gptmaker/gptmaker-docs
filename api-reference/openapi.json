@@ -3783,6 +3783,74 @@
                   "autoGenerateBody": {
                     "type": "boolean",
                     "description": "Geração automática do corpo da requisição"
+                  },
+                  "tableConfig": {
+                    "type": "object",
+                    "description": "Configuração da tabela usada pela intenção.\n\nUse quando quiser que o agente interaja com uma tabela, como buscar ou registrar dados durante a execução.",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Tipo de interação com a tabela. `SEARCH` para buscar dados, `INSERT` para inserir uma nova linha.",
+                        "enum": [
+                          "SEARCH",
+                          "INSERT"
+                        ]
+                      },
+                      "tableId": {
+                        "type": "string",
+                        "description": "ID da tabela com a qual o agente vai interagir"
+                      },
+                      "fields": {
+                        "type": "array",
+                        "description": "Condições aplicadas nas colunas da tabela durante a interação",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "columnName": {
+                              "type": "string",
+                              "description": "Nome da coluna da tabela"
+                            },
+                            "condition": {
+                              "type": "string",
+                              "description": "Condição de comparação aplicada ao valor da coluna",
+                              "enum": [
+                                "EQUALS",
+                                "NOT_EQUALS",
+                                "GREATER_THAN",
+                                "GREATER_THAN_OR_EQUAL",
+                                "LESS_THAN",
+                                "LESS_THAN_OR_EQUAL",
+                                "LIKE",
+                                "STARTS_WITH",
+                                "CONTAINS",
+                                "NOT_CONTAINS",
+                                "IN",
+                                "BETWEEN",
+                                "EMPTY",
+                                "FILLED",
+                                "IS_TRUE",
+                                "IS_FALSE",
+                                "IS_NULL",
+                                "IS_NOT_NULL"
+                              ]
+                            },
+                            "value": {
+                              "type": "string",
+                              "description": "Valor a ser comparado com a coluna"
+                            }
+                          },
+                          "required": [
+                            "columnName",
+                            "condition",
+                            "value"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "tableId"
+                    ]
                   }
                 },
                 "required": [
@@ -10319,6 +10387,74 @@
           "autoGenerateBody": {
             "type": "boolean",
             "description": "Geração automática do corpo da requisição"
+          },
+          "tableConfig": {
+            "type": "object",
+            "description": "Configuração da tabela usada pela intenção.\n\nUse quando quiser que o agente interaja com uma tabela, como buscar ou registrar dados durante a execução.",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Tipo de interação com a tabela. `SEARCH` para buscar dados, `INSERT` para inserir uma nova linha.",
+                "enum": [
+                  "SEARCH",
+                  "INSERT"
+                ]
+              },
+              "tableId": {
+                "type": "string",
+                "description": "ID da tabela com a qual o agente vai interagir"
+              },
+              "fields": {
+                "type": "array",
+                "description": "Condições aplicadas nas colunas da tabela durante a interação",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "columnName": {
+                      "type": "string",
+                      "description": "Nome da coluna da tabela"
+                    },
+                    "condition": {
+                      "type": "string",
+                      "description": "Condição de comparação aplicada ao valor da coluna",
+                      "enum": [
+                        "EQUALS",
+                        "NOT_EQUALS",
+                        "GREATER_THAN",
+                        "GREATER_THAN_OR_EQUAL",
+                        "LESS_THAN",
+                        "LESS_THAN_OR_EQUAL",
+                        "LIKE",
+                        "STARTS_WITH",
+                        "CONTAINS",
+                        "NOT_CONTAINS",
+                        "IN",
+                        "BETWEEN",
+                        "EMPTY",
+                        "FILLED",
+                        "IS_TRUE",
+                        "IS_FALSE",
+                        "IS_NULL",
+                        "IS_NOT_NULL"
+                      ]
+                    },
+                    "value": {
+                      "type": "string",
+                      "description": "Valor a ser comparado com a coluna"
+                    }
+                  },
+                  "required": [
+                    "columnName",
+                    "condition",
+                    "value"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "type",
+              "tableId"
+            ]
           }
         }
       },
