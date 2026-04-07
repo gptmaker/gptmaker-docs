@@ -7980,6 +7980,1939 @@
           }
         }
       }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/rows/query": {
+      "post": {
+        "operationId": "queryRows",
+        "summary": "Consultar linhas",
+        "description": "Consulta dados de uma tabela com suporte a seleção de colunas, filtros, agrupamento, cálculos e ordenação.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fields": {
+                    "type": "array",
+                    "description": "Lista de colunas que devem ser retornadas.\nSe não informado, todas as colunas são incluídas.\n\nAo usar `group`, os campos devem corresponder aos campos agrupados.",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "produto",
+                      "status",
+                      "total"
+                    ]
+                  },
+                  "rowFilter": {
+                    "type": "object",
+                    "properties": {
+                      "and": {
+                        "type": "array",
+                        "description": "Todas as condições devem ser atendidas.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "field": {
+                              "type": "string",
+                              "description": "Nome do campo"
+                            },
+                            "operator": {
+                              "type": "string",
+                              "enum": [
+                                "=",
+                                "!=",
+                                ">",
+                                ">=",
+                                "<",
+                                "<=",
+                                "IN",
+                                "NOT_IN",
+                                "BETWEEN",
+                                "CONTAINS",
+                                "NOT_CONTAINS",
+                                "STARTS_WITH",
+                                "LIKE",
+                                "IS_NULL",
+                                "IS_NOT_NULL"
+                              ]
+                            },
+                            "value": {
+                              "description": "Valor da condição. Para `IN` e `BETWEEN` use array. Para `IS_NULL`/`IS_NOT_NULL` omita."
+                            }
+                          }
+                        }
+                      },
+                      "or": {
+                        "type": "array",
+                        "description": "Pelo menos uma condição deve ser atendida.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "field": {
+                              "type": "string",
+                              "description": "Nome do campo"
+                            },
+                            "operator": {
+                              "type": "string",
+                              "enum": [
+                                "=",
+                                "!=",
+                                ">",
+                                ">=",
+                                "<",
+                                "<=",
+                                "IN",
+                                "NOT_IN",
+                                "BETWEEN",
+                                "CONTAINS",
+                                "NOT_CONTAINS",
+                                "STARTS_WITH",
+                                "LIKE",
+                                "IS_NULL",
+                                "IS_NOT_NULL"
+                              ]
+                            },
+                            "value": {
+                              "description": "Valor da condição. Para `IN` e `BETWEEN` use array. Para `IS_NULL`/`IS_NOT_NULL` omita."
+                            }
+                          }
+                        }
+                      },
+                      "field": {
+                        "type": "string",
+                        "description": "Nome do campo (condição direta, sem and/or)"
+                      },
+                      "operator": {
+                        "type": "string",
+                        "enum": [
+                          "=",
+                          "!=",
+                          ">",
+                          ">=",
+                          "<",
+                          "<=",
+                          "IN",
+                          "NOT_IN",
+                          "BETWEEN",
+                          "CONTAINS",
+                          "NOT_CONTAINS",
+                          "STARTS_WITH",
+                          "LIKE",
+                          "IS_NULL",
+                          "IS_NOT_NULL"
+                        ]
+                      },
+                      "value": {
+                        "description": "Valor da condição. Para `IN` e `BETWEEN` use array. Para `IS_NULL`/`IS_NOT_NULL` omita."
+                      }
+                    },
+                    "description": "Filtro aplicado diretamente nas linhas da tabela.\nApenas as linhas que atenderem a esse filtro serão consideradas na consulta.\n\nUse `and` para combinar várias condições, ou `or` para aceitar qualquer uma delas."
+                  },
+                  "calculations": {
+                    "type": "array",
+                    "description": "Cálculos a serem aplicados na consulta (ex: contagem, média, soma).\nCada item deve incluir um `type` (o que calcular) e um `alias` (nome do campo no resultado).",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "COUNT",
+                            "SUM",
+                            "AVG",
+                            "MIN",
+                            "MAX",
+                            "EXPRESSION"
+                          ],
+                          "description": "Define o tipo de cálculo.\n\n`COUNT`: Conta quantas linhas existem. Pode usar `filter` para contar apenas algumas linhas, ou `distinct: true` com `field` para contar valores únicos.\n\n`SUM`: Soma os valores de um campo numérico.\n\n`AVG`: Calcula a média de um campo numérico.\n\n`MIN`: Retorna o menor valor de um campo.\n\n`MAX`: Retorna o maior valor de um campo.\n\n`EXPRESSION`: Calcula uma fórmula usando outros cálculos definidos neste array. Suporta `+`, `-`, `*` e `/`. Executado após os demais cálculos."
+                        },
+                        "alias": {
+                          "type": "string",
+                          "description": "Nome do campo no resultado. Use nomes descritivos como `total` ou `media`. Obrigatório."
+                        },
+                        "field": {
+                          "type": "string",
+                          "description": "Campo da tabela usado no cálculo. Obrigatório para `SUM`, `AVG`, `MIN` e `MAX`. Opcional para `COUNT`. Não usado em `EXPRESSION`."
+                        },
+                        "filter": {
+                          "type": "object",
+                          "description": "Filtro aplicado dentro do cálculo. Permite calcular valores com condição (ex: contar apenas registros específicos).",
+                          "properties": {
+                            "field": {
+                              "type": "string"
+                            },
+                            "operator": {
+                              "type": "string",
+                              "enum": [
+                                "=",
+                                "!=",
+                                ">",
+                                ">=",
+                                "<",
+                                "<=",
+                                "IN",
+                                "NOT_IN",
+                                "IS_NULL",
+                                "IS_NOT_NULL",
+                                "CONTAINS"
+                              ]
+                            },
+                            "value": {}
+                          }
+                        },
+                        "formula": {
+                          "type": "string",
+                          "description": "Fórmula usando `alias` de outros cálculos. Obrigatório para `EXPRESSION`.\nExemplo: `negativos / total`.",
+                          "example": "negativos / total"
+                        },
+                        "distinct": {
+                          "type": "boolean",
+                          "description": "Quando `true`, conta apenas valores únicos do `field`. Usado com `COUNT`."
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "alias"
+                      ]
+                    }
+                  },
+                  "order": {
+                    "type": "array",
+                    "description": "Define a ordenação dos resultados.\nPode usar colunas ou alias definidos em `calculations`.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "field": {
+                          "type": "string"
+                        },
+                        "direction": {
+                          "type": "string",
+                          "enum": [
+                            "ASC",
+                            "DESC"
+                          ],
+                          "default": "ASC"
+                        }
+                      },
+                      "required": [
+                        "field"
+                      ]
+                    },
+                    "example": [
+                      {
+                        "field": "total",
+                        "direction": "DESC"
+                      }
+                    ]
+                  },
+                  "page": {
+                    "type": "integer",
+                    "description": "Página atual (começa em 0). Modo listagem. Padrão: 0.",
+                    "default": 0
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "description": "Itens por página. Modo listagem. Padrão: 50. Máximo: 500.",
+                    "default": 50
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "Máximo de grupos retornados. Modo agrupamento. Padrão: 50."
+                  },
+                  "group": {
+                    "type": "array",
+                    "description": "Agrupa as linhas por um ou mais campos.\nQuando presente, o retorno deixa de ser uma lista paginada de linhas e passa a ser um array de grupos, com um objeto para cada combinação de valores dos campos agrupados.\n\nGeralmente usado junto com `calculations`.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "field"
+                      ],
+                      "properties": {
+                        "field": {
+                          "type": "string",
+                          "description": "Campo para agrupar"
+                        }
+                      }
+                    },
+                    "example": [
+                      {
+                        "field": "produto"
+                      }
+                    ]
+                  },
+                  "resultFilter": {
+                    "type": "object",
+                    "properties": {
+                      "and": {
+                        "type": "array",
+                        "description": "Todas as condições devem ser atendidas.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "field": {
+                              "type": "string",
+                              "description": "Nome do campo"
+                            },
+                            "operator": {
+                              "type": "string",
+                              "enum": [
+                                "=",
+                                "!=",
+                                ">",
+                                ">=",
+                                "<",
+                                "<=",
+                                "IN",
+                                "NOT_IN",
+                                "BETWEEN",
+                                "CONTAINS",
+                                "NOT_CONTAINS",
+                                "STARTS_WITH",
+                                "LIKE",
+                                "IS_NULL",
+                                "IS_NOT_NULL"
+                              ]
+                            },
+                            "value": {
+                              "description": "Valor da condição. Para `IN` e `BETWEEN` use array. Para `IS_NULL`/`IS_NOT_NULL` omita."
+                            }
+                          }
+                        }
+                      },
+                      "or": {
+                        "type": "array",
+                        "description": "Pelo menos uma condição deve ser atendida.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "field": {
+                              "type": "string",
+                              "description": "Nome do campo"
+                            },
+                            "operator": {
+                              "type": "string",
+                              "enum": [
+                                "=",
+                                "!=",
+                                ">",
+                                ">=",
+                                "<",
+                                "<=",
+                                "IN",
+                                "NOT_IN",
+                                "BETWEEN",
+                                "CONTAINS",
+                                "NOT_CONTAINS",
+                                "STARTS_WITH",
+                                "LIKE",
+                                "IS_NULL",
+                                "IS_NOT_NULL"
+                              ]
+                            },
+                            "value": {
+                              "description": "Valor da condição. Para `IN` e `BETWEEN` use array. Para `IS_NULL`/`IS_NOT_NULL` omita."
+                            }
+                          }
+                        }
+                      },
+                      "field": {
+                        "type": "string",
+                        "description": "Nome do campo (condição direta, sem and/or)"
+                      },
+                      "operator": {
+                        "type": "string",
+                        "enum": [
+                          "=",
+                          "!=",
+                          ">",
+                          ">=",
+                          "<",
+                          "<=",
+                          "IN",
+                          "NOT_IN",
+                          "BETWEEN",
+                          "CONTAINS",
+                          "NOT_CONTAINS",
+                          "STARTS_WITH",
+                          "LIKE",
+                          "IS_NULL",
+                          "IS_NOT_NULL"
+                        ]
+                      },
+                      "value": {
+                        "description": "Valor da condição. Para `IN` e `BETWEEN` use array. Para `IS_NULL`/`IS_NOT_NULL` omita."
+                      }
+                    },
+                    "description": "Filtro aplicado ao resultado da consulta após os cálculos.\n\nO campo (`field`) deve ser um alias definido em `calculations`."
+                  }
+                }
+              },
+              "examples": {
+                "Query simples": {
+                  "summary": "Busca linhas com filtro e ordenação",
+                  "value": {
+                    "fields": [
+                      "nome",
+                      "status",
+                      "total"
+                    ],
+                    "rowFilter": {
+                      "and": [
+                        {
+                          "field": "status",
+                          "operator": "=",
+                          "value": "ativo"
+                        }
+                      ]
+                    },
+                    "order": [
+                      {
+                        "field": "total",
+                        "direction": "DESC"
+                      }
+                    ],
+                    "page": 0,
+                    "pageSize": 25
+                  }
+                },
+                "Taxa negativa por produto": {
+                  "summary": "Análise avançada com EXPRESSION e aggregationFilter",
+                  "value": {
+                    "fields": [
+                      "produto"
+                    ],
+                    "rowFilter": {
+                      "and": [
+                        {
+                          "field": "data_avaliacao",
+                          "operator": ">=",
+                          "value": "2024-01-01"
+                        }
+                      ]
+                    },
+                    "calculations": [
+                      {
+                        "type": "COUNT",
+                        "alias": "total"
+                      },
+                      {
+                        "type": "COUNT",
+                        "alias": "negativos",
+                        "filter": {
+                          "field": "sentimento",
+                          "operator": "=",
+                          "value": "negativo"
+                        }
+                      },
+                      {
+                        "type": "EXPRESSION",
+                        "alias": "taxa_negativa",
+                        "formula": "negativos / total"
+                      }
+                    ],
+                    "aggregationFilter": {
+                      "and": [
+                        {
+                          "field": "total",
+                          "operator": ">",
+                          "value": 10
+                        }
+                      ]
+                    },
+                    "order": [
+                      {
+                        "field": "taxa_negativa",
+                        "direction": "DESC"
+                      }
+                    ],
+                    "limit": 5,
+                    "group": [
+                      {
+                        "field": "produto"
+                      }
+                    ]
+                  }
+                },
+                "Agrupamento com cálculos": {
+                  "summary": "Pedidos e receita por produto",
+                  "value": {
+                    "fields": [
+                      "produto"
+                    ],
+                    "calculations": [
+                      {
+                        "type": "COUNT",
+                        "alias": "total_pedidos"
+                      },
+                      {
+                        "type": "SUM",
+                        "alias": "receita",
+                        "field": "valor"
+                      }
+                    ],
+                    "order": [
+                      {
+                        "field": "receita",
+                        "direction": "DESC"
+                      }
+                    ],
+                    "group": [
+                      {
+                        "field": "produto"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado da consulta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "Modo listagem (paginado)",
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "description": "Lista de linhas com os campos solicitados.",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": true,
+                            "example": {
+                              "nome": "João Silva",
+                              "status": "ativo",
+                              "total": 149.9,
+                              "criado_em": "2024-03-15T10:30:00"
+                            }
+                          }
+                        },
+                        "count": {
+                          "type": "integer",
+                          "example": 48
+                        },
+                        "page": {
+                          "type": "integer",
+                          "example": 0
+                        },
+                        "pageSize": {
+                          "type": "integer",
+                          "example": 25
+                        }
+                      }
+                    },
+                    {
+                      "title": "Modo agrupamento",
+                      "type": "array",
+                      "description": "Lista de grupos com os valores calculados. Cada objeto contém os campos do group e os aliases de calculations.",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": true,
+                        "example": {
+                          "produto": "Plano Pro",
+                          "total_pedidos": 120,
+                          "receita": 14388.0
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Token inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables": {
+      "get": {
+        "operationId": "listTables",
+        "summary": "Listar tabelas",
+        "description": "Lista todas as tabelas do workspace.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createTable",
+        "summary": "Criar tabela",
+        "description": "Cria uma nova tabela no workspace.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome da tabela"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da tabela"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}": {
+      "put": {
+        "operationId": "updateTable",
+        "summary": "Atualizar tabela",
+        "description": "Atualiza as informações de uma tabela.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Novo nome da tabela"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Nova descrição"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteTable",
+        "summary": "Deletar tabela",
+        "description": "Remove uma tabela e todos os seus dados permanentemente.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/metadata": {
+      "get": {
+        "operationId": "getTableMetadata",
+        "summary": "Metadados da tabela",
+        "description": "Retorna os metadados de uma tabela: colunas (nome, tipo, posição, opções) e total de linhas.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/columns": {
+      "post": {
+        "operationId": "addColumn",
+        "summary": "Adicionar coluna",
+        "description": "Adiciona uma nova coluna à tabela.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "type"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome da coluna"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Tipo do campo",
+                    "enum": [
+                      "STRING",
+                      "NUMBER",
+                      "BOOLEAN",
+                      "DATE",
+                      "DATE_TIME",
+                      "SELECT"
+                    ]
+                  },
+                  "options": {
+                    "type": "object",
+                    "description": "Configurações adicionais do tipo (ex: opções de SELECT)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/columns/{columnId}": {
+      "put": {
+        "operationId": "updateColumn",
+        "summary": "Atualizar coluna",
+        "description": "Atualiza as configurações de uma coluna.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "columnId",
+            "in": "path",
+            "description": "ID da coluna",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Novo nome da coluna"
+                  },
+                  "options": {
+                    "type": "object",
+                    "description": "Configurações adicionais"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteColumn",
+        "summary": "Deletar coluna",
+        "description": "Remove uma coluna e todos os seus dados da tabela.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "columnId",
+            "in": "path",
+            "description": "ID da coluna",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/columns/reorder": {
+      "patch": {
+        "operationId": "reorderColumns",
+        "summary": "Reordenar colunas",
+        "description": "Reordena as colunas da tabela. O array `columnIds` deve conter todos os IDs das colunas, na nova ordem desejada.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "columnIds"
+                ],
+                "properties": {
+                  "columnIds": {
+                    "type": "array",
+                    "description": "IDs de todas as colunas na nova ordem",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/rows": {
+      "post": {
+        "operationId": "addRow",
+        "summary": "Adicionar linha",
+        "description": "Insere uma nova linha na tabela.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fields": {
+                    "type": "object",
+                    "description": "Mapa de campo → valor para os campos da linha",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/rows/batch": {
+      "post": {
+        "operationId": "addRowsBatch",
+        "summary": "Adicionar linhas em lote",
+        "description": "Insere múltiplas linhas de uma só vez. Cada linha é processada de forma independente.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "rows"
+                ],
+                "properties": {
+                  "rows": {
+                    "type": "array",
+                    "description": "Lista de linhas a inserir",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "fields": {
+                          "type": "object",
+                          "description": "Mapa de campo → valor",
+                          "additionalProperties": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado do processamento em lote",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "array",
+                      "description": "Linhas inseridas com sucesso",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "index": {
+                            "type": "integer"
+                          },
+                          "rowId": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "description": "Linhas que falharam",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "index": {
+                            "type": "integer"
+                          },
+                          "input": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "errors": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/rows/{rowId}": {
+      "patch": {
+        "operationId": "patchRowFields",
+        "summary": "Atualizar campos da linha",
+        "description": "Atualiza um ou mais campos de uma linha existente.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rowId",
+            "in": "path",
+            "description": "ID da linha",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fields": {
+                    "type": "object",
+                    "description": "Mapa de campo → valor com os campos a atualizar",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteRow",
+        "summary": "Deletar linha",
+        "description": "Remove uma linha da tabela permanentemente.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rowId",
+            "in": "path",
+            "description": "ID da linha",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/automations": {
+      "get": {
+        "operationId": "listAutomations",
+        "summary": "Listar automações",
+        "description": "Lista todas as automações configuradas na tabela.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createAutomation",
+        "summary": "Criar automação",
+        "description": "Cria uma nova automação na tabela.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "trigger",
+                  "action"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome da automação"
+                  },
+                  "trigger": {
+                    "type": "object",
+                    "description": "Evento que dispara a automação"
+                  },
+                  "conditions": {
+                    "type": "array",
+                    "description": "Condições para execução",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "action": {
+                    "type": "object",
+                    "description": "Ação a executar"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/automations/{automationId}": {
+      "get": {
+        "operationId": "getAutomation",
+        "summary": "Buscar automação",
+        "description": "Retorna os detalhes de uma automação.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "automationId",
+            "in": "path",
+            "description": "ID da automação",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateAutomation",
+        "summary": "Atualizar automação",
+        "description": "Atualiza as configurações de uma automação.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "automationId",
+            "in": "path",
+            "description": "ID da automação",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "trigger": {
+                    "type": "object"
+                  },
+                  "conditions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "action": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteAutomation",
+        "summary": "Deletar automação",
+        "description": "Remove uma automação da tabela.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "automationId",
+            "in": "path",
+            "description": "ID da automação",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/workspace/{workspaceId}/tables/{tableId}/automations/{automationId}/active": {
+      "patch": {
+        "operationId": "toggleAutomation",
+        "summary": "Ativar/Inativar automação",
+        "description": "Alterna o estado ativo/inativo de uma automação.",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "description": "ID do workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableId",
+            "in": "path",
+            "description": "ID da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "automationId",
+            "in": "path",
+            "description": "ID da automação",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "active"
+                ],
+                "properties": {
+                  "active": {
+                    "type": "boolean",
+                    "description": "true para ativar, false para inativar"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

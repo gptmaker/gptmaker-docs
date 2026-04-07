@@ -1,0 +1,599 @@
+---
+title: Consultas avançadas
+description: "Filtre, agrupe e calcule resultados sobre os dados das suas tabelas"
+icon: magnifying-glass
+---
+
+A <a href="/api-reference/tables/rows/query-rows" target="_blank">**API de Consultar linhas**</a> permite explorar os dados de uma tabela de forma flexível.
+Você define o que quer buscar em JSON, como os campos desejados, os filtros e como os dados devem ser agrupados, e a API retorna o resultado pronto.
+
+---
+
+## Dois modos de operação
+
+O modo é detectado automaticamente com base no que você enviar:
+
+| Modo | Quando ativa | O que retorna |
+|------|-------------|---------------|
+| **Listagem** | Sem `group` e sem `calculations` | Objeto paginado com as linhas e seus valores |
+| **Agrupamento** | Com `group` ou `calculations` | Array de grupos com os valores calculados |
+
+---
+
+## Campos do request
+
+<Tip>
+  Antes de montar uma consulta, consulte a <a href="/api-reference/tables/get-table-metadata" target="_blank">**API de Metadados da tabela**</a> para conferir os campos disponíveis, seus tipos e nomes exatos.
+</Tip>
+
+### `fields`
+
+Lista dos campos que você quer ver no resultado. Os nomes devem corresponder aos nomes das colunas da tabela.
+
+Se não informado, todas as colunas são incluídas.
+
+Ao usar `group`, deve conter os mesmos campos usados no agrupamento.
+
+```json
+{
+  "fields": ["produto", "status", "total"]
+}
+```
+
+---
+
+### `rowFilter`
+
+Filtra as linhas da tabela antes de qualquer agrupamento ou cálculo. Funciona com `and` (todas as condições precisam ser verdadeiras) ou `or` (pelo menos uma precisa ser verdadeira).
+
+**Exemplo com múltiplas condições:**
+```json
+{
+  "rowFilter": {
+    "and": [
+      {
+        "field": "status",
+        "operator": "=",
+        "value": "ativo"
+      },
+      {
+        "field": "total",
+        "operator": ">",
+        "value": 100
+      }
+    ]
+  }
+}
+```
+
+**Exemplo com uma única condição:**
+```json
+{
+  "rowFilter": {
+    "field": "status",
+    "operator": "=",
+    "value": "ativo"
+  }
+}
+```
+
+**Exemplo com condições aninhadas:**
+```json
+{
+  "rowFilter": {
+    "or": [
+      {
+        "field": "status",
+        "operator": "=",
+        "value": "ativo"
+      },
+      {
+        "and": [
+          {
+            "field": "status",
+            "operator": "=",
+            "value": "pendente"
+          },
+          {
+            "field": "total",
+            "operator": ">",
+            "value": 500
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Operadores disponíveis:**
+
+| Operador | O que faz | Exemplo de `value` |
+|----------|-----------|-------------------|
+| `=` | Igual a | `"ativo"` |
+| `!=` | Diferente de | `"cancelado"` |
+| `>` `>=` `<` `<=` | Maior, menor ou igual | `100` |
+| `IN` | Está na lista | `["ativo", "pendente"]` |
+| `NOT_IN` | Não está na lista | `["cancelado"]` |
+| `BETWEEN` | Entre dois valores | `["2024-01-01", "2024-12-31"]` |
+| `CONTAINS` | Contém o texto | `"João"` |
+| `NOT_CONTAINS` | Não contém o texto | `"teste"` |
+| `STARTS_WITH` | Começa com | `"PRD-"` |
+| `LIKE` | Padrão com curinga (`%`) | `"%Silva%"` |
+| `IS_NULL` | Campo está vazio | _(omita o `value`)_ |
+| `IS_NOT_NULL` | Campo está preenchido | _(omita o `value`)_ |
+
+---
+
+### `group`
+
+Define como as linhas serão agrupadas. Quando `group` está presente, a consulta entra no modo de agrupamento.
+
+```json
+{
+  "group": [
+    { "field": "produto" },
+    { "field": "status" }
+  ]
+}
+```
+
+---
+
+### `calculations`
+
+Define os valores calculados por grupo. Quando `calculations` está presente, a consulta entra no modo de agrupamento, mesmo sem `group`.
+
+Cada cálculo precisa de um `type` (o tipo de cálculo) e um `alias` (o nome que vai aparecer no resultado). Veja todos os tipos na seção [Calculations](#calculations-1).
+
+---
+
+### `resultFilter`
+
+Filtra o resultado **depois** que os cálculos foram realizados. O `field` de cada condição deve ser um **alias** definido em `calculations`.
+
+<Note>
+  Internamente esse campo é tratado como `aggregationFilter`.
+</Note>
+
+```json
+{
+  "resultFilter": {
+    "and": [
+      {
+        "field": "total_pedidos",
+        "operator": ">",
+        "value": 5
+      }
+    ]
+  }
+}
+```
+
+---
+
+### `order`
+
+Ordena o resultado. Pode referenciar tanto campos normais quanto aliases de `calculations`. O campo informado precisa estar presente em `fields` ou ser um alias de `calculations`.
+
+```json
+{
+  "order": [
+    {
+      "field": "receita_total",
+      "direction": "DESC"
+    }
+  ]
+}
+```
+
+---
+
+### `page` / `pageSize` / `limit`
+
+| Campo | Modo | Descrição | Padrão |
+|-------|------|-----------|--------|
+| `page` | Listagem | Página atual. Começa em `0`. | `0` |
+| `pageSize` | Listagem | Quantidade de itens por página. Máximo: `500`. | `50` |
+| `limit` | Agrupamento | Quantidade máxima de grupos retornados. | `50` |
+
+---
+
+## Exemplos
+
+### Busca simples com filtro
+
+Lista pedidos com status ativo, ordenados pelo total do maior para o menor.
+
+```json
+{
+  "fields": ["nome", "status", "total", "criado_em"],
+  "rowFilter": {
+    "and": [
+      {
+        "field": "status",
+        "operator": "=",
+        "value": "ativo"
+      }
+    ]
+  },
+  "order": [
+    {
+      "field": "total",
+      "direction": "DESC"
+    }
+  ],
+  "page": 0,
+  "pageSize": 25
+}
+```
+
+**Retorno:**
+```json
+{
+  "data": [
+    {
+      "nome": "João Silva",
+      "status": "ativo",
+      "total": 149.90,
+      "criado_em": "2024-03-15T10:30:00"
+    }
+  ],
+  "count": 48,
+  "page": 0,
+  "pageSize": 25
+}
+```
+
+---
+
+### Agrupamento com cálculos
+
+Conta quantos pedidos existem e soma a receita por produto, do maior para o menor.
+
+```json
+{
+  "fields": ["produto"],
+  "group": [
+    {
+      "field": "produto"
+    }
+  ],
+  "calculations": [
+    {
+      "type": "COUNT",
+      "alias": "total_pedidos"
+    },
+    {
+      "type": "SUM",
+      "alias": "receita",
+      "field": "valor"
+    }
+  ],
+  "order": [
+    {
+      "field": "receita",
+      "direction": "DESC"
+    }
+  ]
+}
+```
+
+**Retorno:**
+```json
+[
+  {
+    "produto": "Plano Pro",
+    "total_pedidos": 120,
+    "receita": 14388.00
+  },
+  {
+    "produto": "Plano Básico",
+    "total_pedidos": 85,
+    "receita": 4249.15
+  }
+]
+```
+
+---
+
+### Análise com fórmula e filtro no resultado
+
+Taxa de feedbacks negativos por produto desde janeiro de 2024, mostrando só os produtos com mais de 10 avaliações, do pior para o melhor.
+
+```json
+{
+  "fields": ["produto"],
+  "rowFilter": {
+    "and": [
+      {
+        "field": "data_avaliacao",
+        "operator": ">=",
+        "value": "2024-01-01"
+      }
+    ]
+  },
+  "group": [
+    {
+      "field": "produto"
+    }
+  ],
+  "calculations": [
+    {
+      "type": "COUNT",
+      "alias": "total"
+    },
+    {
+      "type": "COUNT",
+      "alias": "negativos",
+      "filter": {
+        "field": "sentimento",
+        "operator": "=",
+        "value": "negativo"
+      }
+    },
+    {
+      "type": "EXPRESSION",
+      "alias": "taxa_negativa",
+      "formula": "negativos / total"
+    }
+  ],
+  "resultFilter": {
+    "and": [
+      {
+        "field": "total",
+        "operator": ">",
+        "value": 10
+      }
+    ]
+  },
+  "order": [
+    {
+      "field": "taxa_negativa",
+      "direction": "DESC"
+    }
+  ],
+  "limit": 5
+}
+```
+
+**Retorno:**
+```json
+[
+  {
+    "produto": "Produto A",
+    "total": 45,
+    "negativos": 18,
+    "taxa_negativa": 0.40
+  },
+  {
+    "produto": "Produto B",
+    "total": 32,
+    "negativos": 11,
+    "taxa_negativa": 0.34
+  }
+]
+```
+
+---
+
+## Tipos de Calculations
+
+<Tip>
+  Você pode usar `filter` em qualquer cálculo (exceto `EXPRESSION`) para aplicar condições específicas. Isso permite calcular valores com base em subconjuntos dos dados sem precisar fazer chamadas separadas.
+</Tip>
+
+### COUNT = contar linhas
+
+Conta quantas linhas existem no grupo.
+
+```json
+{
+  "type": "COUNT",
+  "alias": "total_pedidos"
+}
+```
+
+**Com filtro** — conta apenas as linhas que atendem a uma condição específica:
+
+```json
+{
+  "type": "COUNT",
+  "alias": "pedidos_cancelados",
+  "filter": {
+    "field": "status",
+    "operator": "=",
+    "value": "cancelado"
+  }
+}
+```
+
+**Valores distintos** — conta apenas valores únicos de um campo:
+
+```json
+{
+  "type": "COUNT",
+  "alias": "clientes_unicos",
+  "field": "cliente_id",
+  "distinct": true
+}
+```
+
+---
+
+### SUM = somar valores
+
+Soma os valores de um campo numérico dentro do grupo.
+
+```json
+{
+  "type": "SUM",
+  "alias": "receita_total",
+  "field": "valor"
+}
+```
+
+**Com filtro** — soma apenas os valores dos pedidos cancelados:
+
+```json
+{
+  "type": "SUM",
+  "alias": "receita_cancelada",
+  "field": "valor",
+  "filter": {
+    "field": "status",
+    "operator": "=",
+    "value": "cancelado"
+  }
+}
+```
+
+---
+
+### AVG = média
+
+Calcula a média dos valores de um campo numérico.
+
+```json
+{
+  "type": "AVG",
+  "alias": "ticket_medio",
+  "field": "valor"
+}
+```
+
+**Com filtro** — calcula a média apenas dos pedidos com status `ativo`:
+
+```json
+{
+  "type": "AVG",
+  "alias": "ticket_medio_ativo",
+  "field": "valor",
+  "filter": {
+    "field": "status",
+    "operator": "=",
+    "value": "ativo"
+  }
+}
+```
+
+---
+
+### MIN e MAX = menor e maior valor
+
+```json
+{
+  "type": "MIN",
+  "alias": "menor_pedido",
+  "field": "valor"
+}
+```
+
+```json
+{
+  "type": "MAX",
+  "alias": "maior_pedido",
+  "field": "valor"
+}
+```
+
+**Com filtro** — retorna o menor e o maior valor apenas dos pedidos entregues:
+
+```json
+{
+  "type": "MIN",
+  "alias": "menor_entregue",
+  "field": "valor",
+  "filter": {
+    "field": "status",
+    "operator": "=",
+    "value": "entregue"
+  }
+}
+```
+
+```json
+{
+  "type": "MAX",
+  "alias": "maior_entregue",
+  "field": "valor",
+  "filter": {
+    "field": "status",
+    "operator": "=",
+    "value": "entregue"
+  }
+}
+```
+
+---
+
+### EXPRESSION = fórmula entre cálculos
+
+Cria um valor a partir de outros cálculos já definidos no mesmo request. Suporta `+`, `*`, `/` e `-`.
+
+```json
+{
+  "type": "EXPRESSION",
+  "alias": "taxa_cancelamento",
+  "formula": "pedidos_cancelados / total_pedidos"
+}
+```
+
+<Warning>
+  EXPRESSION é calculada depois de todos os outros tipos. Se você referenciar um alias que não existe em `calculations`, a requisição vai retornar erro. Divisão por zero retorna `0` automaticamente.
+</Warning>
+
+---
+
+## rowFilter vs resultFilter
+
+Essa é a distinção importante dessa API:
+
+| | `rowFilter` | `resultFilter` |
+|--|-------------|---------------------|
+| **Quando executa** | Antes do agrupamento | Depois dos cálculos |
+| **O que filtra** | Linhas individuais da tabela | Grupos pelo resultado dos cálculos |
+| **`field` aceita** | Campos da tabela | Aliases de `calculations` |
+
+**Exemplo prático:** você quer produtos com mais de 10 avaliações e nota média acima de 4.
+
+Usar `rowFilter` aqui não funciona, no momento em que ele é aplicado, a contagem e a média ainda não foram calculadas. O correto é usar `resultFilter`, que executa depois que os cálculos já foram feitos.
+
+---
+
+## Formatos de valor por tipo de campo
+
+| Tipo | Como enviar | Exemplo |
+|------|-------------|---------|
+| `STRING` | Texto livre | `"João Silva"` |
+| `SELECT` | Opção exata | `"ativo"` |
+| `NUMERIC` | Número inteiro ou decimal | `149.90` |
+| `BOOLEAN` | Verdadeiro ou falso | `true` |
+| `DATE` | Data no formato `yyyy-MM-dd` | `"2024-03-15"` |
+| `DATE_TIME` | Data e hora no padrão ISO 8601 | `"2024-03-15T10:30:00Z"` |
+
+Datas no retorno sempre vêm no formato `yyyy-MM-dd'T'HH:mm:ss`. Resultados numéricos de cálculos retornam com 2 casas decimais.
+
+---
+
+## Erros comuns
+
+| Erro | Causa | Como resolver |
+|------|-------|---------------|
+| Campo não encontrado | O campo informado não existe na tabela | Use a <a href="/api-reference/tables/get-table-metadata" target="_blank">**API de Metadados da tabela**</a> para verificar os campos disponíveis |
+| Campo inválido em filtro | O campo usado em `rowFilter` ou `resultFilter` não existe | Verifique o nome do campo ou alias |
+| Operador inválido | O operador informado não é suportado | Use apenas os operadores disponíveis na documentação |
+| Tipo inválido | Valor no formato errado para o tipo do campo | Verifique o formato correto (string, número, data, etc.) |
+| Alias não encontrado em EXPRESSION | A fórmula referencia um alias que não existe | Verifique se todos os aliases estão definidos em `calculations` |
+| Fórmula inválida | EXPRESSION sem `formula` ou vazia | Informe uma fórmula válida |
+| Ciclo em calculations | Uma expressão depende dela mesma direta ou indiretamente | Remova a dependência circular |
+| resultFilter sem cálculo | Uso de `resultFilter` sem `calculations` | Adicione `calculations` ao request |
+| Campo inválido em order | Campo não está em `fields` nem em `calculations` | Inclua o campo ou alias corretamente |
+| Ordenação inválida | Campo vazio ou inválido em `order` | Verifique o campo informado |
+| Paginação muito alta | `page * pageSize` ultrapassa o limite permitido | Reduza o page ou pageSize |
+| pageSize inválido | Valor menor ou maior que o permitido | Use valores entre 1 e 500 |
+| fields ausente | Campos não informados em consultas que exigem | Informe os campos em `fields` |
+
+<Tip>
+  Antes de montar uma consulta, consulte a <a href="/api-reference/tables/get-table-metadata" target="_blank">**API de Metadados da tabela**</a> para conferir os campos disponíveis, seus tipos e nomes exatos.
+</Tip>
