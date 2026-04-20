@@ -3845,6 +3845,19 @@
                             "value"
                           ]
                         }
+                      },
+                      "displayColumns": {
+                        "type": "array",
+                        "description": "Colunas da tabela que serão exibidas no resultado da busca. Máximo de 10 colunas.",
+                        "maxItems": 10,
+                        "items": {
+                          "type": "string",
+                          "description": "Nome da coluna a ser exibida"
+                        }
+                      },
+                      "groupByColumn": {
+                        "type": "string",
+                        "description": "Nome da coluna usada para agrupar os resultados da busca"
                       }
                     },
                     "required": [
@@ -10449,6 +10462,19 @@
                     "value"
                   ]
                 }
+              },
+              "displayColumns": {
+                "type": "array",
+                "description": "Colunas da tabela que serão exibidas no resultado da busca. Máximo de 10 colunas.",
+                "maxItems": 10,
+                "items": {
+                  "type": "string",
+                  "description": "Nome da coluna a ser exibida"
+                }
+              },
+              "groupByColumn": {
+                "type": "string",
+                "description": "Nome da coluna usada para agrupar os resultados da busca. Útil quando há muitos dados: o agente apresenta primeiro os grupos disponíveis e, ao selecionar um, busca os itens daquele grupo."
               }
             },
             "required": [
