@@ -5136,6 +5136,7 @@
               "schema": {
                 "oneOf": [
                   {
+                    "title": "Texto",
                     "type": "object",
                     "properties": {
                       "contextId": {
@@ -5180,6 +5181,7 @@
                     ]
                   },
                   {
+                    "title": "Imagem",
                     "type": "object",
                     "properties": {
                       "contextId": {
@@ -5230,6 +5232,7 @@
                     ]
                   },
                   {
+                    "title": "Áudio",
                     "type": "object",
                     "properties": {
                       "contextId": {
@@ -5272,6 +5275,106 @@
                       "contextId",
                       "audio"
                     ]
+                  },
+                  {
+                    "title": "Vídeo",
+                    "type": "object",
+                    "properties": {
+                      "contextId": {
+                        "type": "string",
+                        "description": "ID externo para identificar o cliente",
+                        "example": "12345"
+                      },
+                      "video": {
+                        "type": "string",
+                        "description": "URL do vídeo",
+                        "example": "https://example.com/video.mp4"
+                      },
+                      "prompt": {
+                        "type": "string",
+                        "description": "Texto para o agente responder/caption do vídeo",
+                        "example": "o que você acha desse vídeo?"
+                      },
+                      "callbackUrl": {
+                        "type": "string",
+                        "description": "Caso seja informado, a chamada será assíncrona, quando o agente responder, ele vai chamar esse webhook com a resposta.",
+                        "example": "https://webhook.site"
+                      },
+                      "onFinishCallback": {
+                        "type": "string",
+                        "description": "Caso seja informado, será disparado um webhook sempre que o atendimento for finalizado.",
+                        "example": "https://webhook.site"
+                      },
+                      "chatName": {
+                        "type": "string",
+                        "description": "Você pode informar o nome do cliente caso já possua.",
+                        "example": "Fulano"
+                      },
+                      "chatPicture": {
+                        "type": "string",
+                        "description": "Uma foto do cliente que será mostrada no chat de atendimento.",
+                        "example": "https://foto.jpeg"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "description": "Número de whatsapp do cliente.",
+                        "example": "55xxxxxxxx"
+                      }
+                    },
+                    "required": [
+                      "contextId",
+                      "video"
+                    ]
+                  },
+                  {
+                    "title": "Documento",
+                    "type": "object",
+                    "properties": {
+                      "contextId": {
+                        "type": "string",
+                        "description": "ID externo para identificar o cliente",
+                        "example": "12345"
+                      },
+                      "document": {
+                        "type": "string",
+                        "description": "URL do documento a ser enviado",
+                        "example": "https://example.com/document.pdf"
+                      },
+                      "prompt": {
+                        "type": "string",
+                        "description": "Texto para o agente responder/caption do documento",
+                        "example": "o que você acha desse documento?"
+                      },
+                      "callbackUrl": {
+                        "type": "string",
+                        "description": "Caso seja informado, a chamada será assíncrona, quando o agente responder, ele vai chamar esse webhook com a resposta.",
+                        "example": "https://webhook.site"
+                      },
+                      "onFinishCallback": {
+                        "type": "string",
+                        "description": "Caso seja informado, será disparado um webhook sempre que o atendimento for finalizado.",
+                        "example": "https://webhook.site"
+                      },
+                      "chatName": {
+                        "type": "string",
+                        "description": "Você pode informar o nome do cliente caso já possua.",
+                        "example": "Fulano"
+                      },
+                      "chatPicture": {
+                        "type": "string",
+                        "description": "Uma foto do cliente que será mostrada no chat de atendimento.",
+                        "example": "https://foto.jpeg"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "description": "Número de whatsapp do cliente.",
+                        "example": "55xxxxxxxx"
+                      }
+                    },
+                    "required": [
+                      "contextId",
+                      "document"
+                    ]
                   }
                 ]
               }
@@ -5303,6 +5406,13 @@
                       "items": {
                         "type": "string",
                         "description": "URLs dos áudios respondidos pelo agente"
+                      }
+                    },
+                    "documents": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "URLs dos documentos respondidos pelo agente"
                       }
                     }
                   }
@@ -5354,6 +5464,7 @@
               "schema": {
                 "oneOf": [
                   {
+                    "title": "Texto",
                     "type": "object",
                     "properties": {
                       "contextId": {
@@ -5377,6 +5488,7 @@
                     ]
                   },
                   {
+                    "title": "Imagem",
                     "type": "object",
                     "properties": {
                       "contextId": {
@@ -5406,6 +5518,7 @@
                     ]
                   },
                   {
+                    "title": "Áudio",
                     "type": "object",
                     "properties": {
                       "contextId": {
@@ -5426,6 +5539,64 @@
                     "required": [
                       "contextId",
                       "audio"
+                    ]
+                  },
+                  {
+                    "title": "Vídeo",
+                    "type": "object",
+                    "properties": {
+                      "contextId": {
+                        "type": "string",
+                        "description": "ID externo para identificar o cliente",
+                        "example": "12345"
+                      },
+                      "video": {
+                        "type": "string",
+                        "description": "URL do vídeo",
+                        "example": "https://example.com/video.mp4"
+                      },
+                      "prompt": {
+                        "type": "string",
+                        "description": "Texto para o agente responder/caption do vídeo",
+                        "example": "o que você acha desse vídeo?"
+                      },
+                      "role": {
+                        "type": "string",
+                        "description": "define se é uma mensagem do usuário ou do agente, 'user' ou 'assistant' default: 'assistant'"
+                      }
+                    },
+                    "required": [
+                      "contextId",
+                      "video"
+                    ]
+                  },
+                  {
+                    "title": "Documento",
+                    "type": "object",
+                    "properties": {
+                      "contextId": {
+                        "type": "string",
+                        "description": "ID externo para identificar o cliente",
+                        "example": "12345"
+                      },
+                      "document": {
+                        "type": "string",
+                        "description": "URL do documento a ser enviado",
+                        "example": "https://example.com/document.pdf"
+                      },
+                      "prompt": {
+                        "type": "string",
+                        "description": "Texto para o agente responder/caption do documento",
+                        "example": "o que você acha desse documento?"
+                      },
+                      "role": {
+                        "type": "string",
+                        "description": "define se é uma mensagem do usuário ou do agente, 'user' ou 'assistant' default: 'assistant'"
+                      }
+                    },
+                    "required": [
+                      "contextId",
+                      "document"
                     ]
                   }
                 ]
