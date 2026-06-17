@@ -126,6 +126,21 @@
       ]
     },
     {
+      "group": "Bases de conhecimento",
+      "pages": [
+        "api-reference/knowledge-base/create",
+        "api-reference/knowledge-base/list-knowledge-base",
+        "api-reference/knowledge-base/edit-knowledge-base",
+        "api-reference/knowledge-base/connect",
+        "api-reference/knowledge-base/create-affirmation",
+        "api-reference/knowledge-base/list-affirmation",
+        "api-reference/knowledge-base/edit-affirmation",
+        "api-reference/knowledge-base/delete-affirmation",
+        "api-reference/knowledge-base/disconnect",
+        "api-reference/knowledge-base/delete"
+      ]
+    },
+    {
       "group": "Campos customizados",
       "pages": [
         "api-reference/custom-field/list-custom-field",
