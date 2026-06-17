@@ -2034,7 +2034,25 @@
                         },
                         "seconds": {
                           "type": "integer",
-                          "description": "Tempo em segundos de inatividade para disparar a ação"
+                          "description": "Tempo em segundos de inatividade para disparar a ação",
+                          "enum": [
+                            120,
+                            300,
+                            600,
+                            900,
+                            1800,
+                            3600,
+                            7200,
+                            14400,
+                            28800,
+                            86400,
+                            172800,
+                            259200,
+                            345600,
+                            432000,
+                            518400,
+                            604800
+                          ]
                         },
                         "allowAllHours": {
                           "type": "boolean",
@@ -2082,7 +2100,25 @@
                     "properties": {
                       "seconds": {
                         "type": "integer",
-                        "description": "Tempo total (em segundos) para finalizar a interação"
+                        "description": "Tempo total (em segundos) para finalizar a interação",
+                        "enum": [
+                          120,
+                          300,
+                          600,
+                          900,
+                          1800,
+                          3600,
+                          7200,
+                          14400,
+                          28800,
+                          86400,
+                          172800,
+                          259200,
+                          345600,
+                          432000,
+                          518400,
+                          604800
+                        ]
                       }
                     }
                   }
@@ -2221,7 +2257,25 @@
                           },
                           "seconds": {
                             "type": "integer",
-                            "description": "Tempo de inatividade (s) para disparo da ação"
+                            "description": "Tempo de inatividade (s) para disparo da ação",
+                            "enum": [
+                              120,
+                              300,
+                              600,
+                              900,
+                              1800,
+                              3600,
+                              7200,
+                              14400,
+                              28800,
+                              86400,
+                              172800,
+                              259200,
+                              345600,
+                              432000,
+                              518400,
+                              604800
+                            ]
                           }
                         }
                       }
@@ -2232,7 +2286,25 @@
                       "properties": {
                         "seconds": {
                           "type": "integer",
-                          "description": "Tempo total (s) para finalizar a interação"
+                          "description": "Tempo total (s) para finalizar a interação",
+                          "enum": [
+                            120,
+                            300,
+                            600,
+                            900,
+                            1800,
+                            3600,
+                            7200,
+                            14400,
+                            28800,
+                            86400,
+                            172800,
+                            259200,
+                            345600,
+                            432000,
+                            518400,
+                            604800
+                          ]
                         }
                       }
                     }
@@ -2263,13 +2335,75 @@
           }
         }
       },
+      "delete": {
+        "description": "Deleta uma ação existente",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "ID do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ação de inatividade deletada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/agent/{agentId}/idle-action/{idleActionId}": {
       "put": {
-        "description": "Atualizar uma nova ação de inatividade",
+        "description": "Atualiza uma ação de inatividade pelo ID",
         "parameters": [
           {
             "name": "agentId",
             "in": "path",
             "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idleActionId",
+            "in": "path",
+            "description": "Id da ação de inatividade",
             "required": true,
             "schema": {
               "type": "string"
@@ -2296,7 +2430,26 @@
                         },
                         "seconds": {
                           "type": "integer",
-                          "description": "Tempo de inatividade em segundos"
+                          "description": "Tempo de inatividade em segundos. Não pode ser maior que o valor de finishOn.seconds",
+                          "enum": [
+                            120,
+                            300,
+                            600,
+                            900,
+                            1800,
+                            3600,
+                            7200,
+                            14400,
+                            28800,
+                            86400,
+                            172800,
+                            259200,
+                            345600,
+                            432000,
+                            518400,
+                            604800
+                          ],
+                          "example": 120
                         },
                         "allowAllHours": {
                           "type": "boolean",
@@ -2346,7 +2499,26 @@
                     "properties": {
                       "seconds": {
                         "type": "integer",
-                        "description": "Tempo total em segundos"
+                        "description": "Tempo total em segundos. Deve ser maior ou igual ao valor de seconds em cada ação de actions",
+                        "enum": [
+                          120,
+                          300,
+                          600,
+                          900,
+                          1800,
+                          3600,
+                          7200,
+                          14400,
+                          28800,
+                          86400,
+                          172800,
+                          259200,
+                          345600,
+                          432000,
+                          518400,
+                          604800
+                        ],
+                        "example": 300
                       }
                     }
                   }
@@ -2357,7 +2529,7 @@
         },
         "responses": {
           "200": {
-            "description": "Configuração de ações de inatividade atualizada com sucesso",
+            "description": "Ação de inatividade atualizada com sucesso",
             "content": {
               "application/json": {
                 "schema": {
@@ -2485,7 +2657,25 @@
                           },
                           "seconds": {
                             "type": "integer",
-                            "description": "Tempo em segundos para disparar a ação"
+                            "description": "Tempo em segundos para disparar a ação",
+                            "enum": [
+                              120,
+                              300,
+                              600,
+                              900,
+                              1800,
+                              3600,
+                              7200,
+                              14400,
+                              28800,
+                              86400,
+                              172800,
+                              259200,
+                              345600,
+                              432000,
+                              518400,
+                              604800
+                            ]
                           }
                         }
                       }
@@ -2496,7 +2686,25 @@
                       "properties": {
                         "seconds": {
                           "type": "integer",
-                          "description": "Tempo em segundos para finalizar"
+                          "description": "Tempo em segundos para finalizar",
+                          "enum": [
+                            120,
+                            300,
+                            600,
+                            900,
+                            1800,
+                            3600,
+                            7200,
+                            14400,
+                            28800,
+                            86400,
+                            172800,
+                            259200,
+                            345600,
+                            432000,
+                            518400,
+                            604800
+                          ]
                         }
                       }
                     }
@@ -2528,12 +2736,21 @@
         }
       },
       "delete": {
-        "description": "Deleta uma ação existente",
+        "description": "Deleta uma ação de inatividade pelo ID",
         "parameters": [
           {
             "name": "agentId",
             "in": "path",
-            "description": "ID do agente",
+            "description": "Id do agente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idleActionId",
+            "in": "path",
+            "description": "Id da ação de inatividade",
             "required": true,
             "schema": {
               "type": "string"
@@ -2542,19 +2759,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Ação de inatividade deletada com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Ação de inatividade deletada com sucesso"
           },
           "400": {
             "description": "Erro inesperado",
