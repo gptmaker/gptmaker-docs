@@ -1,0 +1,33 @@
+---
+title: Automações
+description: "Dispare ações automaticamente quando dados da tabela forem inseridos ou alterados"
+icon: bolt
+---
+
+As Automações permitem que você configure ações que acontecem automaticamente em resposta a eventos na tabela. Quando uma nova linha é inserida ou um valor é alterado, a automação detecta esse evento e executa a ação configurada, sem que nenhuma intervenção manual seja necessária.
+
+## Como funciona
+
+Uma automação é composta por três partes. O gatilho define qual evento vai disparar a automação, como a inserção de uma nova linha na tabela. As condições, que são opcionais, permitem restringir quando a automação deve ou não executar, por exemplo apenas quando o campo status tiver um determinado valor. E a ação define o que acontece quando a automação é disparada, normalmente uma chamada HTTP para uma URL externa, o que permite integrar com qualquer sistema que aceite webhooks.
+
+<Steps>
+  <Step title="Defina o gatilho">
+    Escolha qual evento na tabela vai disparar a automação. Por exemplo, sempre que uma nova linha for inserida na tabela de leads.
+  </Step>
+  <Step title="Configure as condições (opcional)">
+    Adicione filtros para que a automação só execute quando os dados atenderem a critérios específicos. Por exemplo, apenas quando o campo "status" for igual a "aguardando".
+  </Step>
+  <Step title="Configure a ação">
+    Defina para onde a chamada será feita e quais dados serão enviados. A automação irá disparar essa requisição automaticamente sempre que o gatilho for ativado e as condições forem atendidas.
+  </Step>
+</Steps>
+
+## Casos de uso
+
+As automações são muito flexíveis e se encaixam em diversos cenários. Um uso comum é enviar notificações, como alertar a equipe de vendas no WhatsApp ou Slack sempre que um novo pedido for registrado pelo agente. Outro exemplo é acionar o sistema de entrega automaticamente quando o status de um pedido mudar para "pronto para envio", sem que ninguém precise fazer isso manualmente. Também é possível notificar o cliente quando o status do pedido for atualizado, como no exemplo da lanchonete que envia uma mensagem assim que o pedido sai para entrega.
+
+## Ativando e desativando
+
+Você pode ativar ou desativar uma automação a qualquer momento sem precisar excluí-la. Isso é útil para pausar temporariamente um fluxo sem perder a configuração, especialmente durante testes ou períodos de manutenção.
+
+As automações são um recurso poderoso para conectar suas tabelas ao restante dos sistemas que você utiliza. Com elas, os dados coletados pelo agente durante os atendimentos podem fluir automaticamente para onde precisam estar, tornando sua operação mais eficiente e eliminando retrabalho manual.

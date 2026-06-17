@@ -84,6 +84,17 @@
       ]
     },
     {
+      "group": "Tabelas",
+      "pages": [
+        "tables/tables-intro",
+        "tables/tables-columns",
+        "tables/tables-rows",
+        "tables/tables-fields",
+        "tables/tables-automations",
+        "tables/tables-query"
+      ]
+    },
+    {
       "group": "API Documentation",
       "pages": [
         "api-reference/introduction"
@@ -201,6 +212,46 @@
         "api-reference/interactions/list-interactions",
         "api-reference/interactions/list-messages",
         "api-reference/interactions/delete-interactions"
+      ]
+    },
+    {
+      "group": "Tabelas",
+      "pages": [
+        "api-reference/tables/list-tables",
+        "api-reference/tables/get-table-metadata",
+        "api-reference/tables/create-table",
+        "api-reference/tables/update-table",
+        "api-reference/tables/delete-table",
+        {
+          "group": "Colunas",
+          "pages": [
+            "api-reference/tables/columns/add-column",
+            "api-reference/tables/columns/update-column",
+            "api-reference/tables/columns/delete-column",
+            "api-reference/tables/columns/reorder-columns"
+          ]
+        },
+        {
+          "group": "Linhas",
+          "pages": [
+            "api-reference/tables/rows/query-rows",
+            "api-reference/tables/rows/add-row",
+            "api-reference/tables/rows/add-rows-batch",
+            "api-reference/tables/rows/delete-row",
+            "api-reference/tables/rows/patch-row-fields"
+          ]
+        },
+        {
+          "group": "Automações",
+          "pages": [
+            "api-reference/tables/automations/list-automations",
+            "api-reference/tables/automations/get-automation",
+            "api-reference/tables/automations/create-automation",
+            "api-reference/tables/automations/update-automation",
+            "api-reference/tables/automations/delete-automation",
+            "api-reference/tables/automations/toggle-automation"
+          ]
+        }
       ]
     },
     {
