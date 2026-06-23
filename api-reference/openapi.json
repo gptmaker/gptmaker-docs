@@ -5115,6 +5115,47 @@
         }
       }
     },
+    "/v2/contact/{contactId}/delete": {
+      "delete": {
+        "description": "Deleta um contato em específico",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Id do contato",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contato deletado com sucesso"
+          },
+          "400": {
+            "description": "Erro inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/agent/{agentId}/conversation": {
       "post": {
         "description": "Permite conversar com o agente via API enviando texto, imagem ou áudio",

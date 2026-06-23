@@ -192,7 +192,8 @@
       "pages": [
         "api-reference/contacts/search-contacts",
         "api-reference/contacts/get-contact-by-id",
-        "api-reference/contacts/update-contact"
+        "api-reference/contacts/update-contact",
+        "api-reference/contacts/delete-contact-by-id"
       ]
     },
     {
