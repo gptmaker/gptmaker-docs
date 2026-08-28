@@ -1,0 +1,57 @@
+---
+title: Colunas
+description: "Configure os campos da sua tabela e seus comportamentos"
+icon: table-columns
+---
+
+As colunas definem a estrutura da sua tabela. Cada coluna representa um campo, e você determina qual tipo de dado esse campo aceita e como o agente deve se comportar em relação a ele. Configurar bem as colunas é fundamental para garantir que os dados sejam armazenados de forma consistente e que o agente possa utilizá-los com eficiência.
+
+## Tipos de coluna
+
+### Texto
+
+O tipo texto aceita qualquer valor em formato de string. É o tipo mais versátil, usado para nomes, descrições, telefones, e-mails e qualquer informação que não se enquadre nos tipos mais específicos. Colunas de texto também suportam a opção de busca semântica, que permite ao agente encontrar registros por similaridade de significado, e não apenas por correspondência exata de palavras.
+
+### Número
+
+O tipo número aceita valores numéricos inteiros ou decimais. Use para preços, quantidades, idades, pontuações e qualquer dado que precise de cálculo ou comparação numérica.
+
+### Booleano
+
+O tipo booleano aceita apenas verdadeiro ou falso. É ideal para flags como "ativo", "verificado", "pago" ou "concluído", onde o campo representa uma condição binária.
+
+### Data
+
+O tipo data armazena uma data sem horário. Use quando o momento exato do dia não é relevante, como datas de nascimento ou prazos.
+
+### Data e hora
+
+O tipo data e hora armazena data e horário juntos. Use para registrar momentos precisos, como a data e o horário de um atendimento ou de uma ação realizada.
+
+### Seleção
+
+O tipo seleção permite que a célula aceite apenas valores de uma lista pré-definida de opções. Cada opção possui um label, que é o texto exibido ao usuário, um value, que é o valor armazenado internamente, uma cor para identificação visual e uma posição que define a ordem de exibição.
+
+Esse tipo é especialmente útil para campos como "status", "categoria" ou "prioridade", onde os valores possíveis são conhecidos e limitados. Você pode ainda ativar a opção de múltiplos valores, permitindo que a célula armazene mais de uma opção ao mesmo tempo.
+
+## Configurações
+
+Além do tipo, cada coluna possui configurações adicionais que expandem seu comportamento.
+
+<b>Vincular contato:</b> Quando ativado, essa coluna armazena o identificador do contato vinculado à linha. Use quando cada linha representa um cliente ou atendimento, permitindo que o agente encontre registros rapidamente pelo identificador do contato da conversa atual. Vale lembrar que apenas uma coluna por tabela pode ter essa configuração ativada. Caso você tente ativar em uma segunda coluna, a plataforma irá indicar que outra coluna já está configurada para vincular contato.
+
+<b>Permitir busca semântica:</b> Disponível para colunas do tipo texto. Permite que o agente encontre registros por similaridade semântica. Por exemplo, ao buscar "calça jeans escura", o agente consegue encontrar registros com "jeans azul" ou "denim azul", mesmo que os termos não sejam idênticos.
+
+## Opções do tipo Seleção
+
+Colunas do tipo seleção possuem duas opções adicionais.
+
+<b>Múltipla seleção:</b> Permite que a célula armazene mais de uma opção ao mesmo tempo, útil para campos como "interesses" ou "tags".
+
+<b>Preenchimento automático pelo agente:</b> Quando ativado, o agente escolhe ou cria a opção mais adequada para essa coluna com base no contexto da conversa, sem que você precise configurar nenhuma lógica adicional para isso.
+
+## Reordenando colunas
+
+A ordem das colunas pode ser alterada a qualquer momento. Basta enviar um array com os identificadores ou nomes das colunas na nova ordem desejada, e a posição de cada uma será atualizada de acordo.
+
+Configurar as colunas com os tipos corretos e as opções adequadas é o passo mais importante para garantir que a sua tabela funcione bem. Uma estrutura bem pensada facilita tanto as consultas do agente quanto a integração com sistemas externos.
