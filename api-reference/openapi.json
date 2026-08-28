@@ -5404,6 +5404,11 @@
                         "description": "URL do documento a ser enviado",
                         "example": "https://example.com/document.pdf"
                       },
+                      "documentName": {
+                        "type": "string",
+                        "description": "Nome do documento a ser enviado",
+                        "example": "document.pdf"
+                      },
                       "prompt": {
                         "type": "string",
                         "description": "Texto para o agente responder/caption do documento",
@@ -5647,6 +5652,11 @@
                         "type": "string",
                         "description": "URL do documento a ser enviado",
                         "example": "https://example.com/document.pdf"
+                      },
+                      "documentName": {
+                        "type": "string",
+                        "description": "Nome do documento a ser enviado",
+                        "example": "document.pdf"
                       },
                       "prompt": {
                         "type": "string",
