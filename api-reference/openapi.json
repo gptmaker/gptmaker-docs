@@ -8824,6 +8824,13 @@
       },
       "NewAssistant": {
         "type": "object",
+        "required": [
+          "name",
+          "type",
+          "communicationType",
+          "jobName",
+          "jobDescription"
+        ],
         "properties": {
           "name": {
             "type": "string",
