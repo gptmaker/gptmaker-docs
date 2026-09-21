@@ -1979,7 +1979,7 @@
                         }
                       }
                     },
-                    "finishOn": {
+                    "finishAction": {
                       "type": "object",
                       "description": "Configuração de tempo para finalizar interação",
                       "properties": {
@@ -2048,7 +2048,8 @@
                         },
                         "seconds": {
                           "type": "integer",
-                          "description": "Tempo em segundos de inatividade para disparar a ação"
+                          "description": "Tempo em segundos de inatividade para disparar a ação",
+                          "enum": [120, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400, 172800, 259200, 345600, 432000, 518400, 604800]
                         },
                         "allowAllHours": {
                           "type": "boolean",
@@ -2091,12 +2092,13 @@
                       }
                     }
                   },
-                  "finishOn": {
+                  "finishAction": {
                     "type": "object",
                     "properties": {
                       "seconds": {
                         "type": "integer",
-                        "description": "Tempo total (em segundos) para finalizar a interação"
+                        "description": "Tempo total (em segundos) para finalizar a interação",
+                        "enum": [120, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400, 172800, 259200, 345600, 432000, 518400, 604800]
                       }
                     }
                   }
@@ -2240,7 +2242,7 @@
                         }
                       }
                     },
-                    "finishOn": {
+                    "finishAction": {
                       "type": "object",
                       "description": "Configuração para finalização automática",
                       "properties": {
@@ -2310,7 +2312,8 @@
                         },
                         "seconds": {
                           "type": "integer",
-                          "description": "Tempo de inatividade em segundos"
+                          "description": "Tempo de inatividade em segundos",
+                          "enum": [120, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400, 172800, 259200, 345600, 432000, 518400, 604800]
                         },
                         "allowAllHours": {
                           "type": "boolean",
@@ -2354,13 +2357,14 @@
                       }
                     }
                   },
-                  "finishOn": {
+                  "finishAction": {
                     "type": "object",
                     "description": "Tempo para finalizar interação automaticamente",
                     "properties": {
                       "seconds": {
                         "type": "integer",
-                        "description": "Tempo total em segundos"
+                        "description": "Tempo total em segundos",
+                        "enum": [120, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400, 172800, 259200, 345600, 432000, 518400, 604800]
                       }
                     }
                   }
@@ -2504,7 +2508,7 @@
                         }
                       }
                     },
-                    "finishOn": {
+                    "finishAction": {
                       "type": "object",
                       "description": "Configuração de tempo total para finalizar automaticamente",
                       "properties": {
