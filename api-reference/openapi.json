@@ -6138,10 +6138,10 @@
                 "example": {
                   "assistantId": null,
                   "workspace": {
-                    "name": "Askia Inoove",
+                    "name": "Minha Empresa",
                     "id": "3EB7F3C2BDB85017727802E54CF1568E"
                   },
-                  "name": "canal de teste slc doido",
+                  "name": "Canal Widget - Suporte",
                   "id": "3EC7E989CB4C50C1B8C542CD510C3BFC",
                   "type": "WIDGET"
                 }
@@ -6258,12 +6258,12 @@
                   "additionalProperties": false
                 },
                 "example": {
-                  "name": "canal atualizado",
+                  "name": "Canal Widget - Suporte",
                   "assistantId": "3EB804183CD300509DF902E54CF1568E",
                   "type": "WIDGET",
                   "workspace": {
                     "id": "3EB7F3C2BDB85017727802E54CF1568E",
-                    "name": "Askia Inoove"
+                    "name": "Minha Empresa"
                   }
                 }
               }
