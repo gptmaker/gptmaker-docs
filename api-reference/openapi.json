@@ -1595,11 +1595,21 @@
                       "MONEY"
                     ]
                   },
+                  "appliesTo": {
+                    "enum": [
+                      "CONTACT",
+                      "DEAL"
+                    ],
+                    "description": "A que tipo de registro o campo se aplica: \"CONTACT\" (o campo aparece no cadastro do contato) ou \"DEAL\" (o campo aparece no negócio/oportunidade do funil de vendas)."
+                  },
                   "archived": {
                     "type": "boolean",
                     "description": "mostra se está arquivado ou não"
                   }
-                }
+                },
+                "required": [
+                  "appliesTo"
+                ]
               }
             }
           },
