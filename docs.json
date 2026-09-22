@@ -170,7 +170,6 @@
             "pages": [
               "api-reference/channels/list-channels",
               "api-reference/channels/list-channels2",
-              "api-reference/channels/create-channel",
               "api-reference/channels/create-channel-workspace",
               "api-reference/channels/remove-channel",
               "api-reference/channels/edit-channel",
