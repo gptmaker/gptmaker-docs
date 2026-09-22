@@ -1595,11 +1595,21 @@
                       "MONEY"
                     ]
                   },
+                  "appliesTo": {
+                    "enum": [
+                      "CONTACT",
+                      "DEAL"
+                    ],
+                    "description": "a que tipo de registro o campo se aplica"
+                  },
                   "archived": {
                     "type": "boolean",
                     "description": "mostra se está arquivado ou não"
                   }
-                }
+                },
+                "required": [
+                  "appliesTo"
+                ]
               }
             }
           },
