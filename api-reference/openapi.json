@@ -1600,7 +1600,7 @@
                       "CONTACT",
                       "DEAL"
                     ],
-                    "description": "a que tipo de registro o campo se aplica"
+                    "description": "A que tipo de registro o campo se aplica: \"CONTACT\" (o campo aparece no cadastro do contato) ou \"DEAL\" (o campo aparece no negócio/oportunidade do funil de vendas)."
                   },
                   "archived": {
                     "type": "boolean",
