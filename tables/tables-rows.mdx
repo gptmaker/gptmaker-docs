@@ -1,0 +1,35 @@
+---
+title: Linhas
+description: "Gerencie os registros da sua tabela"
+icon: list
+---
+
+Cada linha representa um registro dentro da tabela. Pense em uma linha como uma entrada no seu banco de dados, podendo ser um cliente, um pedido, um lead ou uma tarefa. Ao inserir uma nova linha, você está adicionando um novo registro com seus respectivos valores em cada coluna.
+
+## Adicionando linhas
+
+Ao adicionar uma linha, você pode já incluir os valores das células no mesmo momento, evitando múltiplas chamadas à API. Basta passar os valores de cada coluna no corpo da requisição, referenciando as colunas pelo identificador ou pelo nome. Isso torna a inserção mais eficiente e garante que o registro seja criado completo desde o início.
+
+Se alguma coluna tiver o vínculo com contato ativado, o identificador do contato da conversa atual será associado à linha automaticamente, facilitando buscas futuras por esse contato.
+
+## Consultando linhas
+
+A consulta de linhas é bastante flexível e suporta filtros, ordenação e paginação. Isso permite que o agente ou um sistema externo busque exatamente os registros necessários, sem precisar trazer toda a tabela de uma vez.
+
+### Filtros
+
+Os filtros permitem restringir quais linhas serão retornadas com base nos valores das colunas. Você pode filtrar por igualdade, diferença, conteúdo de texto, comparações numéricas e até verificar se um campo está vazio ou preenchido. Múltiplos filtros podem ser combinados para buscas mais precisas.
+
+### Ordenação
+
+A ordenação define por qual coluna os resultados serão organizados e se a ordem é crescente ou decrescente. Por exemplo, você pode ordenar uma tabela de leads pela data de contato mais recente, ou uma tabela de produtos pelo preço.
+
+### Paginação
+
+A paginação controla quantos registros são retornados por vez e qual página está sendo consultada. Para tabelas com muitos registros, sempre utilize paginação para garantir respostas rápidas e evitar sobrecarga.
+
+## Deletando linhas
+
+Linhas podem ser removidas pelo seu identificador. A operação é irreversível, portanto certifique-se de que o registro não é mais necessário antes de excluí-lo.
+
+Trabalhar bem com linhas significa pensar com antecedência em como os registros serão consultados. Estruturar bem os filtros e usar paginação são práticas essenciais para garantir que o agente consiga acessar os dados de forma rápida e eficiente durante os atendimentos.

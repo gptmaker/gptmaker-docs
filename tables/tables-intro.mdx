@@ -1,0 +1,35 @@
+---
+title: Introdução
+description: "Armazene, organize e consulte dados estruturados diretamente na plataforma"
+icon: table
+---
+
+As Tabelas do GPT Maker funcionam como um banco de dados embutido na plataforma. Elas permitem que você armazene informações estruturadas como cadastros de clientes, catálogos de produtos, registros de pedidos ou qualquer outro dado relevante, e que seus agentes consultem e gravem nessas tabelas durante as conversas via intenções.
+
+## O que é uma Tabela
+
+Uma tabela é composta por colunas, linhas e células. As colunas definem os campos que a tabela possui e o tipo de dado que cada campo aceita. As linhas representam os registros, onde cada linha é uma entrada como um cliente ou um pedido. As células são os valores em si, na interseção de uma linha com uma coluna.
+
+Pense em uma tabela como uma planilha inteligente: você define a estrutura com as colunas, e cada linha que vai sendo inserida representa um novo registro com valores em cada campo.
+
+## Como o agente interage com a Tabela
+
+O agente interage com as tabelas através das intenções. Você configura uma intenção que conecta o agente às tabelas, permitindo que ele busque ou insira registros com base no contexto da conversa. Por exemplo, ao coletar os dados de um pedido durante o atendimento, o agente registra essas informações automaticamente na tabela, sem que o cliente perceba nenhuma interrupção no fluxo da conversa.
+
+## Automações
+
+As tabelas também contam com um sistema de automações que permite disparar ações automaticamente em resposta a eventos nos dados. Quando uma nova linha é inserida ou o valor de uma coluna é alterado, a automação detecta essa mudança e executa a ação configurada.
+
+Essas ações podem ser notificações enviadas para o cliente ou para a equipe, chamadas para sistemas externos via webhook, integrações com ERPs, plataformas de entrega ou qualquer outro sistema que aceite requisições HTTP. As automações também suportam condições, permitindo que você defina regras precisas para que a ação só aconteça quando os dados atenderem a critérios específicos, como um status tendo um determinado valor.
+
+## Caso de uso
+
+Imagine uma lanchonete que usa o GPT Maker para receber pedidos pelo WhatsApp. Ela tem uma tabela de Produtos com o nome, descrição e preço de cada item do cardápio, e uma tabela de Pedidos onde cada linha representa um pedido realizado por um cliente, com colunas para os itens escolhidos, o nome do cliente, o endereço de entrega e o status do pedido.
+
+Durante a conversa, o agente consulta a tabela de Produtos para responder perguntas sobre o cardápio e, ao confirmar o pedido, insere uma nova linha na tabela de Pedidos com todas as informações coletadas. A equipe da lanchonete gerencia os pedidos e atualiza o status conforme o andamento. Quando o status é alterado para "saiu para entrega", a automação configurada detecta essa mudança e notifica automaticamente o cliente pelo WhatsApp informando que o pedido está a caminho.
+
+## Tipos de dados disponíveis nas colunas
+
+Cada coluna aceita um tipo de dado específico. O tipo texto livre é o mais comum, usado para nomes, descrições e contatos. O tipo número aceita valores inteiros ou decimais. O tipo booleano representa verdadeiro ou falso, útil para campos como "ativo" ou "pago". Os tipos de data permitem armazenar datas com ou sem horário. E o tipo seleção permite que a célula receba apenas valores de uma lista pré-definida de opções, com suporte a cores e múltipla seleção.
+
+Toda essa estrutura garante que os dados armazenados nas tabelas sejam consistentes e fáceis de consultar, seja pelo agente ou por sistemas externos via API.

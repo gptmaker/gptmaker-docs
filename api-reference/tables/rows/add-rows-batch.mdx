@@ -1,0 +1,14 @@
+---
+title: "Adicionar linhas em lote"
+openapi: "POST /v2/workspace/{workspaceId}/tables/{tableId}/rows/batch"
+---
+
+Insere múltiplas linhas de uma só vez. Ideal para importação de dados em massa, como migrar uma planilha inteira para uma tabela ou cadastrar um conjunto grande de registros de uma única vez.
+
+Use o endpoint `/rows` para criação individual em formulários ou fluxos simples. Use este endpoint quando precisar inserir volume.
+
+## Processamento parcial
+
+Este endpoint não falha o lote inteiro se uma linha tiver problema. Cada linha é processada de forma independente: as válidas são inseridas normalmente e as inválidas são reportadas no retorno sem afetar as demais.
+
+O retorno sempre traz dois arrays. Em `success` ficam as linhas inseridas com sucesso, cada uma com seu `index` (posição no array enviado), o `rowId` gerado e os `fields` gravados. Em `errors` ficam as linhas que falharam, com o `index`, o `input` com o objeto original que foi enviado e um array `errors` detalhando qual campo causou o problema e o motivo.
