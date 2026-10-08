@@ -4395,7 +4395,7 @@
                       },
                       "image": {
                         "type": "string",
-                        "description": "URL da imagem"
+                        "description": "URL da imagem ou imagem em base64. Se for base64, deve ser enviada como data URI com o prefixo do tipo, por exemplo: data:image/jpeg;base64,/9j/4AAQ... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:image/jpeg, data:image/png, data:image/webp"
                       }
                     }
                   },
@@ -4405,7 +4405,7 @@
                     "properties": {
                       "audio": {
                         "type": "string",
-                        "description": "URL do audio"
+                        "description": "URL do áudio ou áudio em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:audio/mpeg;base64,SUQzBAAA... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:audio/mpeg, data:audio/ogg, data:audio/mp4"
                       }
                     }
                   },
@@ -4415,7 +4415,7 @@
                     "properties": {
                       "video": {
                         "type": "string",
-                        "description": "URL do vídeo"
+                        "description": "URL do vídeo ou vídeo em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:video/mp4;base64,AAAAIGZ0... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:video/mp4"
                       }
                     }
                   },
@@ -4425,7 +4425,7 @@
                     "properties": {
                       "document": {
                         "type": "string",
-                        "description": "URL do documento a ser enviado"
+                        "description": "URL do documento ou documento em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:application/pdf;base64,JVBERi0x... (base64 puro, sem o prefixo, não é aceito). Informe o tipo correspondente ao arquivo, como data:application/pdf"
                       },
                       "documentName": {
                         "type": "string",
@@ -7530,7 +7530,7 @@
                       },
                       "image": {
                         "type": "string",
-                        "description": "URL da imagem a ser enviada"
+                        "description": "URL da imagem ou imagem em base64. Se for base64, deve ser enviada como data URI com o prefixo do tipo, por exemplo: data:image/jpeg;base64,/9j/4AAQ... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:image/jpeg, data:image/png, data:image/webp"
                       }
                     },
                     "required": [
@@ -7548,7 +7548,7 @@
                       },
                       "video": {
                         "type": "string",
-                        "description": "URL do video a ser enviado"
+                        "description": "URL do vídeo ou vídeo em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:video/mp4;base64,AAAAIGZ0... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:video/mp4"
                       }
                     },
                     "required": [
@@ -7566,7 +7566,7 @@
                       },
                       "audio": {
                         "type": "string",
-                        "description": "URL do áudio a ser enviado"
+                        "description": "URL do áudio ou áudio em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:audio/mpeg;base64,SUQzBAAA... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:audio/mpeg, data:audio/ogg, data:audio/mp4"
                       }
                     },
                     "required": [
@@ -7584,7 +7584,7 @@
                       },
                       "document": {
                         "type": "string",
-                        "description": "URL do documento a ser enviado"
+                        "description": "URL do documento ou documento em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:application/pdf;base64,JVBERi0x... (base64 puro, sem o prefixo, não é aceito). Informe o tipo correspondente ao arquivo, como data:application/pdf"
                       },
                       "documentName": {
                         "type": "string",
