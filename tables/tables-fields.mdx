@@ -1,0 +1,17 @@
+---
+title: Campos
+description: "Atualize os valores dos campos de uma linha"
+icon: pen-to-square
+---
+
+Os campos representam os valores de cada coluna dentro de uma linha. Para criar ou atualizar esses valores, basta enviar um objeto com o nome da coluna e o valor desejado. O mesmo endpoint cria o valor caso ele ainda não exista, ou atualiza caso já tenha sido preenchido anteriormente.
+
+## Como funciona
+
+Você envia uma requisição para a linha desejada informando no corpo um objeto chamado fields, onde cada chave é o nome da coluna e o valor é o dado que deve ser armazenado. É possível atualizar múltiplos campos de uma só vez na mesma requisição.
+
+O valor enviado precisa ser compatível com o tipo da coluna. Colunas de texto aceitam strings, colunas de número aceitam valores numéricos, colunas booleanas aceitam verdadeiro ou falso, colunas de data aceitam datas no formato correto, e colunas de seleção aceitam apenas valores que existam na lista de opções configuradas.
+
+Para colunas de seleção, o valor enviado deve corresponder ao campo value de uma das opções cadastradas na coluna, e não ao label exibido. Se a coluna permite múltipla seleção, é possível enviar mais de um valor ao mesmo tempo como um array.
+
+O conjunto de linhas, colunas e campos forma a base de dados estruturada da sua tabela. Entender como cada valor é armazenado e quais formatos são aceitos é essencial para garantir consistência nos dados e evitar erros durante a integração com o agente.
