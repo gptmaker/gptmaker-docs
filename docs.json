@@ -186,7 +186,12 @@
                 "group": "Whatsapp",
                 "pages": [
                   "api-reference/channels/start-conversation",
-                  "api-reference/channels/qr-code"
+                  "api-reference/channels/qr-code",
+                  "api-reference/channels/zapi-proxy-post",
+                  "api-reference/channels/zapi-proxy-get",
+                  "api-reference/channels/zapi-proxy-put",
+                  "api-reference/channels/zapi-proxy-patch",
+                  "api-reference/channels/zapi-proxy-delete"
                 ]
               }
             ]
