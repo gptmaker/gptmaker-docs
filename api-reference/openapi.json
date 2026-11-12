@@ -2071,7 +2071,24 @@
                         "seconds": {
                           "type": "integer",
                           "description": "Tempo em segundos de inatividade para disparar a ação",
-                          "enum": [120, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400, 172800, 259200, 345600, 432000, 518400, 604800]
+                          "enum": [
+                            120,
+                            300,
+                            600,
+                            900,
+                            1800,
+                            3600,
+                            7200,
+                            14400,
+                            28800,
+                            86400,
+                            172800,
+                            259200,
+                            345600,
+                            432000,
+                            518400,
+                            604800
+                          ]
                         },
                         "allowAllHours": {
                           "type": "boolean",
@@ -2120,7 +2137,24 @@
                       "seconds": {
                         "type": "integer",
                         "description": "Tempo total (em segundos) para finalizar a interação",
-                        "enum": [120, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400, 172800, 259200, 345600, 432000, 518400, 604800]
+                        "enum": [
+                          120,
+                          300,
+                          600,
+                          900,
+                          1800,
+                          3600,
+                          7200,
+                          14400,
+                          28800,
+                          86400,
+                          172800,
+                          259200,
+                          345600,
+                          432000,
+                          518400,
+                          604800
+                        ]
                       }
                     }
                   }
@@ -2335,7 +2369,24 @@
                         "seconds": {
                           "type": "integer",
                           "description": "Tempo de inatividade em segundos",
-                          "enum": [120, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400, 172800, 259200, 345600, 432000, 518400, 604800]
+                          "enum": [
+                            120,
+                            300,
+                            600,
+                            900,
+                            1800,
+                            3600,
+                            7200,
+                            14400,
+                            28800,
+                            86400,
+                            172800,
+                            259200,
+                            345600,
+                            432000,
+                            518400,
+                            604800
+                          ]
                         },
                         "allowAllHours": {
                           "type": "boolean",
@@ -2386,7 +2437,24 @@
                       "seconds": {
                         "type": "integer",
                         "description": "Tempo total em segundos",
-                        "enum": [120, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400, 172800, 259200, 345600, 432000, 518400, 604800]
+                        "enum": [
+                          120,
+                          300,
+                          600,
+                          900,
+                          1800,
+                          3600,
+                          7200,
+                          14400,
+                          28800,
+                          86400,
+                          172800,
+                          259200,
+                          345600,
+                          432000,
+                          518400,
+                          604800
+                        ]
                       }
                     }
                   }
@@ -8015,6 +8083,561 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/channel/{channelId}/whatsapp/{action}": {
+      "get": {
+        "summary": "Executar ação da Z-API (GET)",
+        "description": "Repassa a chamada para a [API da Z-API](https://developer.z-api.io) usando a instância do canal no GPT Maker. Use para recursos da Z-API que a API do GPT Maker ainda não expõe, como lista de opções (`send-option-list`) e botões (`send-button-list`).\n\n- `action` é o caminho da rota na Z-API depois de `/instances/{instância}/token/{token}/`, por exemplo `send-option-list`. Pode ter mais de um trecho, como `chats/5511999999999`.\n- O corpo e a query string vão para a Z-API como foram enviados, e a resposta é a da Z-API.\n- Funciona só para canais Z-API.\n- Envios (rotas `send-*`) exigem `phone` no corpo.\n- Mensagens enviadas por aqui aparecem no chat do GPT Maker e não acionam o agente.\n- Rotas bloqueadas: alteração de webhooks (`update-webhook-*` e `update-every-webhooks`) e `me`.\n\n**Erros**\n\n| Status | Quando |\n| --- | --- |\n| `404` | Canal inexistente, de outra conta ou que não é Z-API, rota bloqueada ou caminho inválido. |\n| `400` | Envio (`send-*`) sem `phone` no corpo. |\n| `502` | A Z-API não respondeu. |\n\nOs demais erros vêm da Z-API, com o status e o corpo dela.",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal Z-API",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action",
+            "in": "path",
+            "description": "Rota da Z-API, por exemplo `send-option-list`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "send-option-list"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resposta da Z-API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "example": {
+                  "zaapId": "3999984263738042930CD6ECDE9VDWSA",
+                  "messageId": "D241XXXX732339502B68",
+                  "id": "D241XXXX732339502B68"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Envio sem telefone",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "phone is required"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Canal ou rota não encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "not found"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Z-API indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "z-api unavailable"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Executar ação da Z-API (POST)",
+        "description": "Repassa a chamada para a [API da Z-API](https://developer.z-api.io) usando a instância do canal no GPT Maker. Use para recursos da Z-API que a API do GPT Maker ainda não expõe, como lista de opções (`send-option-list`) e botões (`send-button-list`).\n\n- `action` é o caminho da rota na Z-API depois de `/instances/{instância}/token/{token}/`, por exemplo `send-option-list`. Pode ter mais de um trecho, como `chats/5511999999999`.\n- O corpo e a query string vão para a Z-API como foram enviados, e a resposta é a da Z-API.\n- Funciona só para canais Z-API.\n- Envios (rotas `send-*`) exigem `phone` no corpo.\n- Mensagens enviadas por aqui aparecem no chat do GPT Maker e não acionam o agente.\n- Rotas bloqueadas: alteração de webhooks (`update-webhook-*` e `update-every-webhooks`) e `me`.\n\n**Erros**\n\n| Status | Quando |\n| --- | --- |\n| `404` | Canal inexistente, de outra conta ou que não é Z-API, rota bloqueada ou caminho inválido. |\n| `400` | Envio (`send-*`) sem `phone` no corpo. |\n| `502` | A Z-API não respondeu. |\n\nOs demais erros vêm da Z-API, com o status e o corpo dela.",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal Z-API",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action",
+            "in": "path",
+            "description": "Rota da Z-API, por exemplo `send-option-list`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "send-option-list"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resposta da Z-API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "example": {
+                  "zaapId": "3999984263738042930CD6ECDE9VDWSA",
+                  "messageId": "D241XXXX732339502B68",
+                  "id": "D241XXXX732339502B68"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Envio sem telefone",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "phone is required"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Canal ou rota não encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "not found"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Z-API indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "z-api unavailable"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Corpo da rota da Z-API"
+              },
+              "example": {
+                "phone": "5511999999999",
+                "message": "Escolha uma opção",
+                "optionList": {
+                  "title": "Opções",
+                  "buttonLabel": "Ver opções",
+                  "options": [
+                    {
+                      "id": "1",
+                      "title": "Suporte",
+                      "description": "Falar com o suporte"
+                    },
+                    {
+                      "id": "2",
+                      "title": "Vendas"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Executar ação da Z-API (PUT)",
+        "description": "Repassa a chamada para a [API da Z-API](https://developer.z-api.io) usando a instância do canal no GPT Maker. Use para recursos da Z-API que a API do GPT Maker ainda não expõe, como lista de opções (`send-option-list`) e botões (`send-button-list`).\n\n- `action` é o caminho da rota na Z-API depois de `/instances/{instância}/token/{token}/`, por exemplo `send-option-list`. Pode ter mais de um trecho, como `chats/5511999999999`.\n- O corpo e a query string vão para a Z-API como foram enviados, e a resposta é a da Z-API.\n- Funciona só para canais Z-API.\n- Envios (rotas `send-*`) exigem `phone` no corpo.\n- Mensagens enviadas por aqui aparecem no chat do GPT Maker e não acionam o agente.\n- Rotas bloqueadas: alteração de webhooks (`update-webhook-*` e `update-every-webhooks`) e `me`.\n\n**Erros**\n\n| Status | Quando |\n| --- | --- |\n| `404` | Canal inexistente, de outra conta ou que não é Z-API, rota bloqueada ou caminho inválido. |\n| `400` | Envio (`send-*`) sem `phone` no corpo. |\n| `502` | A Z-API não respondeu. |\n\nOs demais erros vêm da Z-API, com o status e o corpo dela.",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal Z-API",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action",
+            "in": "path",
+            "description": "Rota da Z-API, por exemplo `send-option-list`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "send-option-list"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resposta da Z-API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "example": {
+                  "zaapId": "3999984263738042930CD6ECDE9VDWSA",
+                  "messageId": "D241XXXX732339502B68",
+                  "id": "D241XXXX732339502B68"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Envio sem telefone",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "phone is required"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Canal ou rota não encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "not found"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Z-API indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "z-api unavailable"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Corpo da rota da Z-API"
+              },
+              "example": {
+                "phone": "5511999999999",
+                "message": "Escolha uma opção",
+                "optionList": {
+                  "title": "Opções",
+                  "buttonLabel": "Ver opções",
+                  "options": [
+                    {
+                      "id": "1",
+                      "title": "Suporte",
+                      "description": "Falar com o suporte"
+                    },
+                    {
+                      "id": "2",
+                      "title": "Vendas"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Executar ação da Z-API (PATCH)",
+        "description": "Repassa a chamada para a [API da Z-API](https://developer.z-api.io) usando a instância do canal no GPT Maker. Use para recursos da Z-API que a API do GPT Maker ainda não expõe, como lista de opções (`send-option-list`) e botões (`send-button-list`).\n\n- `action` é o caminho da rota na Z-API depois de `/instances/{instância}/token/{token}/`, por exemplo `send-option-list`. Pode ter mais de um trecho, como `chats/5511999999999`.\n- O corpo e a query string vão para a Z-API como foram enviados, e a resposta é a da Z-API.\n- Funciona só para canais Z-API.\n- Envios (rotas `send-*`) exigem `phone` no corpo.\n- Mensagens enviadas por aqui aparecem no chat do GPT Maker e não acionam o agente.\n- Rotas bloqueadas: alteração de webhooks (`update-webhook-*` e `update-every-webhooks`) e `me`.\n\n**Erros**\n\n| Status | Quando |\n| --- | --- |\n| `404` | Canal inexistente, de outra conta ou que não é Z-API, rota bloqueada ou caminho inválido. |\n| `400` | Envio (`send-*`) sem `phone` no corpo. |\n| `502` | A Z-API não respondeu. |\n\nOs demais erros vêm da Z-API, com o status e o corpo dela.",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal Z-API",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action",
+            "in": "path",
+            "description": "Rota da Z-API, por exemplo `send-option-list`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "send-option-list"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resposta da Z-API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "example": {
+                  "zaapId": "3999984263738042930CD6ECDE9VDWSA",
+                  "messageId": "D241XXXX732339502B68",
+                  "id": "D241XXXX732339502B68"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Envio sem telefone",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "phone is required"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Canal ou rota não encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "not found"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Z-API indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "z-api unavailable"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Corpo da rota da Z-API"
+              },
+              "example": {
+                "phone": "5511999999999",
+                "message": "Escolha uma opção",
+                "optionList": {
+                  "title": "Opções",
+                  "buttonLabel": "Ver opções",
+                  "options": [
+                    {
+                      "id": "1",
+                      "title": "Suporte",
+                      "description": "Falar com o suporte"
+                    },
+                    {
+                      "id": "2",
+                      "title": "Vendas"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Executar ação da Z-API (DELETE)",
+        "description": "Repassa a chamada para a [API da Z-API](https://developer.z-api.io) usando a instância do canal no GPT Maker. Use para recursos da Z-API que a API do GPT Maker ainda não expõe, como lista de opções (`send-option-list`) e botões (`send-button-list`).\n\n- `action` é o caminho da rota na Z-API depois de `/instances/{instância}/token/{token}/`, por exemplo `send-option-list`. Pode ter mais de um trecho, como `chats/5511999999999`.\n- O corpo e a query string vão para a Z-API como foram enviados, e a resposta é a da Z-API.\n- Funciona só para canais Z-API.\n- Envios (rotas `send-*`) exigem `phone` no corpo.\n- Mensagens enviadas por aqui aparecem no chat do GPT Maker e não acionam o agente.\n- Rotas bloqueadas: alteração de webhooks (`update-webhook-*` e `update-every-webhooks`) e `me`.\n\n**Erros**\n\n| Status | Quando |\n| --- | --- |\n| `404` | Canal inexistente, de outra conta ou que não é Z-API, rota bloqueada ou caminho inválido. |\n| `400` | Envio (`send-*`) sem `phone` no corpo. |\n| `502` | A Z-API não respondeu. |\n\nOs demais erros vêm da Z-API, com o status e o corpo dela.",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "ID do canal Z-API",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action",
+            "in": "path",
+            "description": "Rota da Z-API, por exemplo `send-option-list`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "send-option-list"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resposta da Z-API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "example": {
+                  "zaapId": "3999984263738042930CD6ECDE9VDWSA",
+                  "messageId": "D241XXXX732339502B68",
+                  "id": "D241XXXX732339502B68"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Envio sem telefone",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "phone is required"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro de token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Canal ou rota não encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "not found"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Z-API indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "example": {
+                  "error": "z-api unavailable"
                 }
               }
             }
