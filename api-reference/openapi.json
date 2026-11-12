@@ -4322,7 +4322,7 @@
     },
     "/v2/chat/{chatId}/send-message": {
       "post": {
-        "description": "Envia uma nova mensagem para o chat",
+        "description": "Envia uma nova mensagem para o chat\n\n## Arquivos em base64\n\nOs campos `image`, `audio`, `video` e `document` aceitam a URL pública do arquivo ou o próprio arquivo em base64. Em base64, envie como data URI, com o tipo no prefixo: `data:<tipo>;base64,<conteúdo>`. Base64 sem o prefixo não é aceito.\n\nO GPT Maker guarda o arquivo e entrega ao canal uma URL própria.\n\n**Limites**\n\n- Até 16 MB por arquivo, depois de decodificado.\n- Imagem com até 50 milhões de pixels.\n\n**Tipos aceitos**\n\n- `image`: `image/jpeg`, `image/png`, `image/gif`, `image/webp`\n- `audio`: `audio/mpeg`, `audio/ogg`, `audio/opus`, `audio/wav`, `audio/aac`, `audio/amr`, `audio/mp4`, `audio/x-m4a`\n- `video`: `video/mp4`, `video/3gpp`, `video/quicktime`, `video/webm`\n- `document`: `application/pdf`, `application/msword`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, `application/vnd.ms-excel`, `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`, `application/vnd.ms-powerpoint`, `application/vnd.openxmlformats-officedocument.presentationml.presentation`, `text/plain`, `text/csv`, `text/markdown`, `text/rtf`\n\nO canal ainda aplica os próprios limites. No WhatsApp oficial, por exemplo, a imagem precisa ser JPEG ou PNG de até 5 MB, e o vídeo, MP4 ou 3GP.\n\n**Erros**\n\nQuando o arquivo é recusado, a resposta é `400` com `error` e `errorCode`:\n\n| `errorCode` | Motivo |\n| --- | --- |\n| `INVALID_BASE64` | O conteúdo não é base64 válido ou não corresponde ao tipo informado. |\n| `UNSUPPORTED_MEDIA_TYPE` | O tipo não está na lista aceita. |\n| `MEDIA_TOO_LARGE` | O arquivo passa de 16 MB. |\n| `IMAGE_TOO_LARGE` | A imagem passa de 50 milhões de pixels. |",
         "parameters": [
           {
             "name": "chatId",
@@ -4367,7 +4367,7 @@
                       },
                       "image": {
                         "type": "string",
-                        "description": "URL da imagem ou imagem em base64. Se for base64, deve ser enviada como data URI com o prefixo do tipo, por exemplo: data:image/jpeg;base64,/9j/4AAQ... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:image/jpeg, data:image/png, data:image/webp"
+                        "description": "URL da imagem ou imagem em base64 como data URI, por exemplo `data:image/jpeg;base64,/9j/4AAQ...`. Tipos aceitos e limites em \"Arquivos em base64\"."
                       }
                     }
                   },
@@ -4377,7 +4377,7 @@
                     "properties": {
                       "audio": {
                         "type": "string",
-                        "description": "URL do áudio ou áudio em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:audio/mpeg;base64,SUQzBAAA... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:audio/mpeg, data:audio/ogg, data:audio/mp4"
+                        "description": "URL do áudio ou áudio em base64 como data URI, por exemplo `data:audio/mpeg;base64,SUQzBAAA...`. Tipos aceitos e limites em \"Arquivos em base64\"."
                       }
                     }
                   },
@@ -4387,7 +4387,7 @@
                     "properties": {
                       "video": {
                         "type": "string",
-                        "description": "URL do vídeo ou vídeo em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:video/mp4;base64,AAAAIGZ0... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:video/mp4"
+                        "description": "URL do vídeo ou vídeo em base64 como data URI, por exemplo `data:video/mp4;base64,AAAAIGZ0...`. Tipos aceitos e limites em \"Arquivos em base64\"."
                       }
                     }
                   },
@@ -4397,7 +4397,7 @@
                     "properties": {
                       "document": {
                         "type": "string",
-                        "description": "URL do documento ou documento em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:application/pdf;base64,JVBERi0x... (base64 puro, sem o prefixo, não é aceito). Informe o tipo correspondente ao arquivo, como data:application/pdf"
+                        "description": "URL do documento ou documento em base64 como data URI, por exemplo `data:application/pdf;base64,JVBERi0x...`. Tipos aceitos e limites em \"Arquivos em base64\"."
                       },
                       "documentName": {
                         "type": "string",
@@ -4432,11 +4432,34 @@
             }
           },
           "400": {
-            "description": "Erro inesperado",
+            "description": "Requisição inválida ou falha no envio. Quando o arquivo em base64 é recusado, a resposta traz também o errorCode.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "examples": {
+                  "base64Invalido": {
+                    "summary": "Base64 inválido",
+                    "value": {
+                      "error": "base64 inválido",
+                      "errorCode": "INVALID_BASE64"
+                    }
+                  },
+                  "tipoNaoSuportado": {
+                    "summary": "Tipo não suportado",
+                    "value": {
+                      "error": "tipo não suportado: application/zip",
+                      "errorCode": "UNSUPPORTED_MEDIA_TYPE"
+                    }
+                  },
+                  "arquivoGrande": {
+                    "summary": "Arquivo acima de 16 MB",
+                    "value": {
+                      "error": "arquivo excede o tamanho máximo de 16 MB",
+                      "errorCode": "MEDIA_TOO_LARGE"
+                    }
+                  }
                 }
               }
             }
@@ -7722,7 +7745,7 @@
     },
     "/v2/channel/{channelId}/start-conversation": {
       "post": {
-        "description": "Iniciar conversa",
+        "description": "Iniciar conversa\n\n## Arquivos em base64\n\nOs campos `image`, `audio`, `video` e `document` aceitam a URL pública do arquivo ou o próprio arquivo em base64. Em base64, envie como data URI, com o tipo no prefixo: `data:<tipo>;base64,<conteúdo>`. Base64 sem o prefixo não é aceito.\n\nO GPT Maker guarda o arquivo e entrega ao canal uma URL própria.\n\n**Limites**\n\n- Até 16 MB por arquivo, depois de decodificado.\n- Imagem com até 50 milhões de pixels.\n\n**Tipos aceitos**\n\n- `image`: `image/jpeg`, `image/png`, `image/gif`, `image/webp`\n- `audio`: `audio/mpeg`, `audio/ogg`, `audio/opus`, `audio/wav`, `audio/aac`, `audio/amr`, `audio/mp4`, `audio/x-m4a`\n- `video`: `video/mp4`, `video/3gpp`, `video/quicktime`, `video/webm`\n- `document`: `application/pdf`, `application/msword`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, `application/vnd.ms-excel`, `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`, `application/vnd.ms-powerpoint`, `application/vnd.openxmlformats-officedocument.presentationml.presentation`, `text/plain`, `text/csv`, `text/markdown`, `text/rtf`\n\nO canal ainda aplica os próprios limites. No WhatsApp oficial, por exemplo, a imagem precisa ser JPEG ou PNG de até 5 MB, e o vídeo, MP4 ou 3GP.\n\n**Erros**\n\nQuando o arquivo é recusado, a resposta é `400` com `error` e `errorCode`:\n\n| `errorCode` | Motivo |\n| --- | --- |\n| `INVALID_BASE64` | O conteúdo não é base64 válido ou não corresponde ao tipo informado. |\n| `UNSUPPORTED_MEDIA_TYPE` | O tipo não está na lista aceita. |\n| `MEDIA_TOO_LARGE` | O arquivo passa de 16 MB. |\n| `IMAGE_TOO_LARGE` | A imagem passa de 50 milhões de pixels. |",
         "parameters": [
           {
             "name": "channelId",
@@ -7768,7 +7791,7 @@
                       },
                       "image": {
                         "type": "string",
-                        "description": "URL da imagem ou imagem em base64. Se for base64, deve ser enviada como data URI com o prefixo do tipo, por exemplo: data:image/jpeg;base64,/9j/4AAQ... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:image/jpeg, data:image/png, data:image/webp"
+                        "description": "URL da imagem ou imagem em base64 como data URI, por exemplo `data:image/jpeg;base64,/9j/4AAQ...`. Tipos aceitos e limites em \"Arquivos em base64\"."
                       }
                     },
                     "required": [
@@ -7786,7 +7809,7 @@
                       },
                       "video": {
                         "type": "string",
-                        "description": "URL do vídeo ou vídeo em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:video/mp4;base64,AAAAIGZ0... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:video/mp4"
+                        "description": "URL do vídeo ou vídeo em base64 como data URI, por exemplo `data:video/mp4;base64,AAAAIGZ0...`. Tipos aceitos e limites em \"Arquivos em base64\"."
                       }
                     },
                     "required": [
@@ -7804,7 +7827,7 @@
                       },
                       "audio": {
                         "type": "string",
-                        "description": "URL do áudio ou áudio em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:audio/mpeg;base64,SUQzBAAA... (base64 puro, sem o prefixo, não é aceito). Tipos aceitos: data:audio/mpeg, data:audio/ogg, data:audio/mp4"
+                        "description": "URL do áudio ou áudio em base64 como data URI, por exemplo `data:audio/mpeg;base64,SUQzBAAA...`. Tipos aceitos e limites em \"Arquivos em base64\"."
                       }
                     },
                     "required": [
@@ -7822,7 +7845,7 @@
                       },
                       "document": {
                         "type": "string",
-                        "description": "URL do documento ou documento em base64. Se for base64, deve ser enviado como data URI com o prefixo do tipo, por exemplo: data:application/pdf;base64,JVBERi0x... (base64 puro, sem o prefixo, não é aceito). Informe o tipo correspondente ao arquivo, como data:application/pdf"
+                        "description": "URL do documento ou documento em base64 como data URI, por exemplo `data:application/pdf;base64,JVBERi0x...`. Tipos aceitos e limites em \"Arquivos em base64\"."
                       },
                       "documentName": {
                         "type": "string",
@@ -7863,11 +7886,34 @@
             }
           },
           "400": {
-            "description": "Erro inesperado",
+            "description": "Requisição inválida ou falha no envio. Quando o arquivo em base64 é recusado, a resposta traz também o errorCode.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/RequestError"
+                },
+                "examples": {
+                  "base64Invalido": {
+                    "summary": "Base64 inválido",
+                    "value": {
+                      "error": "base64 inválido",
+                      "errorCode": "INVALID_BASE64"
+                    }
+                  },
+                  "tipoNaoSuportado": {
+                    "summary": "Tipo não suportado",
+                    "value": {
+                      "error": "tipo não suportado: application/zip",
+                      "errorCode": "UNSUPPORTED_MEDIA_TYPE"
+                    }
+                  },
+                  "arquivoGrande": {
+                    "summary": "Arquivo acima de 16 MB",
+                    "value": {
+                      "error": "arquivo excede o tamanho máximo de 16 MB",
+                      "errorCode": "MEDIA_TOO_LARGE"
+                    }
+                  }
                 }
               }
             }
@@ -8874,6 +8920,28 @@
         "properties": {
           "error": {
             "type": "string"
+          }
+        }
+      },
+      "RequestError": {
+        "required": [
+          "error"
+        ],
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Motivo do erro."
+          },
+          "errorCode": {
+            "type": "string",
+            "description": "Presente quando o arquivo em base64 é recusado.",
+            "enum": [
+              "INVALID_BASE64",
+              "UNSUPPORTED_MEDIA_TYPE",
+              "MEDIA_TOO_LARGE",
+              "IMAGE_TOO_LARGE"
+            ]
           }
         }
       }
