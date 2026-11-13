@@ -4533,6 +4533,11 @@
                   "properties": {
                     "success": {
                       "type": "boolean"
+                    },
+                    "messageId": {
+                      "type": "string",
+                      "description": "ID da mensagem enviada",
+                      "example": "MESSAGE_ID"
                     }
                   }
                 }
@@ -7721,6 +7726,11 @@
                   "properties": {
                     "success": {
                       "type": "boolean"
+                    },
+                    "messageId": {
+                      "type": "string",
+                      "description": "ID da mensagem enviada",
+                      "example": "MESSAGE_ID"
                     }
                   }
                 }
