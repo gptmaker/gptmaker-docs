@@ -1193,7 +1193,6 @@
                         "type": "string",
                         "description": "Intervalo de treinamento",
                         "enum": [
-                          "THIRTY_SECONDS",
                           "NEVER",
                           "ONE_HOUR",
                           "FOUR_HOUR",
@@ -9117,7 +9116,6 @@
             "type": "string",
             "description": "Intervalo de treinamento",
             "enum": [
-              "THIRTY_SECONDS",
               "NEVER",
               "ONE_HOUR",
               "FOUR_HOUR",
